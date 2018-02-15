@@ -39,7 +39,7 @@ public class PasteAction extends HTMLTextEditAction
         putValue(SMALL_ICON, UIUtils.getIcon(UIUtils.X16, "paste.png"));
         putValue(ActionManager.LARGE_ICON, UIUtils.getIcon(UIUtils.X24, "paste.png"));
 		putValue(ACCELERATOR_KEY,
-			KeyStroke.getKeyStroke(KeyEvent.VK_V, InputEvent.CTRL_MASK));
+			KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         addShouldBeEnabledDelegate(new ShouldBeEnabledDelegate()
         {
             public boolean shouldBeEnabled(Action a)

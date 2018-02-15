@@ -115,7 +115,7 @@ public class ImagePanel extends HTMLAttributeEditorPanel
         gbc.weightx = 1.0;
         gbc.insets = new java.awt.Insets(0,0,5,0);
         gbc.gridx = 1;
-        urlPanel.add(linkUrlField, gbc);        
+        urlPanel.add(linkUrlField, gbc); 
         
         JPanel linkPanel = new JPanel(new BorderLayout(5, 5));
         linkPanel.add(urlPanel, BorderLayout.NORTH);

@@ -15,11 +15,14 @@ import net.atlanticbb.tantlinger.io.IOUtils;
  */
 public class Demo {
 
+    private final JFrame frame;
+    private final HTMLEditorPane editor;
+    
     public Demo() {
         
 
 
-        HTMLEditorPane editor = new HTMLEditorPane();
+        editor = new HTMLEditorPane(false);
         InputStream in = Demo.class.getResourceAsStream("/net/atlanticbb/tantlinger/shef/htmlsnip.txt");
         try{
             editor.setText(IOUtils.read(in));
@@ -29,7 +32,7 @@ public class Demo {
             IOUtils.close(in);
         }
 
-        JFrame frame = new JFrame();
+        frame = new JFrame();
         JMenuBar menuBar = new JMenuBar();
         menuBar.add(editor.getEditMenu());
         menuBar.add(editor.getFormatMenu());
@@ -37,27 +40,43 @@ public class Demo {
         frame.setJMenuBar(menuBar);
 
         frame.setTitle("HTML Editor Demo");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(800, 600);
         frame.getContentPane().add(editor);
         frame.setVisible(true);
         
     }
 
-    public static void main(String args[]) {
+    private void printHtml() {
+        System.out.println(editor.getText());
+    }
+    
+    
+    private static Demo demo;
+    
+    public static void main(String args[]) throws InterruptedException {
 
         try {
             UIManager.setLookAndFeel(
                 UIManager.getSystemLookAndFeelClassName());
         } catch(Exception ex){}
 
-
         SwingUtilities.invokeLater(new Runnable() {
 
             public void run() {
-               new Demo();
+               demo = new Demo();
             }
         });
+        
+        do {
+            Thread.sleep(2000);
+            
+        } while (demo.frame.isVisible());
+        
+        demo.printHtml();
+        
     }
+
+    
 
 }

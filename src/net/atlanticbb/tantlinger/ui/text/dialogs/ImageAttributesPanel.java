@@ -7,14 +7,18 @@ package net.atlanticbb.tantlinger.ui.text.dialogs;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.io.File;
+import javax.swing.JButton;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import net.atlanticbb.tantlinger.ui.text.TextEditPopupManager;
 
@@ -32,6 +36,7 @@ public class ImageAttributesPanel extends HTMLAttributeEditorPanel
     };
     
     private JLabel imgUrlLabel = null;
+    private JButton selectFileButton = null;
     private JCheckBox altTextCB = null;
     private JCheckBox widthCB = null;
     private JCheckBox heightCB = null;
@@ -239,6 +244,14 @@ public class ImageAttributesPanel extends HTMLAttributeEditorPanel
      */
     private void initialize()
     {
+        
+        GridBagConstraints gridBagConstraints22 = new GridBagConstraints();
+        gridBagConstraints22.gridx = 2;
+        gridBagConstraints22.gridwidth = 2;
+        gridBagConstraints22.anchor = java.awt.GridBagConstraints.CENTER;
+        gridBagConstraints22.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints22.weighty = 1.0;
+        gridBagConstraints22.gridy = 0;
         GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
         gridBagConstraints21.gridx = 0;
         gridBagConstraints21.gridwidth = 2;
@@ -279,19 +292,45 @@ public class ImageAttributesPanel extends HTMLAttributeEditorPanel
         gridBagConstraints.gridy = 0;
         imgUrlLabel = new JLabel();
         imgUrlLabel.setText(i18n.str("image_url")); //$NON-NLS-1$
+        
+        selectFileButton = new JButton("Select Image File...");
+        selectFileButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                
+                JFileChooser chooser = new JFileChooser(System.getProperty ("user.home"));
+                File selected;
+                chooser.setDialogTitle("Select Image File");
+                chooser.addChoosableFileFilter(new FileNameExtensionFilter("Images", "jpg", "jpeg", "png", "gif"));
+                chooser.setAcceptAllFileFilterUsed(false);
+                int rc = chooser.showDialog(ImageAttributesPanel.this, "Select");
+                if (rc == JFileChooser.APPROVE_OPTION) {
+                    selected = chooser.getSelectedFile();
+                    if (selected == null)
+                        return;
+                    
+                    imgUrlField.setText("file:" + selected.getAbsolutePath());
+                    
+                }
+                
+            }
+        });
+        
         this.setLayout(new GridBagLayout());
-        this.setSize(365, 188);
         //this.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder(null, "Image Properties", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null), javax.swing.BorderFactory.createEmptyBorder(5,5,5,5)));
         this.add(imgUrlLabel, gridBagConstraints);
+        this.add(selectFileButton, gridBagConstraints22);
         this.add(getAltTextCB(), gridBagConstraints1);
         this.add(getImgUrlField(), gridBagConstraints14);
         this.add(getAltTextField(), gridBagConstraints15);
         this.add(getAttribPanel(), gridBagConstraints16);
         this.add(getSpacerPanel(), gridBagConstraints21);
+        this.setSize(700, 300);
         
         TextEditPopupManager popupMan = TextEditPopupManager.getInstance();
         popupMan.registerJTextComponent(imgUrlField);
         popupMan.registerJTextComponent(altTextField);
+        imgUrlField.setToolTipText("Filename (prefaced with \"file:\" or Link (prefaced with \"http://\")");
+
     }
 
     /**

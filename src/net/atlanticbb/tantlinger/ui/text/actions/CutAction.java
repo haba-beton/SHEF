@@ -3,6 +3,7 @@
  */
 package net.atlanticbb.tantlinger.ui.text.actions;
 
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -37,7 +38,7 @@ public class CutAction extends BasicEditAction
         putValue(Action.SMALL_ICON, UIUtils.getIcon(UIUtils.X16, "cut.png"));
         putValue(ActionManager.LARGE_ICON, UIUtils.getIcon(UIUtils.X24, "cut.png"));
         putValue(Action.ACCELERATOR_KEY,
-            KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_MASK));
+            KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         putValue(MNEMONIC_KEY, new Integer(i18n.mnem("cut")));
         addShouldBeEnabledDelegate(new ShouldBeEnabledDelegate()
         {

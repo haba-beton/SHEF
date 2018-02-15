@@ -4,8 +4,8 @@
  */
 package net.atlanticbb.tantlinger.ui.text;
 
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
-import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.Vector;
 
@@ -236,7 +236,7 @@ public class CompoundUndoManager implements UndoableEditListener
             setEnabled(false);
             putValue(
                 Action.ACCELERATOR_KEY,
-                KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_MASK));
+                KeyStroke.getKeyStroke(KeyEvent.VK_Z, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
             putValue(SHORT_DESCRIPTION, getValue(NAME));
         }
 
@@ -277,7 +277,7 @@ public class CompoundUndoManager implements UndoableEditListener
             
             setEnabled(false);
             putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(
-                    KeyEvent.VK_Y, InputEvent.CTRL_MASK));
+                    KeyEvent.VK_Y, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
             putValue(SHORT_DESCRIPTION, getValue(NAME));
         }
 

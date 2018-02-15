@@ -46,7 +46,7 @@ public class ImageDialog extends HTMLOptionDialog
     {
         imagePanel = new ImagePanel();
         setContentPane(imagePanel);
-        setSize(300, 345);
+        setSize(600, 400);
         setResizable(false);
     }
     

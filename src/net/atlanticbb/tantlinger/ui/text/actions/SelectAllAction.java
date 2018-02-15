@@ -1,5 +1,6 @@
 package net.atlanticbb.tantlinger.ui.text.actions;
 
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -26,7 +27,7 @@ public class SelectAllAction extends BasicEditAction
         putValue(MNEMONIC_KEY, new Integer(i18n.mnem("select_all")));
         
         putValue(ACCELERATOR_KEY, 
-            KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_MASK));
+            KeyStroke.getKeyStroke(KeyEvent.VK_A, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         
         putValue(Action.SHORT_DESCRIPTION, getValue(Action.NAME));
     }

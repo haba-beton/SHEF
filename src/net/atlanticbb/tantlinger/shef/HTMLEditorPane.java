@@ -44,6 +44,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.plaf.basic.BasicTabbedPaneUI;
 import javax.swing.text.Document;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
@@ -124,10 +125,9 @@ public class HTMLEditorPane extends JPanel
         
     private boolean isWysTextChanged;
     
-    
-    public HTMLEditorPane()
+    public HTMLEditorPane(boolean showHTMLEditor)
     {
-    	initUI();
+    	initUI(showHTMLEditor);
     }
     
     public void setCaretPosition(int pos)
@@ -149,10 +149,10 @@ public class HTMLEditorPane extends JPanel
     	tabs.setSelectedIndex(i);
     }
     
-    private void initUI()
+    private void initUI(boolean showHTMLEditor)
     {
-        createEditorTabs();
-        createEditorActions();
+        createEditorTabs(showHTMLEditor);
+        createEditorActions(showHTMLEditor);
         setLayout(new BorderLayout());
         add(formatToolBar, BorderLayout.NORTH);
         add(tabs, BorderLayout.CENTER);    
@@ -176,7 +176,7 @@ public class HTMLEditorPane extends JPanel
     }
 
     
-    private void createEditorActions()
+    private void createEditorActions(boolean enableHTML)
     {        
         actionList = new ActionList("editor-actions");
         
@@ -195,15 +195,18 @@ public class HTMLEditorPane extends JPanel
         JMenu fileMenu = new JMenu(i18n.str("file"));        
         
         // create edit menu   
+        Action act;
         ActionList lst = new ActionList("edits");             
-        Action act = new ChangeTabAction(0);        
-        lst.add(act);
-        act = new ChangeTabAction(1);        
-        lst.add(act);
-        lst.add(null);//separator        
+        if (enableHTML) {
+            act = new ChangeTabAction(0);        
+            lst.add(act);
+            act = new ChangeTabAction(1);        
+            lst.add(act);
+            lst.add(null);//separator   
+        }
         lst.addAll(editActions);
         lst.add(null);
-        lst.add(new FindReplaceAction(false));
+        lst.add(new FindReplaceAction(false, enableHTML));
         actionList.addAll(lst);
         editMenu = ActionUIFactory.getInstance().createMenu(lst);
         editMenu.setText(i18n.str("edit"));        
@@ -467,9 +470,20 @@ public class HTMLEditorPane extends JPanel
         return m;
     }
     
-    private void createEditorTabs()
+    private void createEditorTabs(boolean show)
     {
         tabs = new JTabbedPane(SwingConstants.BOTTOM);
+        
+        if (!show) {  //set the tab height to zero to hide them from the panel
+            tabs.setUI(new BasicTabbedPaneUI() {  
+                @Override  
+                protected int calculateTabAreaHeight(int tab_placement, int run_count, int max_tab_height) {  
+
+                        return 0;  
+                }  
+            });  
+        }
+        
         wysEditor = createWysiwygEditor();
         srcEditor = createSourceEditor();        
         
@@ -488,7 +502,8 @@ public class HTMLEditorPane extends JPanel
             {                
                 updateEditView();                
             }
-        });       
+        });   
+        tabs.setEnabledAt(1, false);
     }
     
     private SourceCodeEditor createSourceEditor()

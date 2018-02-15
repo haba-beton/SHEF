@@ -34,6 +34,7 @@ import java.util.Vector;
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.ButtonModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
@@ -44,14 +45,17 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.plaf.basic.BasicTabbedPaneUI;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 
 import net.atlanticbb.tantlinger.i18n.I18n;
+import net.atlanticbb.tantlinger.ui.UIUtils;
 import net.atlanticbb.tantlinger.ui.text.TextEditPopupManager;
 
 
@@ -66,6 +70,9 @@ public class TextFinderDialog extends JDialog
      */
     private static final long serialVersionUID = 1L;
 
+    private ImageIcon warnIcon = UIUtils.getIcon(UIUtils.X48, "error.png");
+    
+    
     private static final I18n i18n = I18n.getInstance("net.atlanticbb.tantlinger.ui.text.dialogs");
     
     public static final char[] WORD_SEPARATORS = {' ', '\t', '\n',
@@ -97,23 +104,32 @@ public class TextFinderDialog extends JDialog
     private static final String TITLE = i18n.str("find_and_replace"); //$NON-NLS-1$
     //private JTextComponent textComp;
 
-    public TextFinderDialog(Frame owner, JTextComponent tc, int index)
+    public TextFinderDialog(Frame owner, JTextComponent tc, int index, boolean showHTML)
     {
         super(owner, TITLE, false);
-        init(tc, index);        
+        init(tc, index, showHTML);        
     }
     
-	public TextFinderDialog(Dialog owner, JTextComponent tc, int index)
+	public TextFinderDialog(Dialog owner, JTextComponent tc, int index, boolean showHTML)
 	{
 		super(owner, TITLE, false);
-		init(tc, index);        
+		init(tc, index, showHTML);        
 	}
 	
-	private void init(JTextComponent tc, int index)
+	private void init(JTextComponent tc, int index, boolean showHTML)
 	{
 		setJTextComponent(tc);
 		
-		tb = new JTabbedPane();
+		tb = new JTabbedPane(SwingConstants.BOTTOM);
+                if (!showHTML) {
+                    tb.setUI(new BasicTabbedPaneUI() {  
+                        @Override  
+                        protected int calculateTabAreaHeight(int tab_placement, int run_count, int max_tab_height) {  
+                            return 0; //return super.calculateTabAreaHeight(tab_placement, run_count, max_tab_height);  
+
+                        }  
+                    });  
+                }
 
 		// "Find" panel
 		JPanel p1 = new JPanel(new BorderLayout());
@@ -501,7 +517,7 @@ public class TextFinderDialog extends JDialog
 	protected void warning(String message) 
 	{
 		JOptionPane.showMessageDialog(owner, 
-			message, TITLE, JOptionPane.INFORMATION_MESSAGE);
+			message, TITLE, JOptionPane.INFORMATION_MESSAGE, warnIcon);
 	}
 	
 	

@@ -3,6 +3,7 @@
  */
 package net.atlanticbb.tantlinger.ui.text.actions;
 
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -36,7 +37,7 @@ public class CopyAction extends BasicEditAction
         putValue(Action.SMALL_ICON, UIUtils.getIcon(UIUtils.X16, "copy.png"));
         putValue(ActionManager.LARGE_ICON, UIUtils.getIcon(UIUtils.X24, "copy.png"));
         putValue(Action.ACCELERATOR_KEY,
-            KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_MASK));
+            KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         putValue(MNEMONIC_KEY, new Integer(i18n.mnem("copy")));
         addShouldBeEnabledDelegate(new ShouldBeEnabledDelegate()
         {

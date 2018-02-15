@@ -5,6 +5,7 @@
 package net.atlanticbb.tantlinger.ui.text.actions;
 
 import java.awt.Event;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
@@ -101,17 +102,17 @@ public class HTMLInlineAction extends HTMLTextEditAction
         if(type == BOLD)
         {
             ico = UIUtils.getIcon(UIUtils.X16, "bold.png");
-            ks = KeyStroke.getKeyStroke(KeyEvent.VK_B, Event.CTRL_MASK);
+            ks = KeyStroke.getKeyStroke(KeyEvent.VK_B, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
         }
         else if(type == ITALIC)
         {
             ico = UIUtils.getIcon(UIUtils.X16, "italic.png");
-            ks = KeyStroke.getKeyStroke(KeyEvent.VK_I, Event.CTRL_MASK);
+            ks = KeyStroke.getKeyStroke(KeyEvent.VK_I, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
         }
         else if(type == UNDERLINE)
         {
             ico = UIUtils.getIcon(UIUtils.X16, "underline.png");
-            ks = KeyStroke.getKeyStroke(KeyEvent.VK_U, Event.CTRL_MASK);
+            ks = KeyStroke.getKeyStroke(KeyEvent.VK_U, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
         }
         putValue(SMALL_ICON, ico);
         putValue(ACCELERATOR_KEY, ks);

@@ -55,7 +55,7 @@ public class UIUtils
     /**
      * The 48 x 48 icon package
      */
-    public static final String X48 = "resources/images/x32/";
+    public static final String X48 = "resources/images/x48/";
     
     
     /**
