@@ -483,10 +483,10 @@ public class HTMLEditorPane extends JPanel
                 }  
             });  
         }
-        
+                        
         wysEditor = createWysiwygEditor();
         srcEditor = createSourceEditor();        
-        
+
         tabs.addTab("Edit", new JScrollPane(wysEditor));
         
         JScrollPane scrollPane = new JScrollPane(srcEditor);        
@@ -503,7 +503,6 @@ public class HTMLEditorPane extends JPanel
                 updateEditView();                
             }
         });   
-        tabs.setEnabledAt(1, false);
     }
     
     private SourceCodeEditor createSourceEditor()
@@ -531,7 +530,7 @@ public class HTMLEditorPane extends JPanel
        
         ed.setContentType("text/html"); 
         
-        insertHTML(ed, "<p></p>", 0);        
+        insertHTML(ed, "<div></div>", 0);        
                 
         ed.addCaretListener(caretHandler);
         ed.addFocusListener(focusHandler);

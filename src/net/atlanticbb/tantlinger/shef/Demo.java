@@ -22,7 +22,7 @@ public class Demo {
         
 
 
-        editor = new HTMLEditorPane(false);
+        editor = new HTMLEditorPane(true);
         InputStream in = Demo.class.getResourceAsStream("/net/atlanticbb/tantlinger/shef/htmlsnip.txt");
         try{
             editor.setText(IOUtils.read(in));
