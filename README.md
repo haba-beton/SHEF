@@ -16,6 +16,14 @@ Features
 * Easily embeddable in Swing Applications or Applets
 * All the basic features you'd expect in an HTML Editing Component
 
+Demo
+--------
+
+A Demo is provided in the package.  Here's a screenshot:
+
+![SHEF screenshot](https://github.com/kkieffer/SHEF "SHEF screenshot")
+
+
 Modifications
 --------
 
