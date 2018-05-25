@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Vector;
 
 import javax.swing.AbstractButton;
 import javax.swing.Action;
@@ -29,6 +28,7 @@ import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JEditorPane;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
@@ -336,21 +336,35 @@ public class HTMLEditorPane extends JPanel
         formatToolBar.add(paragraphCombo);
         formatToolBar.addSeparator();
                 
-        Vector fonts = new Vector();
+        ArrayList<String> fonts = new ArrayList<String>();
         fonts.add("Default");
         fonts.add("serif");
         fonts.add("sans-serif");
         fonts.add("monospaced"); 
-        GraphicsEnvironment gEnv = 
-            GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsEnvironment gEnv = GraphicsEnvironment.getLocalGraphicsEnvironment();
         fonts.addAll(Arrays.asList(gEnv.getAvailableFontFamilyNames()));             
         
-        fontFamilyCombo = new JComboBox(fonts);
-        fontFamilyCombo.setPreferredSize(new Dimension(150, 22));
-        fontFamilyCombo.setMinimumSize(new Dimension(150, 22));
-        fontFamilyCombo.setMaximumSize(new Dimension(150, 22));
-        fontFamilyCombo.setFont(comboFont);
-        fontFamilyCombo.addActionListener(fontChangeHandler);
+        fontFamilyCombo = new JComboBox<Font>();
+         
+        for (String f : fonts) 
+            fontFamilyCombo.addItem(new Font(f, Font.PLAIN, 12));
+
+        fontFamilyCombo.setRenderer(new DefaultListCellRenderer() {
+            
+            protected DefaultListCellRenderer defaultRenderer = new DefaultListCellRenderer();
+
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                JLabel renderer = (JLabel) defaultRenderer.getListCellRendererComponent(list, value, index, isSelected,cellHasFocus);
+                renderer.setFont((Font)value);
+                renderer.setText(((Font)value).getFontName());
+                fontFamilyCombo.setFont((Font)value);
+                return renderer;
+            }
+        });
+        
+        
+        
         formatToolBar.add(fontFamilyCombo);        
         
         final JButton fontSizeButton = new JButton(UIUtils.getIcon(UIUtils.X16, "fontsize.png"));
