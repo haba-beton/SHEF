@@ -345,7 +345,12 @@ public class HTMLEditorPane extends JPanel
         fonts.addAll(Arrays.asList(gEnv.getAvailableFontFamilyNames()));             
         
         fontFamilyCombo = new JComboBox<Font>();
-         
+        fontFamilyCombo.setPreferredSize(new Dimension(150, 22));
+        fontFamilyCombo.setMinimumSize(new Dimension(150, 22));
+        fontFamilyCombo.setMaximumSize(new Dimension(150, 22));
+        fontFamilyCombo.setFont(comboFont);
+        fontFamilyCombo.addActionListener(fontChangeHandler);
+        
         for (String f : fonts) 
             fontFamilyCombo.addItem(new Font(f, Font.PLAIN, 12));
 
@@ -698,7 +703,7 @@ public class HTMLEditorPane extends JPanel
             if(fontName == null)
                 fontFamilyCombo.setSelectedIndex(0);
             else
-                fontFamilyCombo.setSelectedItem(fontName);
+                fontFamilyCombo.setSelectedItem(new Font(fontName, Font.PLAIN, 12));
             fontFamilyCombo.addActionListener(fontChangeHandler);
         }
         
@@ -866,7 +871,7 @@ public class HTMLEditorPane extends JPanel
                 
                 if(fontFamilyCombo.getSelectedIndex() != 0)
                 {
-                    HTMLUtils.setFontFamily(wysEditor, fontFamilyCombo.getSelectedItem().toString());
+                    HTMLUtils.setFontFamily(wysEditor, ((Font)fontFamilyCombo.getSelectedItem()).getFamily());
                     
                 }
                 else
