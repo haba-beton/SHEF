@@ -162,7 +162,7 @@ public class HTMLFontDialog extends HTMLOptionDialog
     {        
         setContentPane(getJContentPane());
         pack();
-        setSize(285, getHeight());
+        setSize(350, getHeight());
         setResizable(false);
         this.text = text;
     }

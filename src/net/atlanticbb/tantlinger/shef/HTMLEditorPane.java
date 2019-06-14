@@ -158,6 +158,20 @@ public class HTMLEditorPane extends JPanel
         add(tabs, BorderLayout.CENTER);    
         
     }
+    
+    public void dispose() {
+        
+        wysEditor.removeAll();
+        wysEditor.removeCaretListener(caretHandler);
+        wysEditor.removeFocusListener(focusHandler);
+        wysEditor.getDocument().removeDocumentListener(textChangedHandler);
+        
+        srcEditor.removeAll();
+        srcEditor.removeCaretListener(caretHandler);
+        srcEditor.removeFocusListener(focusHandler);
+        srcEditor.getDocument().removeDocumentListener(textChangedHandler);
+        
+    }
 
 
     public JMenu getEditMenu()

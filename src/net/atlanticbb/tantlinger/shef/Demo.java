@@ -3,6 +3,7 @@ package net.atlanticbb.tantlinger.shef;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.SwingUtilities;
@@ -54,14 +55,14 @@ public class Demo {
     
     private static Demo demo;
     
-    public static void main(String args[]) throws InterruptedException {
+    public static void main(String args[]) throws InterruptedException, InvocationTargetException {
 
         try {
             UIManager.setLookAndFeel(
                 UIManager.getSystemLookAndFeelClassName());
         } catch(Exception ex){}
 
-        SwingUtilities.invokeLater(new Runnable() {
+        SwingUtilities.invokeAndWait(new Runnable() {
 
             public void run() {
                demo = new Demo();

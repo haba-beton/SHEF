@@ -49,7 +49,6 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
-import javax.swing.plaf.basic.BasicTabbedPaneUI;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
@@ -104,32 +103,24 @@ public class TextFinderDialog extends JDialog
     private static final String TITLE = i18n.str("find_and_replace"); //$NON-NLS-1$
     //private JTextComponent textComp;
 
-    public TextFinderDialog(Frame owner, JTextComponent tc, int index, boolean showHTML)
+    public TextFinderDialog(Frame owner, JTextComponent tc, int index)
     {
         super(owner, TITLE, false);
-        init(tc, index, showHTML);        
+        init(tc, index);        
     }
     
-	public TextFinderDialog(Dialog owner, JTextComponent tc, int index, boolean showHTML)
+	public TextFinderDialog(Dialog owner, JTextComponent tc, int index)
 	{
 		super(owner, TITLE, false);
-		init(tc, index, showHTML);        
+		init(tc, index);        
 	}
 	
-	private void init(JTextComponent tc, int index, boolean showHTML)
+	private void init(JTextComponent tc, int index)
 	{
 		setJTextComponent(tc);
 		
-		tb = new JTabbedPane(SwingConstants.BOTTOM);
-                if (!showHTML) {
-                    tb.setUI(new BasicTabbedPaneUI() {  
-                        @Override  
-                        protected int calculateTabAreaHeight(int tab_placement, int run_count, int max_tab_height) {  
-                            return 0; //return super.calculateTabAreaHeight(tab_placement, run_count, max_tab_height);  
-
-                        }  
-                    });  
-                }
+		tb = new JTabbedPane(SwingConstants.TOP);
+                
 
 		// "Find" panel
 		JPanel p1 = new JPanel(new BorderLayout());

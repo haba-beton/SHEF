@@ -6,7 +6,6 @@ package net.atlanticbb.tantlinger.ui.text.actions;
 
 import java.awt.Component;
 import java.awt.Dialog;
-import java.awt.Event;
 import java.awt.Frame;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -24,7 +23,7 @@ public class FindReplaceAction extends BasicEditAction
      * 
      */
     private static final long serialVersionUID = 1L;
-    private boolean isReplaceTab;    
+    private final boolean isReplaceTab;    
     private TextFinderDialog dialog;
     private final boolean showHTML;
         
@@ -60,16 +59,16 @@ public class FindReplaceAction extends BasicEditAction
             if(c instanceof Frame)
             {           
                 if(isReplaceTab)
-                dialog = new TextFinderDialog((Frame)c, textComponent, TextFinderDialog.REPLACE, showHTML);
+                dialog = new TextFinderDialog((Frame)c, textComponent, TextFinderDialog.REPLACE);
                 else
-                dialog = new TextFinderDialog((Frame)c, textComponent, TextFinderDialog.FIND, showHTML);
+                dialog = new TextFinderDialog((Frame)c, textComponent, TextFinderDialog.FIND);
             }
             else if(c instanceof Dialog)
             {           
                 if(isReplaceTab)
-                dialog = new TextFinderDialog((Dialog)c, textComponent, TextFinderDialog.REPLACE, showHTML);
+                dialog = new TextFinderDialog((Dialog)c, textComponent, TextFinderDialog.REPLACE);
                 else
-                dialog = new TextFinderDialog((Dialog)c, textComponent, TextFinderDialog.FIND, showHTML);
+                dialog = new TextFinderDialog((Dialog)c, textComponent, TextFinderDialog.FIND);
             }
             else 
                 return;
@@ -84,6 +83,7 @@ public class FindReplaceAction extends BasicEditAction
         }
     }
     
+    @Override
     protected void updateContextState(JEditorPane editor)
     {
         if(dialog != null)
