@@ -33,6 +33,7 @@ Modifications
 * Updated hotkeys for menu items for specific OS (i.e. CTRL for Win, CMD for Mac)
 * Added icons and other cosmetic changes
 * Font combo box now displays WYSIWYG fonts
+* Directly paste images from system clipboard
 
 
 License
