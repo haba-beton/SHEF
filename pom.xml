@@ -18,5 +18,12 @@
 	    <scope>system</scope>
 	    <systemPath>${basedir}/lib/sam.jar</systemPath>
 	</dependency>
+	<dependency>
+	    <artifactId>jtidy</artifactId>
+	    <groupId>jtidy</groupId>
+	    <version>8.0</version>
+	    <scope>system</scope>
+	    <systemPath>${basedir}/lib/jtidy-8.0.jar</systemPath>
+	</dependency>
   </dependencies>
 </project>
