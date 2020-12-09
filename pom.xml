@@ -3,27 +3,31 @@
   <groupId>SHEF</groupId>
   <artifactId>SHEF</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+  <properties>
+     <maven.compiler.source>1.8</maven.compiler.source>
+     <maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
   <dependencies>
-	<dependency>
-	    <artifactId>novaworx-syntax</artifactId>
-	    <groupId>novaworx-syntax</groupId>
-	    <version>0.0.7</version>
-	    <scope>system</scope>
-	    <systemPath>${basedir}/lib/novaworx-syntax-0.0.7.jar</systemPath>
-	</dependency>
-	<dependency>
-	    <artifactId>sam</artifactId>
-	    <groupId>sam</groupId>
-	    <version>0.0.1</version>
-	    <scope>system</scope>
-	    <systemPath>${basedir}/lib/sam.jar</systemPath>
-	</dependency>
-	<dependency>
-	    <artifactId>jtidy</artifactId>
-	    <groupId>jtidy</groupId>
-	    <version>8.0</version>
-	    <scope>system</scope>
-	    <systemPath>${basedir}/lib/jtidy-8.0.jar</systemPath>
-	</dependency>
+    <dependency>
+      <artifactId>novaworx-syntax</artifactId>
+      <groupId>novaworx-syntax</groupId>
+      <version>0.0.7</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/lib/novaworx-syntax-0.0.7.jar</systemPath>
+    </dependency>
+    <dependency>
+      <artifactId>sam</artifactId>
+      <groupId>sam</groupId>
+      <version>0.0.1</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/lib/sam.jar</systemPath>
+    </dependency>
+    <dependency>
+      <artifactId>jtidy</artifactId>
+      <groupId>jtidy</groupId>
+      <version>8.0</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/lib/jtidy-8.0.jar</systemPath>
+    </dependency>
   </dependencies>
 </project>
