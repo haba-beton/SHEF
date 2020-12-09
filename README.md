@@ -1,8 +1,11 @@
 SHEF
 ====
 
-Forked SHEF from soureceforge (http://svn.code.sf.net/p/shef/code)
-Forked Modified SHEF from https://github.com/VEDAGroup/SHEF
+SHEF is an HTML editing framework and component for the Java Swing GUI library. It can be plugged into the `javax.swing.JEditorPane` text component, adding usable HTML WYSIWYG editing capabilities. In addition, SHEF works around various `JEditorPane` quirks and adds functionality currently missing from the standard Swing text implementation. 
+
+Forked SHEF from SourecForge: (http://svn.code.sf.net/p/shef/code)
+
+Forked modified SHEF from https://github.com/VEDAGroup/SHEF
 
 Features
 --------
@@ -19,7 +22,7 @@ Features
 Demo
 --------
 
-A Demo is provided in the package.  Here's a screenshot:
+A Demo is provided in the package.  Here is a screenshot:
 
 ![SHEF screenshot](https://github.com/kkieffer/SHEF/blob/master/screenshot.jpg "SHEF screenshot")
 
