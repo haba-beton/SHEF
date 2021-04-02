@@ -4,30 +4,32 @@
   <artifactId>SHEF</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <properties>
-     <maven.compiler.source>1.8</maven.compiler.source>
-     <maven.compiler.target>1.8</maven.compiler.target>
+    <maven.compiler.source>8</maven.compiler.source>
+    <maven.compiler.target>8</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
   </properties>
+  <repositories>
+    <repository>
+      <id>talon-one</id>
+      <url>https://nexus.talanlabs.com/content/repositories/releases/</url>
+    </repository>
+  </repositories>
   <dependencies>
     <dependency>
+      <groupId>novaworx</groupId>
       <artifactId>novaworx-syntax</artifactId>
-      <groupId>novaworx-syntax</groupId>
       <version>0.0.7</version>
-      <scope>system</scope>
-      <systemPath>${basedir}/lib/novaworx-syntax-0.0.7.jar</systemPath>
     </dependency>
     <dependency>
+      <groupId>org.bushe</groupId>
       <artifactId>sam</artifactId>
-      <groupId>sam</groupId>
-      <version>0.0.1</version>
-      <scope>system</scope>
-      <systemPath>${basedir}/lib/sam.jar</systemPath>
+      <version>1.0.0</version>
     </dependency>
     <dependency>
+      <groupId>org.w3c</groupId>
       <artifactId>jtidy</artifactId>
-      <groupId>jtidy</groupId>
       <version>8.0</version>
-      <scope>system</scope>
-      <systemPath>${basedir}/lib/jtidy-8.0.jar</systemPath>
     </dependency>
   </dependencies>
 </project>
