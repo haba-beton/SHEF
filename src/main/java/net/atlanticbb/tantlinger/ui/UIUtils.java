@@ -20,28 +20,28 @@ public class UIUtils {
   /**
    * The 16 x 16 icon package
    */
-  public static final String X16 = "resources/images/x16/";
+  public static final String X16 = "images/x16/";
 
   /**
    * The 24 x 24 icon package
    */
-  public static final String X24 = "resources/images/x24/";
+  public static final String X24 = "images/x24/";
 
   /**
    * The 32 x 32 icon package
    */
-  public static final String X32 = "resources/images/x32/";
+  public static final String X32 = "images/x32/";
 
   /**
    * The 48 x 48 icon package
    */
-  public static final String X48 = "resources/images/x48/";
+  public static final String X48 = "images/x48/";
 
 
   /**
    * Misc icons that are unsized
    */
-  public static final String MISC = "resources/images/misc/";
+  public static final String MISC = "images/misc/";
 
   /**
    * Gets the icon in the specified package with the specified name.
@@ -58,22 +58,10 @@ public class UIUtils {
     return getIcon(_package + iconName);
   }
 
-  /**
-   * Gets the icon at the specified path
-   *
-   * @param path The path of the icon
-   * @return The icon, or null if the icon file doesn't exist
-   */
   public static ImageIcon getIcon(String path) {
     return createImageIcon(path);
   }
 
-  /**
-   * Create an ImageIcon from the image at the specified path
-   *
-   * @param path The path of the image
-   * @return The image icon, or null if the image doesn't exist
-   */
   public static ImageIcon createImageIcon(String path) {
 
     URL u = Thread.currentThread().getContextClassLoader().getResource(path);
@@ -83,11 +71,6 @@ public class UIUtils {
     return new ImageIcon(u);
   }
 
-  /**
-   * Shows an error message dialog
-   *
-   * @param msg
-   */
   public static void showError(String msg) {
     showError(null, msg);
   }
@@ -102,35 +85,15 @@ public class UIUtils {
       showError(c, ex.getLocalizedMessage());
   }
 
-  /**
-   * Shows an error message dialog
-   *
-   * @param owner
-   * @param msg
-   */
   public static void showError(Component owner, String msg) {
     showError(owner, "Error", msg);
   }
 
-  /**
-   * Shows an error message dialog
-   *
-   * @param owner
-   * @param title
-   * @param msg
-   */
   public static void showError(Component owner, String title, String msg) {
     JOptionPane.showMessageDialog(
       owner, msg, title, JOptionPane.ERROR_MESSAGE);
   }
 
-  /**
-   * Shows an exception dialog
-   *
-   * @param owner
-   * @param title
-   * @param th
-   */
   public static void showError(Frame owner, String title, Throwable th) {
     JDialog d = new ExceptionDialog(owner, th);
     if (title != null)
@@ -140,25 +103,11 @@ public class UIUtils {
     th.printStackTrace();
   }
 
-
-  /**
-   * Shows an exception dialog
-   *
-   * @param owner
-   * @param th
-   */
   public static void showError(Frame owner, Throwable th) {
     showError(owner, null, th);
     ;
   }
 
-  /**
-   * Shows an exception dialog
-   *
-   * @param owner
-   * @param title
-   * @param th
-   */
   public static void showError(Dialog owner, String title, Throwable th) {
     JDialog d = new ExceptionDialog(owner, th);
     if (title != null)
@@ -168,76 +117,33 @@ public class UIUtils {
     th.printStackTrace();
   }
 
-
-  /**
-   * Shows an exception dialog
-   *
-   * @param owner
-   * @param th
-   */
   public static void showError(Dialog owner, Throwable th) {
     showError(owner, null, th);
     ;
   }
 
-  /**
-   * Shows a warning dialog
-   *
-   * @param owner
-   * @param title
-   * @param msg
-   */
   public static void showWarning(Component owner, String title, String msg) {
     JOptionPane.showMessageDialog(
       owner, msg, title, JOptionPane.WARNING_MESSAGE);
   }
 
-  /**
-   * Shows a warning dialog
-   *
-   * @param owner
-   * @param msg
-   */
   public static void showWarning(Component owner, String msg) {
     showWarning(owner, "Warning", msg);
   }
 
-  /**
-   * Shows a warning dialog
-   *
-   * @param msg
-   */
   public static void showWarning(String msg) {
     showWarning(null, msg);
   }
 
-  /**
-   * Shows an info dialog
-   *
-   * @param owner
-   * @param title
-   * @param msg
-   */
   public static void showInfo(Component owner, String title, String msg) {
     JOptionPane.showMessageDialog(
       owner, msg, title, JOptionPane.INFORMATION_MESSAGE);
   }
 
-  /**
-   * Shows an info dialog
-   *
-   * @param owner
-   * @param msg
-   */
   public static void showInfo(Component owner, String msg) {
     showInfo(owner, "Information", msg);
   }
 
-  /**
-   * Shows an info dialog
-   *
-   * @param msg
-   */
   public static void showInfo(String msg) {
     showInfo(null, msg);
   }
@@ -261,7 +167,8 @@ public class UIUtils {
       if (button.getAction().getValue("LARGE_ICON") != null) {
         try {
           button.setIcon((Icon) button.getAction().getValue("LARGE_ICON"));
-        } catch (ClassCastException cce) {
+        }
+        catch (ClassCastException cce) {
         }
       }
     }

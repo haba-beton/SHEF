@@ -1,13 +1,9 @@
-/*
- * Created on Nov 25, 2007
- */
 package net.atlanticbb.tantlinger.ui.text.actions;
 
 import net.atlanticbb.tantlinger.ui.UIUtils;
 import net.atlanticbb.tantlinger.ui.text.CompoundUndoManager;
 import net.atlanticbb.tantlinger.ui.text.HTMLUtils;
 import org.bushe.swing.action.ActionManager;
-import org.bushe.swing.action.ShouldBeEnabledDelegate;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,7 +18,6 @@ import java.io.Reader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 /**
  * @author Bob Tantlinger
  */
@@ -36,19 +31,17 @@ public class PasteFormattedAction extends HTMLTextEditAction {
     putValue(SMALL_ICON, UIUtils.getIcon(UIUtils.X16, "paste.png"));
     putValue(ActionManager.LARGE_ICON, UIUtils.getIcon(UIUtils.X24, "paste.png"));
     putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("shift ctrl V"));
-    addShouldBeEnabledDelegate(new ShouldBeEnabledDelegate() {
-      public boolean shouldBeEnabled(Action a) {
-        if (getCurrentEditor() == null)
-          return false;
+    addShouldBeEnabledDelegate(a -> {
+      if (getCurrentEditor() == null)
+        return false;
 
-        Transferable content =
-          Toolkit.getDefaultToolkit().getSystemClipboard().getContents(PasteFormattedAction.this);
+      Transferable content =
+        Toolkit.getDefaultToolkit().getSystemClipboard().getContents(PasteFormattedAction.this);
 
-        if (content == null)
-          return false;
-        DataFlavor flv = DataFlavor.selectBestTextFlavor(content.getTransferDataFlavors());
-        return flv != null && flv.getMimeType().startsWith("text/html");
-      }
+      if (content == null)
+        return false;
+      DataFlavor flv = DataFlavor.selectBestTextFlavor(content.getTransferDataFlavors());
+      return flv != null && flv.getMimeType().startsWith("text/html");
     });
 
     putValue(Action.SHORT_DESCRIPTION, getValue(Action.NAME));
@@ -100,14 +93,6 @@ public class PasteFormattedAction extends HTMLTextEditAction {
     }
   }
 
-
-  /**
-   * Get the HTML text from the content if any
-   *
-   * @return returns the html fragment, or null if this content isn't HTML
-   * @throws UnsupportedFlavorException
-   * @throws IOException
-   */
   private String getHTMLFragment() throws IOException, UnsupportedFlavorException {
     Clipboard clip = Toolkit.getDefaultToolkit().getSystemClipboard();
     Transferable c = clip.getContents(this);
@@ -156,7 +141,7 @@ public class PasteFormattedAction extends HTMLTextEditAction {
 
   public String read(Reader input) throws IOException {
     BufferedReader reader = new BufferedReader(input);
-    StringBuffer sb = new StringBuffer();
+    StringBuilder sb = new StringBuilder();
     int ch;
 
     try {
@@ -164,16 +149,15 @@ public class PasteFormattedAction extends HTMLTextEditAction {
         //System.err.print((char)ch);
         sb.append((char) ch);
       }
-    } catch (IOException ex) {
-      throw ex;
-    } finally {
+    }
+    finally {
       try {
         reader.close();
-      } catch (IOException ioe) {
+      }
+      catch (IOException ignored) {
       }
     }
 
     return sb.toString();
   }
-
 }
