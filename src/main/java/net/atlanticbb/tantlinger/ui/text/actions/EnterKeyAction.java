@@ -1,10 +1,5 @@
 package net.atlanticbb.tantlinger.ui.text.actions;
 
-/*
- * Created on Dec 10, 2005
- *
- */
-
 import net.atlanticbb.tantlinger.ui.text.CompoundUndoManager;
 import net.atlanticbb.tantlinger.ui.text.ElementWriter;
 import net.atlanticbb.tantlinger.ui.text.HTMLUtils;
@@ -21,18 +16,8 @@ import java.awt.event.ActionEvent;
 import java.io.StringWriter;
 import java.util.Enumeration;
 
-
-/**
- * Action which properly inserts breaks for an HTMLDocument
- *
- * @author Bob Tantlinger
- */
 public class EnterKeyAction extends DecoratedTextAction {
-  /**
-   *
-   */
   private static final long serialVersionUID = 1L;
-  //private Action delegate = null;
 
   /**
    * Creates a new EnterKeyAction.
@@ -41,7 +26,6 @@ public class EnterKeyAction extends DecoratedTextAction {
    */
   public EnterKeyAction(Action defaultEnterAction) {
     super("EnterAction", defaultEnterAction);
-    //delegate = defaultEnterAction;
   }
 
   public void actionPerformed(ActionEvent e) {
@@ -51,7 +35,8 @@ public class EnterKeyAction extends DecoratedTextAction {
     try {
       editor = (JEditorPane) getTextComponent(e);
       document = (HTMLDocument) editor.getDocument();
-    } catch (ClassCastException ex) {
+    }
+    catch (ClassCastException ex) {
       // don't know what to do with this type
       // so pass off the event to the delegate
       delegate.actionPerformed(e);
@@ -88,7 +73,8 @@ public class EnterKeyAction extends DecoratedTextAction {
             }
 
             editor.setCaretPosition(caret + 1);
-          } else// empty list item
+          }
+          else// empty list item
           {
             Element listParentElem = HTMLUtils.getListParent(parentElem).getParentElement();
             //System.out.println(listParentElem.getName());
@@ -172,8 +158,8 @@ public class EnterKeyAction extends DecoratedTextAction {
             insertParagraphAfter(parentElem, editor);
           }
         }
-      } else //not implied
-      {
+      }
+      else {
         //we need to check for this here in case any straggling li's
         //or dd's exist
         if (isListItem(tag)) {
@@ -228,14 +214,6 @@ public class EnterKeyAction extends DecoratedTextAction {
     document.setOuterHTML(elem, html);
   }
 
-  /**
-   * Inserts a paragraph after the current paragraph of the same type
-   *
-   * @param elem
-   * @param editor
-   * @throws BadLocationException
-   * @throws java.io.IOException
-   */
   private void insertParagraphAfter(Element elem, JEditorPane editor)
     throws BadLocationException, java.io.IOException {
     int cr = editor.getCaretPosition();
@@ -254,7 +232,8 @@ public class EnterKeyAction extends DecoratedTextAction {
     //get duplicated
     if (cr == startOffs) {
       html = createBlock(t, elem, "");
-    } else //split the current para at the cursor position
+    }
+    else //split the current para at the cursor position
     {
       StringWriter out = new StringWriter();
       ElementWriter w = new ElementWriter(out, elem, startOffs, cr);
@@ -264,7 +243,8 @@ public class EnterKeyAction extends DecoratedTextAction {
 
     if (cr == endOffs - 1) {
       html += createBlock(t, elem, "");
-    } else {
+    }
+    else {
       StringWriter out = new StringWriter();
       ElementWriter w = new ElementWriter(out, elem, cr, endOffs);
       w.write();
@@ -308,10 +288,9 @@ public class EnterKeyAction extends DecoratedTextAction {
     //if the charattribs contains a br, hr, or img attribute, it'll erase
     //any content in the paragraph
     boolean skipAttribs = false;
-    for (Enumeration ee = sas.getAttributeNames(); ee.hasMoreElements(); ) {
+    for (Enumeration<?> ee = sas.getAttributeNames(); ee.hasMoreElements(); ) {
       Object n = ee.nextElement();
       String val = chAttribs.getAttribute(n).toString();
-      ////System.out.println(n + " " + val);
       skipAttribs = val.equals("br") || val.equals("hr") || val.equals("img");
     }
 

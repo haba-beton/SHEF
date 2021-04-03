@@ -1,7 +1,3 @@
-/*
- * Created on Feb 25, 2005
- *
- */
 package net.atlanticbb.tantlinger.ui.text.actions;
 
 import net.atlanticbb.tantlinger.ui.UIUtils;
@@ -18,65 +14,49 @@ import javax.swing.text.html.HTML;
 import javax.swing.text.html.HTMLDocument;
 import java.awt.event.ActionEvent;
 
-
 /**
  * Action which aligns HTML elements
  *
  * @author Bob Tantlinger
  */
 public class HTMLAlignAction extends HTMLTextEditAction {
-  /**
-   *
-   */
-  private static final long serialVersionUID = 1L;
   public static final int LEFT = 0;
   public static final int CENTER = 1;
   public static final int RIGHT = 2;
   public static final int JUSTIFY = 3;
 
-  public static final String ALIGNMENT_NAMES[] =
-    {
-      i18n.str("left"),
-      i18n.str("center"),
-      i18n.str("right"),
-      i18n.str("justify")
-    };
+  public static final String[] ALIGNMENT_NAMES = {
+    i18n.str("left"),
+    i18n.str("center"),
+    i18n.str("right"),
+    i18n.str("justify")
+  };
 
-  private static final int[] MNEMS =
-    {
-      i18n.mnem("left"),
-      i18n.mnem("center"),
-      i18n.mnem("right"),
-      i18n.mnem("justify")
-    };
+  private static final int[] MNEMS = {
+    i18n.mnem("left"),
+    i18n.mnem("center"),
+    i18n.mnem("right"),
+    i18n.mnem("justify")
+  };
 
-  public static final String ALIGNMENTS[] =
-    {
-      "left", "center", "right", "justify"
-    };
+  public static final String[] ALIGNMENTS = {
+    "left", "center", "right", "justify"
+  };
 
-  private static final String IMGS[] =
-    {
-      "al_left.png", "al_center.png", "al_right.png", "al_just.png"
-    };
+  private static final String[] IMGS = {
+    "al_left.png", "al_center.png", "al_right.png", "al_just.png"
+  };
 
   private int align;
 
-
-  /**
-   * Creates a new HTMLAlignAction
-   *
-   * @param al LEFT, RIGHT, CENTER, or JUSTIFY
-   * @throws IllegalArgumentException
-   */
   public HTMLAlignAction(int al) throws IllegalArgumentException {
     super("");
-    if (al < 0 || al >= ALIGNMENTS.length)
+    if (al < 0 || al >= ALIGNMENTS.length) {
       throw new IllegalArgumentException("Illegal Argument");
+    }
 
-    //String pkg = getClass().getPackage().getName();
     putValue(NAME, (ALIGNMENT_NAMES[al]));
-    putValue(MNEMONIC_KEY, new Integer(MNEMS[al]));
+    putValue(MNEMONIC_KEY, MNEMS[al]);
 
     putValue(SMALL_ICON, UIUtils.getIcon(UIUtils.X16, IMGS[al]));
     putValue(ActionManager.BUTTON_TYPE, ActionManager.BUTTON_TYPE_VALUE_RADIO);
