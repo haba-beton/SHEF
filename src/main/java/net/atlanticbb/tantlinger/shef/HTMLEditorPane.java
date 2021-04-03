@@ -22,35 +22,29 @@ import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.undo.UndoManager;
 import java.awt.*;
 import java.awt.event.*;
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 /**
  * @author Bob Tantlinger
  */
 public class HTMLEditorPane extends JPanel {
-  /**
-   *
-   */
-  private static final long serialVersionUID = 1L;
+  private static final long     serialVersionUID = 1L;
 
-  private static final I18n i18n = I18n.getInstance("net.atlanticbb.tantlinger.shef");
+  private static final I18n     i18n             = I18n.getInstance("net.atlanticbb.tantlinger.shef");
 
-  private static final String INVALID_TAGS[] = {"html", "head", "body", "title"};
+  private static final String[] INVALID_TAGS     = {"html", "head", "body", "title"};
 
-  private JEditorPane wysEditor;
-  private SourceCodeEditor srcEditor;
-  private JEditorPane focusedEditor;
-  private JComboBox fontFamilyCombo;
-  private JComboBox paragraphCombo;
-  private JTabbedPane tabs;
-  //private JMenuBar menuBar;
-  private JToolBar formatToolBar;
+  private JEditorPane           wysEditor;
+  private SourceCodeEditor      srcEditor;
+  private JEditorPane           focusedEditor;
+  private JComboBox<Font>       fontFamilyCombo;
+  private JComboBox             paragraphCombo;
+  private JTabbedPane           tabs;
+  private JToolBar              formatToolBar;
 
   private JMenu editMenu;
   private JMenu formatMenu;
@@ -77,7 +71,8 @@ public class HTMLEditorPane extends JPanel {
     if (tabs.getSelectedIndex() == 0) {
       wysEditor.setCaretPosition(pos);
       wysEditor.requestFocusInWindow();
-    } else if (tabs.getSelectedIndex() == 1) {
+    }
+    else if (tabs.getSelectedIndex() == 1) {
       srcEditor.setCaretPosition(pos);
       srcEditor.requestFocusInWindow();
     }
@@ -93,11 +88,9 @@ public class HTMLEditorPane extends JPanel {
     setLayout(new BorderLayout());
     add(formatToolBar, BorderLayout.NORTH);
     add(tabs, BorderLayout.CENTER);
-
   }
 
   public void dispose() {
-
     wysEditor.removeAll();
     wysEditor.removeCaretListener(caretHandler);
     wysEditor.removeFocusListener(focusHandler);
@@ -107,9 +100,7 @@ public class HTMLEditorPane extends JPanel {
     srcEditor.removeCaretListener(caretHandler);
     srcEditor.removeFocusListener(focusHandler);
     srcEditor.getDocument().removeDocumentListener(textChangedHandler);
-
   }
-
 
   public JMenu getEditMenu() {
     return editMenu;
@@ -122,7 +113,6 @@ public class HTMLEditorPane extends JPanel {
   public JMenu getInsertMenu() {
     return insertMenu;
   }
-
 
   private void createEditorActions(boolean enableHTML) {
     actionList = new ActionList("editor-actions");
@@ -240,7 +230,6 @@ public class HTMLEditorPane extends JPanel {
     actionList.add(act);
     insertMenu.add(act);
 
-
     createFormatToolBar(paraActions, fontSizeActions);
   }
 
@@ -250,23 +239,21 @@ public class HTMLEditorPane extends JPanel {
     formatToolBar.setFocusable(false);
 
     Font comboFont = new Font("Dialog", Font.PLAIN, 12);
-    PropertyChangeListener propLst = new PropertyChangeListener() {
-      public void propertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals("selected")) {
-          if (evt.getNewValue().equals(Boolean.TRUE)) {
-            paragraphCombo.removeActionListener(paragraphComboHandler);
-            paragraphCombo.setSelectedItem(evt.getSource());
-            paragraphCombo.addActionListener(paragraphComboHandler);
-          }
+    PropertyChangeListener propLst = evt -> {
+      if (evt.getPropertyName().equals("selected")) {
+        if (evt.getNewValue().equals(Boolean.TRUE)) {
+          paragraphCombo.removeActionListener(paragraphComboHandler);
+          paragraphCombo.setSelectedItem(evt.getSource());
+          paragraphCombo.addActionListener(paragraphComboHandler);
         }
       }
     };
-    for (Iterator it = blockActs.iterator(); it.hasNext(); ) {
-      Object o = it.next();
-      if (o instanceof DefaultAction)
+    for (Object o : blockActs) {
+      if (o instanceof DefaultAction) {
         ((DefaultAction) o).addPropertyChangeListener(propLst);
+      }
     }
-    paragraphCombo = new JComboBox(toArray(blockActs));
+    paragraphCombo = new JComboBox<>(toArray(blockActs));
     paragraphCombo.setPreferredSize(new Dimension(120, 22));
     paragraphCombo.setMinimumSize(new Dimension(120, 22));
     paragraphCombo.setMaximumSize(new Dimension(120, 22));
@@ -276,15 +263,16 @@ public class HTMLEditorPane extends JPanel {
     formatToolBar.add(paragraphCombo);
     formatToolBar.addSeparator();
 
-    ArrayList<String> fonts = new ArrayList<String>();
+    ArrayList<String> fonts = new ArrayList<>();
     fonts.add("Default");
     fonts.add("serif");
     fonts.add("sans-serif");
     fonts.add("monospaced");
+
     GraphicsEnvironment gEnv = GraphicsEnvironment.getLocalGraphicsEnvironment();
     fonts.addAll(Arrays.asList(gEnv.getAvailableFontFamilyNames()));
 
-    fontFamilyCombo = new JComboBox<Font>();
+    fontFamilyCombo = new JComboBox<>();
     fontFamilyCombo.setPreferredSize(new Dimension(150, 22));
     fontFamilyCombo.setMinimumSize(new Dimension(150, 22));
     fontFamilyCombo.setMaximumSize(new Dimension(150, 22));
@@ -344,8 +332,8 @@ public class HTMLEditorPane extends JPanel {
     formatToolBar.addSeparator();
 
     List alst = HTMLEditorActionFactory.createListElementActionList();
-    for (Iterator it = alst.iterator(); it.hasNext(); ) {
-      act = (Action) it.next();
+    for (Object value : alst) {
+      act = (Action) value;
       act.putValue(ActionManager.BUTTON_TYPE, ActionManager.BUTTON_TYPE_VALUE_TOGGLE);
       actionList.add(act);
       addToToolBar(formatToolBar, act);
@@ -353,8 +341,8 @@ public class HTMLEditorPane extends JPanel {
     formatToolBar.addSeparator();
 
     alst = HTMLEditorActionFactory.createAlignActionList();
-    for (Iterator it = alst.iterator(); it.hasNext(); ) {
-      act = (Action) it.next();
+    for (Object o : alst) {
+      act = (Action) o;
       act.putValue(ActionManager.BUTTON_TYPE, ActionManager.BUTTON_TYPE_VALUE_TOGGLE);
       actionList.add(act);
       addToToolBar(formatToolBar, act);
@@ -381,21 +369,12 @@ public class HTMLEditorPane extends JPanel {
     toolbar.add(button);
   }
 
-  /**
-   * Converts an action list to an array.
-   * Any of the null "separators" or sub ActionLists are ommited from the array.
-   *
-   * @param lst
-   * @return
-   */
   private Action[] toArray(ActionList lst) {
     List acts = new ArrayList();
-    for (Iterator it = lst.iterator(); it.hasNext(); ) {
-      Object v = it.next();
+    for (Object v : lst) {
       if (v != null && v instanceof Action)
         acts.add(v);
     }
-
     return (Action[]) acts.toArray(new Action[acts.size()]);
   }
 
@@ -427,7 +406,6 @@ public class HTMLEditorPane extends JPanel {
       tabs.setUI(new BasicTabbedPaneUI() {
         @Override
         protected int calculateTabAreaHeight(int tab_placement, int run_count, int max_tab_height) {
-
           return 0;
         }
       });
@@ -493,11 +471,12 @@ public class HTMLEditorPane extends JPanel {
   //  inserts html into the wysiwyg editor TODO remove JEditorPane parameter
   private void insertHTML(JEditorPane editor, String html, int location) {
     try {
-      HTMLEditorKit kit = (HTMLEditorKit) editor.getEditorKit();
+      HTMLEditorKit kit = (HTMLEditorKit)editor.getEditorKit();
       Document doc = editor.getDocument();
       StringReader reader = new StringReader(HTMLUtils.jEditorPaneizeHTML(html));
-      kit.read(reader, doc, location);
-    } catch (Exception ex) {
+      kit.read(reader,doc,location);
+    }
+    catch (Exception ex) {
       ex.printStackTrace();
     }
   }
@@ -510,7 +489,8 @@ public class HTMLEditorPane extends JPanel {
       insertHTML(wysEditor, topText, 0);
       CompoundUndoManager.discardAllEdits(wysEditor.getDocument());
 
-    } else {
+    }
+    else {
       String topText = removeInvalidTags(wysEditor.getText());
       if (isWysTextChanged || srcEditor.getText().equals("")) {
         String t = deIndent(removeInvalidTags(topText));
@@ -530,17 +510,12 @@ public class HTMLEditorPane extends JPanel {
     String topText = removeInvalidTags(text);
 
     if (tabs.getSelectedIndex() == 0) {
-
       wysEditor.setText("");
       insertHTML(wysEditor, topText, 0);
       CompoundUndoManager.discardAllEdits(wysEditor.getDocument());
-
-    } else {
-      {
-        String t = deIndent(removeInvalidTags(topText));
-        t = Entities.HTML40.unescapeUnknownEntities(t);
-        srcEditor.setText(t);
-      }
+    }
+    else {
+      srcEditor.setText(Entities.HTML40.unescapeUnknownEntities(deIndent(removeInvalidTags(topText))));
       CompoundUndoManager.discardAllEdits(srcEditor.getDocument());
     }
   }
@@ -550,12 +525,12 @@ public class HTMLEditorPane extends JPanel {
     if (tabs.getSelectedIndex() == 0) {
       topText = removeInvalidTags(wysEditor.getText());
 
-    } else {
+    }
+    else {
       topText = removeInvalidTags(srcEditor.getText());
       topText = deIndent(removeInvalidTags(topText));
       topText = Entities.HTML40.unescapeUnknownEntities(topText);
     }
-
     return topText;
   }
 
@@ -565,7 +540,7 @@ public class HTMLEditorPane extends JPanel {
    * ******************************************************************/
   private String deIndent(String html) {
     String ws = "\n    ";
-    StringBuffer sb = new StringBuffer(html);
+    StringBuilder sb = new StringBuilder(html);
 
     while (sb.indexOf(ws) != -1) {
       int s = sb.indexOf(ws);
@@ -578,17 +553,16 @@ public class HTMLEditorPane extends JPanel {
   }
 
   private String removeInvalidTags(String html) {
-    for (int i = 0; i < INVALID_TAGS.length; i++) {
-      html = deleteOccurance(html, '<' + INVALID_TAGS[i] + '>');
-      html = deleteOccurance(html, "</" + INVALID_TAGS[i] + '>');
+    for (String invalidTag : INVALID_TAGS) {
+      html = deleteOccurance(html, '<' + invalidTag + '>');
+      html = deleteOccurance(html, "</" + invalidTag + '>');
     }
 
     return html.trim();
   }
 
   private String deleteOccurance(String text, String word) {
-    //if(text == null)return "";
-    StringBuffer sb = new StringBuffer(text);
+    StringBuilder sb = new StringBuilder(text);
     int p;
     while ((p = sb.toString().toLowerCase().indexOf(word.toLowerCase())) != -1) {
       sb.delete(p, p + word.length());
@@ -633,13 +607,14 @@ public class HTMLEditorPane extends JPanel {
 
     private void checkForPopupTrigger(MouseEvent e) {
       if (e.isPopupTrigger()) {
-        JPopupMenu p = null;
+        JPopupMenu p;
         if (e.getSource() == wysEditor)
           p = wysPopupMenu;
         else if (e.getSource() == srcEditor)
           p = srcPopupMenu;
-        else
+        else {
           return;
+        }
         p.show(e.getComponent(), e.getX(), e.getY());
       }
     }
@@ -658,7 +633,6 @@ public class HTMLEditorPane extends JPanel {
     }
 
     public void focusLost(FocusEvent e) {
-
       if (e.getComponent() instanceof JEditorPane) {
         //focusedEditor = null;
         //wysiwygUpdated();
@@ -718,7 +692,7 @@ public class HTMLEditorPane extends JPanel {
     }
   }
 
-  private class ParagraphComboRenderer extends DefaultListCellRenderer {
+  private static class ParagraphComboRenderer extends DefaultListCellRenderer {
     /**
      *
      */
@@ -755,8 +729,6 @@ public class HTMLEditorPane extends JPanel {
      * @see java.awt.event.ItemListener#itemStateChanged(java.awt.event.ItemEvent)
      */
     public void itemStateChanged(ItemEvent e) {
-
-
     }
   }
 }

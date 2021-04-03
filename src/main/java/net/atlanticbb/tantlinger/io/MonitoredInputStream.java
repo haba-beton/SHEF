@@ -22,7 +22,7 @@ public class MonitoredInputStream extends FilterInputStream {
     return super.read();
   }
 
-  public int read(byte b[], int off, int len) throws IOException {
+  public int read(byte[] b, int off, int len) throws IOException {
     checkAborted();
     int numRead = super.read(b, off, len);
     if (numRead != -1) {
@@ -32,7 +32,7 @@ public class MonitoredInputStream extends FilterInputStream {
 
   }
 
-  public int read(byte b[]) throws IOException {
+  public int read(byte[] b) throws IOException {
     checkAborted();
     return super.read(b);
   }

@@ -111,7 +111,7 @@ public class PasteFormattedAction extends HTMLTextEditAction {
     Pattern p = Pattern.compile(("<\\s*body\\b([^<>]*)>"), flags);
     Matcher m = p.matcher(text);
     if (m.find()) {
-      text = text.substring(m.end(), text.length());
+      text = text.substring(m.end());
     }
 
     p = Pattern.compile("<\\s*/\\s*body\\s*>", flags);
