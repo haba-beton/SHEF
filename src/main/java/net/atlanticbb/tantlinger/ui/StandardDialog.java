@@ -1,5 +1,3 @@
-//based on a javaworld article
-
 package net.atlanticbb.tantlinger.ui;
 
 import net.atlanticbb.tantlinger.i18n.I18n;
@@ -9,7 +7,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-
 
 /**
  * This class implements a standard data entry dialog with "OK" and
@@ -24,63 +21,29 @@ import java.awt.event.WindowEvent;
  * @author Michael Harris
  */
 public class StandardDialog extends JDialog {
-  /**
-   *
-   */
   private static final long serialVersionUID = 1L;
 
   private static final I18n i18n = I18n.getInstance("net.atlanticbb.tantlinger.ui");
 
-  // Constants
   public static final int BUTTONS_CENTER = FlowLayout.CENTER;
   public static final int BUTTONS_LEFT = FlowLayout.LEFT;
   public static final int BUTTONS_RIGHT = FlowLayout.RIGHT;
 
-  /**
-   * The spacing between components in pixels
-   */
   private static final int COMPONENT_SPACING = 5;
 
-  // Attributes
-
-  /**
-   * Flag indicating if the "Cancel" button was pressed to close dialog
-   */
   private boolean myIsDialogCancelled = true;
 
-  /**
-   * The content pane for holding user components
-   */
   private Container myUserContentPane;
 
-  // Methods
-
-  /**
-   * This method is the default constructor.
-   */
   public StandardDialog() {
     init(BUTTONS_CENTER, COMPONENT_SPACING);
   }
 
-  /**
-   * This method creates a StandardDialog with the given parent frame
-   * and title.
-   *
-   * @param parent The parent frame for the dialog.
-   * @param title  The title to display in the dialog.
-   */
   public StandardDialog(Frame parent, String title) {
     super(parent, title);
     init(BUTTONS_CENTER, COMPONENT_SPACING);
   }
 
-  /**
-   * This method creates a StandardDialog with the given parent dialog
-   * and title.
-   *
-   * @param parent The parent dialog for the dialog.
-   * @param title  The title to display in the dialog.
-   */
   public StandardDialog(Dialog parent, String title) {
     super(parent, title);
     init(BUTTONS_CENTER, COMPONENT_SPACING);
@@ -106,11 +69,6 @@ public class StandardDialog extends JDialog {
     init(orientation, COMPONENT_SPACING);
   }
 
-
-  /**
-   * This method sets up the default attributes of the dialog and
-   * the content pane.
-   */
   private void init(int orientation, int spacing) {
     setModal(true);
     setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);

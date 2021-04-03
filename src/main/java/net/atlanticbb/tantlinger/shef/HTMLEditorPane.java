@@ -128,9 +128,6 @@ public class HTMLEditorPane extends JPanel {
     wysPopupMenu.add(objectPropertiesAction);
     srcPopupMenu = ActionUIFactory.getInstance().createPopupMenu(editActions);
 
-    // create file menu
-    JMenu fileMenu = new JMenu(i18n.str("file"));
-
     // create edit menu
     Action act;
     ActionList lst = new ActionList("edits");
@@ -449,7 +446,7 @@ public class HTMLEditorPane extends JPanel {
 
   private JEditorPane createWysiwygEditor() {
     JEditorPane ed = new JEditorPane();
-    ed.setEditorKitForContentType("text/html", new WysiwygHTMLEditorKit());
+    ed.setEditorKitForContentType("text/html",new WysiwygHTMLEditorKit());
 
     ed.setContentType("text/html");
 
@@ -458,7 +455,6 @@ public class HTMLEditorPane extends JPanel {
     ed.addCaretListener(caretHandler);
     ed.addFocusListener(focusHandler);
     ed.addMouseListener(popupHandler);
-
 
     HTMLDocument document = (HTMLDocument) ed.getDocument();
     CompoundUndoManager cuh = new CompoundUndoManager(document, new UndoManager());
@@ -534,7 +530,6 @@ public class HTMLEditorPane extends JPanel {
     return topText;
   }
 
-
   /* *******************************************************************
    *  Methods for dealing with HTML between wysiwyg and source editors
    * ******************************************************************/
@@ -569,7 +564,6 @@ public class HTMLEditorPane extends JPanel {
     }
     return sb.toString();
   }
-  /* ************************************* */
 
   private void updateState() {
     if (focusedEditor == wysEditor) {
@@ -588,10 +582,7 @@ public class HTMLEditorPane extends JPanel {
 
 
   private class CaretHandler implements CaretListener {
-    /* (non-Javadoc)
-     * @see javax.swing.event.CaretListener#caretUpdate(javax.swing.event.CaretEvent)
-     */
-    public void caretUpdate(CaretEvent e) {
+     public void caretUpdate(CaretEvent e) {
       updateState();
     }
   }

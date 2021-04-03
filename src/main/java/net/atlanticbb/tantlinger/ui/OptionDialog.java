@@ -1,18 +1,9 @@
-/*
- * Created on Jan 10, 2006
- *
- */
-
 package net.atlanticbb.tantlinger.ui;
 
 import javax.swing.*;
 import java.awt.*;
 
-
 public class OptionDialog extends StandardDialog {
-  /**
-   *
-   */
   private static final long serialVersionUID = 1L;
   private JPanel internalContentPane;
   private Container contentPane;
@@ -33,7 +24,6 @@ public class OptionDialog extends StandardDialog {
     hp.setTitle(title);
     hp.setDescription(desc);
     hp.setIcon(icon);
-    //hp.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.GRAY));
     internalContentPane.add(hp, BorderLayout.NORTH);
 
     super.setContentPane(internalContentPane);
@@ -44,9 +34,7 @@ public class OptionDialog extends StandardDialog {
   }
 
   public void setContentPane(Container c) {
-    //internalContentPane.remove(contentPane);
     contentPane = c;
     internalContentPane.add(c, BorderLayout.CENTER);
-
   }
 }

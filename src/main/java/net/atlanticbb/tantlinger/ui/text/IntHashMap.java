@@ -39,7 +39,7 @@ class IntHashMap {
   /**
    * The hash table data.
    */
-  private transient Entry table[];
+  private transient Entry[] table;
 
   /**
    * The total number of entries in the hash table.
@@ -175,7 +175,7 @@ class IntHashMap {
       throw new NullPointerException();
     }
 
-    Entry tab[] = table;
+    Entry[] tab = table;
     for (int i = tab.length; i-- > 0; ) {
       for (Entry e = tab[i]; e != null; e = e.next) {
         if (e.value.equals(value)) {
@@ -211,11 +211,10 @@ class IntHashMap {
    * @see #contains(Object)
    */
   public boolean containsKey(int key) {
-    Entry tab[] = table;
-    int hash = key;
-    int index = (hash & 0x7FFFFFFF) % tab.length;
+    Entry[] tab = table;
+    int index = (key & 0x7FFFFFFF) % tab.length;
     for (Entry e = tab[index]; e != null; e = e.next) {
-      if (e.hash == hash) {
+      if (e.hash == key) {
         return true;
       }
     }
@@ -232,11 +231,10 @@ class IntHashMap {
    * @see #put(int, Object)
    */
   public Object get(int key) {
-    Entry tab[] = table;
-    int hash = key;
-    int index = (hash & 0x7FFFFFFF) % tab.length;
+    Entry[] tab = table;
+    int index = (key & 0x7FFFFFFF) % tab.length;
     for (Entry e = tab[index]; e != null; e = e.next) {
-      if (e.hash == hash) {
+      if (e.hash == key) {
         return e.value;
       }
     }
@@ -254,10 +252,10 @@ class IntHashMap {
    */
   protected void rehash() {
     int oldCapacity = table.length;
-    Entry oldMap[] = table;
+    Entry[] oldMap = table;
 
     int newCapacity = oldCapacity * 2 + 1;
-    Entry newMap[] = new Entry[newCapacity];
+    Entry[] newMap = new Entry[newCapacity];
 
     threshold = (int) (newCapacity * loadFactor);
     table = newMap;
@@ -291,11 +289,10 @@ class IntHashMap {
    */
   public Object put(int key, Object value) {
     // Makes sure the key is not already in the hashtable.
-    Entry tab[] = table;
-    int hash = key;
-    int index = (hash & 0x7FFFFFFF) % tab.length;
+    Entry[] tab = table;
+    int index = (key & 0x7FFFFFFF) % tab.length;
     for (Entry e = tab[index]; e != null; e = e.next) {
-      if (e.hash == hash) {
+      if (e.hash == key) {
         Object old = e.value;
         e.value = value;
         return old;
@@ -307,11 +304,11 @@ class IntHashMap {
       rehash();
 
       tab = table;
-      index = (hash & 0x7FFFFFFF) % tab.length;
+      index = (key & 0x7FFFFFFF) % tab.length;
     }
 
     // Creates the new entry.
-    Entry e = new Entry(hash, key, value, tab[index]);
+    Entry e = new Entry(key, key, value, tab[index]);
     tab[index] = e;
     count++;
     return null;
@@ -329,11 +326,10 @@ class IntHashMap {
    * or <code>null</code> if the key did not have a mapping.
    */
   public Object remove(int key) {
-    Entry tab[] = table;
-    int hash = key;
-    int index = (hash & 0x7FFFFFFF) % tab.length;
+    Entry[] tab = table;
+    int index = (key & 0x7FFFFFFF) % tab.length;
     for (Entry e = tab[index], prev = null; e != null; prev = e, e = e.next) {
-      if (e.hash == hash) {
+      if (e.hash == key) {
         if (prev != null) {
           prev.next = e.next;
         } else {
@@ -352,7 +348,7 @@ class IntHashMap {
    * <p>Clears this hashtable so that it contains no keys.</p>
    */
   public synchronized void clear() {
-    Entry tab[] = table;
+    Entry[] tab = table;
     for (int index = tab.length; --index >= 0; ) {
       tab[index] = null;
     }

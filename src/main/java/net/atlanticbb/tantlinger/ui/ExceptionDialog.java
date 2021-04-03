@@ -7,13 +7,12 @@ import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-
 public class ExceptionDialog extends JDialog {
   private static final I18n i18n = I18n.getInstance("net.atlanticbb.tantlinger.ui");
 
   private static final long serialVersionUID = 1L;
   private static final int PREFERRED_WIDTH = 450;
-  private static final String DEFAULT_TITLE = i18n.str("error");  //  @jve:decl-index=0: //$NON-NLS-1$
+  private static final String DEFAULT_TITLE = i18n.str("error");
 
   private JPanel jContentPane = null;
   private JLabel iconLabel = null;
@@ -33,9 +32,6 @@ public class ExceptionDialog extends JDialog {
 
   }
 
-  /**
-   * @param owner
-   */
   public ExceptionDialog(Frame owner, Throwable th) {
     super(owner, DEFAULT_TITLE);
     init(th);
@@ -54,21 +50,11 @@ public class ExceptionDialog extends JDialog {
     showDetails(false);
   }
 
-  /**
-   * This method initializes this
-   *
-   * @return void
-   */
   private void initialize() {
     this.setContentPane(getJContentPane());
     getRootPane().setDefaultButton(getOkButton());
   }
 
-  /**
-   * This method initializes jContentPane
-   *
-   * @return javax.swing.JPanel
-   */
   private JPanel getJContentPane() {
     if (jContentPane == null) {
       GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
@@ -99,7 +85,7 @@ public class ExceptionDialog extends JDialog {
       gridBagConstraints2.insets = new Insets(0, 20, 5, 5);
       gridBagConstraints2.gridy = 1;
       msgLabel = new JLabel();
-      msgLabel.setText(""); //$NON-NLS-1$
+      msgLabel.setText("");
       GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
       gridBagConstraints1.gridx = 1;
       gridBagConstraints1.anchor = GridBagConstraints.WEST;
@@ -108,7 +94,7 @@ public class ExceptionDialog extends JDialog {
       gridBagConstraints1.weightx = 1.0;
       gridBagConstraints1.gridy = 0;
       titleLabel = new JLabel();
-      titleLabel.setText(i18n.str("error_prompt")); //$NON-NLS-1$
+      titleLabel.setText(i18n.str("error_prompt"));
       GridBagConstraints gridBagConstraints = new GridBagConstraints();
       gridBagConstraints.gridx = 0;
       gridBagConstraints.gridheight = 3;
@@ -117,9 +103,8 @@ public class ExceptionDialog extends JDialog {
       gridBagConstraints.insets = new Insets(0, 0, 0, 0);
       gridBagConstraints.gridy = 0;
       iconLabel = new JLabel();
-      iconLabel.setText(""); //$NON-NLS-1$
-      iconLabel.setIcon(UIManager.getIcon("OptionPane.errorIcon")); //$NON-NLS-1$
-      //iconLabel.setIcon(new ImageIcon(getClass().getResource("/com/neatomatic/ui/images/x32/cancel.png")));
+      iconLabel.setText("");
+      iconLabel.setIcon(UIManager.getIcon("OptionPane.errorIcon"));
       jContentPane = new JPanel();
       jContentPane.setLayout(new GridBagLayout());
       jContentPane.setBorder(BorderFactory.createEmptyBorder(12, 5, 10, 5));
@@ -133,11 +118,6 @@ public class ExceptionDialog extends JDialog {
     return jContentPane;
   }
 
-  /**
-   * This method initializes buttonPanel
-   *
-   * @return javax.swing.JPanel
-   */
   private JPanel getButtonPanel() {
     if (buttonPanel == null) {
       GridLayout gridLayout = new GridLayout();
@@ -153,38 +133,20 @@ public class ExceptionDialog extends JDialog {
     return buttonPanel;
   }
 
-  /**
-   * This method initializes okButton
-   *
-   * @return javax.swing.JButton
-   */
   private JButton getOkButton() {
     if (okButton == null) {
       okButton = new JButton();
-      okButton.setText(i18n.str("ok")); //$NON-NLS-1$
-      okButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          dispose();
-        }
-      });
+      okButton.setText(i18n.str("ok"));
+      okButton.addActionListener(e -> dispose());
     }
     return okButton;
   }
 
-  /**
-   * This method initializes detailsButton
-   *
-   * @return javax.swing.JButton
-   */
   private JButton getDetailsButton() {
     if (detailsButton == null) {
       detailsButton = new JButton();
-      detailsButton.setText(i18n.str("_details")); //$NON-NLS-1$
-      detailsButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          toggleDetails();
-        }
-      });
+      detailsButton.setText(i18n.str("_details"));
+      detailsButton.addActionListener(e -> toggleDetails());
     }
     return detailsButton;
   }
@@ -195,11 +157,11 @@ public class ExceptionDialog extends JDialog {
 
   public void showDetails(boolean b) {
     if (b) {
-      detailsButton.setText(i18n.str("details_")); //$NON-NLS-1$
+      detailsButton.setText(i18n.str("details_"));
       scrollPane.setVisible(true);
       separator.setVisible(false);
     } else {
-      detailsButton.setText(i18n.str("_details")); //$NON-NLS-1$
+      detailsButton.setText(i18n.str("_details"));
       scrollPane.setVisible(false);
       separator.setVisible(true);
     }
@@ -214,21 +176,19 @@ public class ExceptionDialog extends JDialog {
   }
 
   public void setThrowable(Throwable th) {
-    String msg = i18n.str("no_message_given"); //$NON-NLS-1$
-    if (th.getLocalizedMessage() != null && !th.getLocalizedMessage().equals("")) //$NON-NLS-1$
+    String msg = i18n.str("no_message_given");
+    if (th.getLocalizedMessage() != null && !th.getLocalizedMessage().equals("")) {
       msg = th.getLocalizedMessage();
+    }
     msgLabel.setText(msg);
     ByteArrayOutputStream bout = new ByteArrayOutputStream();
     th.printStackTrace(new PrintStream(bout));
 
-    String stackTrace = new String(bout.toByteArray());
+    String stackTrace = bout.toString();
     textArea.setText(stackTrace);
     textArea.setCaretPosition(0);
   }
 
-  /**
-   * @return a JSeparator that gets swapped out with the detail pane.
-   */
   private JSeparator getSeparator() {
     if (separator == null) {
       separator = new JSeparator();
@@ -238,11 +198,6 @@ public class ExceptionDialog extends JDialog {
     return separator;
   }
 
-  /**
-   * This method initializes scrollPane
-   *
-   * @return javax.swing.JScrollPane
-   */
   private JScrollPane getScrollPane() {
     if (scrollPane == null) {
       scrollPane = new JScrollPane();
@@ -252,11 +207,6 @@ public class ExceptionDialog extends JDialog {
     return scrollPane;
   }
 
-  /**
-   * This method initializes textArea
-   *
-   * @return javax.swing.JTextArea
-   */
   private JTextArea getTextArea() {
     if (textArea == null) {
       textArea = new JTextArea();

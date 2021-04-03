@@ -1,7 +1,3 @@
-/*
- * Created on Jan 17, 2006
- *
- */
 package net.atlanticbb.tantlinger.ui.text.dialogs;
 
 import net.atlanticbb.tantlinger.i18n.I18n;
@@ -13,19 +9,15 @@ import java.util.Vector;
 
 
 public class HTMLFontDialog extends HTMLOptionDialog {
-  /**
-   *
-   */
   private static final long serialVersionUID = 1L;
 
   private static final I18n i18n = I18n.getInstance("net.atlanticbb.tantlinger.ui.text.dialogs");
 
-  private static Icon icon = UIUtils.getIcon(UIUtils.X48, "fontsize.png"); //$NON-NLS-1$
-  private static String title = i18n.str("font"); //$NON-NLS-1$
-  private static String desc = i18n.str("font_desc"); //$NON-NLS-1$
+  private static Icon icon = UIUtils.getIcon(UIUtils.X48, "fontsize.png");
+  private static String title = i18n.str("font");
+  private static String desc = i18n.str("font_desc");
 
-  private static final Integer SIZES[] =
-    {
+  private static final Integer[] SIZES = {
       new Integer(8),
       new Integer(10),
       new Integer(12),
@@ -47,7 +39,7 @@ public class HTMLFontDialog extends HTMLOptionDialog {
   private JLabel previewLabel = null;
   private JPanel spacerPanel = null;
 
-  private String text = "";   //$NON-NLS-1$
+  private String text = "";
 
   public HTMLFontDialog(Frame parent, String text) {
     super(parent, title, desc, icon);

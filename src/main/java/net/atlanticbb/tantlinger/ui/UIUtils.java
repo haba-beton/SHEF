@@ -45,11 +45,8 @@ public class UIUtils {
 
   /**
    * Gets the icon in the specified package with the specified name.
-   * <p>
    * A package might be UIUtils.X16, UIUtils.X32, etc
    *
-   * @param _package
-   * @param iconName
    * @return The icon, or null if the icon doesn't exist
    */
   public static ImageIcon getIcon(String _package, String iconName) {
@@ -105,7 +102,6 @@ public class UIUtils {
 
   public static void showError(Frame owner, Throwable th) {
     showError(owner, null, th);
-    ;
   }
 
   public static void showError(Dialog owner, String title, Throwable th) {
@@ -119,7 +115,6 @@ public class UIUtils {
 
   public static void showError(Dialog owner, Throwable th) {
     showError(owner, null, th);
-    ;
   }
 
   public static void showWarning(Component owner, String title, String msg) {
@@ -166,9 +161,9 @@ public class UIUtils {
       //prefer large icons for toolbar buttons
       if (button.getAction().getValue("LARGE_ICON") != null) {
         try {
-          button.setIcon((Icon) button.getAction().getValue("LARGE_ICON"));
+          button.setIcon((Icon)button.getAction().getValue("LARGE_ICON"));
         }
-        catch (ClassCastException cce) {
+        catch (ClassCastException ignore) {
         }
       }
     }

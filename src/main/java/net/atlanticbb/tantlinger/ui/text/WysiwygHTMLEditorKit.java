@@ -17,23 +17,16 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.*;
 
-/**
- * An HTML Wysiwyg editor kit which can properly draw borderless tables
- * and allows for resizing of tables and images.
- *
- * @author Bob Tantlinger
- */
 public class WysiwygHTMLEditorKit extends HTMLEditorKit {
-  /**
-   *
-   */
-  private static final long serialVersionUID = 1L;
-  private ViewFactory wysFactory = new WysiwygHTMLFactory();
-  private ArrayList monitoredViews = new ArrayList();
-  private MouseInputAdapter resizeHandler = new ResizeHandler();
 
-  private Map editorToActionsMap = new HashMap();
-  private KeyStroke tabBackwardKS = KeyStroke.getKeyStroke(KeyEvent.VK_TAB, InputEvent.SHIFT_DOWN_MASK);
+  private static final long serialVersionUID = 1L;
+
+  private ViewFactory                         wysFactory = new WysiwygHTMLFactory();
+  private ArrayList<ResizableView>            monitoredViews = new ArrayList<>();
+  private MouseInputAdapter                   resizeHandler = new ResizeHandler();
+
+  private Map<JEditorPane,Map<String,Action>> editorToActionsMap = new HashMap<>();
+  private KeyStroke                           tabBackwardKS      = KeyStroke.getKeyStroke(KeyEvent.VK_TAB, InputEvent.SHIFT_DOWN_MASK);
 
   public WysiwygHTMLEditorKit() {
     super();
@@ -58,7 +51,7 @@ public class WysiwygHTMLEditorKit extends HTMLEditorKit {
     ed.addMouseMotionListener(resizeHandler);
 
     //install wysiwyg actions into the ActionMap for the editor being installed
-    Map actions = new HashMap();
+    Map<String,Action> actions = new HashMap<>();
     InputMap inputMap = ed.getInputMap(JComponent.WHEN_FOCUSED);
     ActionMap actionMap = ed.getActionMap();
 
@@ -105,7 +98,7 @@ public class WysiwygHTMLEditorKit extends HTMLEditorKit {
 
     //restore actions to their original state
     ActionMap actionMap = ed.getActionMap();
-    Map actions = (Map) editorToActionsMap.get(ed);
+    Map<String,Action> actions = editorToActionsMap.get(ed);
 
     Action curAct = actionMap.get("insert-break");
     if (curAct == actions.get("insert-break")) {
@@ -129,7 +122,7 @@ public class WysiwygHTMLEditorKit extends HTMLEditorKit {
 
     curAct = actionMap.get("paste-from-clipboard");
     if (curAct instanceof net.atlanticbb.tantlinger.ui.text.actions.PasteAction) {
-      actionMap.put("paste-from-clipboard", (Action) actions.get("paste-from-clipboard"));
+      actionMap.put("paste-from-clipboard", actions.get("paste-from-clipboard"));
     }
 
     curAct = actionMap.get("tab-backward");
@@ -172,7 +165,7 @@ public class WysiwygHTMLEditorKit extends HTMLEditorKit {
         } else if (kind == HTML.Tag.COMMENT) {
           return new UnknownElementView((elem));
         } else if (kind == HTML.Tag.OBJECT) {
-          ObjectView ov = new ObjectView(elem) {
+          return new ObjectView(elem) {
             //make a nicer looking representation for <object>.
             //The default is a crappy red JLabel with "??" as the text
             protected Component createComponent() {
@@ -192,7 +185,6 @@ public class WysiwygHTMLEditorKit extends HTMLEditorKit {
               return comp;
             }
           };
-          return ov;
         } else if ((kind instanceof HTML.UnknownTag) ||
           (kind == HTML.Tag.TITLE) ||
           (kind == HTML.Tag.META) ||
@@ -226,7 +218,7 @@ public class WysiwygHTMLEditorKit extends HTMLEditorKit {
       //iterate thru the list backwards to select
       //most recently added views so nested tables get selected properly
       for (int i = monitoredViews.size() - 1; i >= 0; i--) {
-        ResizableView v = (ResizableView) monitoredViews.get(i);
+        ResizableView v = monitoredViews.get(i);
         Rectangle r = v.getBounds();
         if (r != null && r.contains(e.getPoint()) && !selected) {
           v.setSelectionEnabled(true);
@@ -297,8 +289,8 @@ public class WysiwygHTMLEditorKit extends HTMLEditorKit {
       if (v != null && dragStarted) {
         Element elem = v.getElement();
         SimpleAttributeSet sas = new SimpleAttributeSet(elem.getAttributes());
-        Integer w = new Integer(v.getSelectionBounds().width);
-        Integer h = new Integer(v.getSelectionBounds().height);
+        Integer w = v.getSelectionBounds().width;
+        Integer h = v.getSelectionBounds().height;
 
         if (elem.getName().equals("table"))//resize the table
         {
@@ -312,7 +304,7 @@ public class WysiwygHTMLEditorKit extends HTMLEditorKit {
           sas.addAttribute(HTML.Attribute.WIDTH, w);
           sas.addAttribute(HTML.Attribute.HEIGHT, h);
           String html = "<img";
-          for (Enumeration ee = sas.getAttributeNames(); ee.hasMoreElements(); ) {
+          for (Enumeration<?> ee = sas.getAttributeNames(); ee.hasMoreElements(); ) {
             Object name = ee.nextElement();
             if (!(name.toString().equals("name") || name.toString().equals("a"))) {
               Object val = sas.getAttribute(name);
@@ -357,11 +349,9 @@ public class WysiwygHTMLEditorKit extends HTMLEditorKit {
     /**
      * Updates the list of monitored ResizeableViews. If they don't
      * exist in the document, they're removed from the list.
-     *
-     * @param doc
      */
     private void updateMonitoredViews(HTMLDocument doc) {
-      for (Iterator it = monitoredViews.iterator(); it.hasNext(); ) {
+      for (Iterator<?> it = monitoredViews.iterator(); it.hasNext(); ) {
         View v = (View) it.next();
         Element vElem = v.getElement();
         if (vElem.getName().equals("img")) {
@@ -383,12 +373,9 @@ public class WysiwygHTMLEditorKit extends HTMLEditorKit {
     /**
      * Get the currently selected view.
      * Only one view at a time can be selected
-     *
-     * @return
      */
     private ResizableView getSelectedView() {
-      for (Iterator it = monitoredViews.iterator(); it.hasNext(); ) {
-        ResizableView v = (ResizableView) it.next();
+      for (ResizableView v : monitoredViews) {
         if (v.isSelectionEnabled())
           return v;
       }
@@ -398,9 +385,6 @@ public class WysiwygHTMLEditorKit extends HTMLEditorKit {
 
     /**
      * Replaced the element with the specified html.
-     *
-     * @param elem
-     * @param html
      */
     private void replace(Element elem, String html) {
       HTMLDocument document = (HTMLDocument) elem.getDocument();
@@ -419,7 +403,7 @@ public class WysiwygHTMLEditorKit extends HTMLEditorKit {
    *
    * @author Bob Tantlinger
    */
-  private class ResizableView extends DelegateView {
+  private static class ResizableView extends DelegateView {
     public static final int NW = 0;
     public static final int NE = 1;
     public static final int SW = 2;
@@ -468,17 +452,13 @@ public class WysiwygHTMLEditorKit extends HTMLEditorKit {
 
     /**
      * Gets the current bounds of the view
-     *
-     * @return
-     */
+      */
     public Rectangle getBounds() {
       return curBounds;
     }
 
     /**
      * Gets the Rectangle from which the selection handles are drawn
-     *
-     * @return
      */
     public Rectangle getSelectionBounds() {
       return selBounds;
@@ -486,8 +466,6 @@ public class WysiwygHTMLEditorKit extends HTMLEditorKit {
 
     /**
      * Draw the selection if true
-     *
-     * @param b
      */
     public void setSelectionEnabled(boolean b) {
       if (b && curBounds != null)
@@ -503,13 +481,12 @@ public class WysiwygHTMLEditorKit extends HTMLEditorKit {
     /**
      * Gets the selection handle at the specified point.
      *
-     * @param p
      * @return one of NW, SW, NE, SE, N, S, E, W
      * or -1 if a handle is not at the point
      */
     public int getHandleForPoint(Point p) {
       if (isSelectionEnabled()) {
-        Rectangle r[] = computeHandles(selBounds);
+        Rectangle[] r = computeHandles(selBounds);
         for (int i = 0; i < r.length; i++)
           if (r[i].contains(p))
             return i;
@@ -526,14 +503,15 @@ public class WysiwygHTMLEditorKit extends HTMLEditorKit {
       g.setColor(Color.DARK_GRAY);
       g.drawRect(selBounds.x, selBounds.y, selBounds.width, selBounds.height);
 
-      Rectangle h[] = computeHandles(selBounds);
-      for (int i = 0; i < h.length; i++)
-        g.fillRect(h[i].x, h[i].y, h[i].width, h[i].height);
+      Rectangle[] h = computeHandles(selBounds);
+      for (Rectangle rectangle : h) {
+        g.fillRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
+      }
       g.setColor(cached);
     }
 
     private Rectangle[] computeHandles(Rectangle sel) {
-      Rectangle r[] = new Rectangle[8];
+      Rectangle[] r = new Rectangle[8];
       int sq = 8;
       r[NW] = new Rectangle(sel.x, sel.y, sq, sq);
       r[NE] = new Rectangle(sel.x + sel.width - sq, sel.y, sq, sq);
@@ -559,7 +537,7 @@ public class WysiwygHTMLEditorKit extends HTMLEditorKit {
    *
    * @author Bob Tantlinger
    */
-  private class BorderlessTableView extends DelegateView {
+  private static class BorderlessTableView extends DelegateView {
     public BorderlessTableView(View delegate) {
       super(delegate);
     }
@@ -585,7 +563,7 @@ public class WysiwygHTMLEditorKit extends HTMLEditorKit {
         //set up the graphics object to draw dotted lines
         Graphics2D g2 = (Graphics2D) g;
         Stroke cachedStroke = g2.getStroke();
-        float dash[] = {3.0f};
+        float[] dash = {3.0f};
         BasicStroke stroke = new BasicStroke(
           1f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER,
           10f, dash, 0.0f);
@@ -614,8 +592,7 @@ public class WysiwygHTMLEditorKit extends HTMLEditorKit {
       AttributeSet atr = getElement().getAttributes();
       Object o = atr.getAttribute(HTML.Attribute.BGCOLOR);
       if (o != null) {
-        Color c = HTMLUtils.stringToColor(o.toString());
-        return c;
+        return HTMLUtils.stringToColor(o.toString());
       }
 
       return null;
@@ -629,7 +606,7 @@ public class WysiwygHTMLEditorKit extends HTMLEditorKit {
     }
 
     private boolean hasBorderAttr(AttributeSet atr) {
-      for (Enumeration e = atr.getAttributeNames(); e.hasMoreElements(); ) {
+      for (Enumeration<?> e = atr.getAttributeNames(); e.hasMoreElements(); ) {
         if (e.nextElement().toString().equals("border"))
           return true;
       }
@@ -649,7 +626,7 @@ public class WysiwygHTMLEditorKit extends HTMLEditorKit {
    *
    * @author Bob Tantlinger
    */
-  private class UnknownElementView extends ComponentView {
+  private static class UnknownElementView extends ComponentView {
     public UnknownElementView(Element e) {
       super(e);
     }
@@ -688,9 +665,7 @@ public class WysiwygHTMLEditorKit extends HTMLEditorKit {
       AttributeSet as = getElement().getAttributes();
       if (as != null) {
         Object end = as.getAttribute(HTML.Attribute.ENDTAG);
-        if (end != null && (end instanceof String) && ((String) end).equals("true")) {
-          return true;
-        }
+        return (end instanceof String) && end.equals("true");
       }
       return false;
     }

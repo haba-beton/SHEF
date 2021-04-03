@@ -1,24 +1,14 @@
-/*
- * Created on Jan 10, 2006
- *
- */
 package net.atlanticbb.tantlinger.ui;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class HeaderPanel extends JPanel {
-  /**
-   *
-   */
   private static final long serialVersionUID = 1L;
   private JLabel titleLabel = null;
   private JLabel msgLabel = null;
   private JLabel iconLabel = null;
 
-  /**
-   * This is the default constructor
-   */
   public HeaderPanel() {
     super();
     initialize();
@@ -45,11 +35,6 @@ public class HeaderPanel extends JPanel {
     iconLabel.setIcon(icon);
   }
 
-  /**
-   * This method initializes this
-   *
-   * @return void
-   */
   private void initialize() {
     GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
     gridBagConstraints3.gridx = 1;
@@ -57,8 +42,6 @@ public class HeaderPanel extends JPanel {
     gridBagConstraints3.insets = new java.awt.Insets(0, 5, 0, 10);
     gridBagConstraints3.gridy = 0;
     iconLabel = new JLabel();
-    //iconLabel.setText("");
-    //iconLabel.setIcon(new ImageIcon(getClass().getResource("/com/bob/ui/text/post.png")));
     iconLabel.setVerticalAlignment(javax.swing.SwingConstants.CENTER);
     GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
     gridBagConstraints2.gridx = 0;
@@ -70,7 +53,6 @@ public class HeaderPanel extends JPanel {
     gridBagConstraints2.gridy = 1;
     msgLabel = new JLabel();
     msgLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
-    //msgLabel.setText("The description goes here");
     msgLabel.setVerticalAlignment(javax.swing.SwingConstants.TOP);
     GridBagConstraints gridBagConstraints = new GridBagConstraints();
     gridBagConstraints.gridx = 0;
@@ -84,7 +66,6 @@ public class HeaderPanel extends JPanel {
     titleLabel = new JLabel();
     titleLabel.setFont(new Font("Dialog", Font.BOLD, 16));
     titleLabel.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-    //titleLabel.setText("This is a title");
     this.setLayout(new GridBagLayout());
     this.setSize(360, 56);
     this.setPreferredSize(new java.awt.Dimension(360, 56));
@@ -103,7 +84,6 @@ public class HeaderPanel extends JPanel {
       RenderingHints.VALUE_ANTIALIAS_ON);
     Rectangle bounds = getBounds();
 
-    // Set Paint for filling Shape
     Color blue = new Color(153, 204, 255);
 
     Paint gradientPaint = new GradientPaint(bounds.width * 0.5f,
@@ -112,5 +92,4 @@ public class HeaderPanel extends JPanel {
     g2.fillRect(0, 0, bounds.width, bounds.height);
 
   }
-
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+}

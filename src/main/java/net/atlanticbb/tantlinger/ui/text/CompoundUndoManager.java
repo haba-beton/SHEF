@@ -60,10 +60,11 @@ public class CompoundUndoManager implements UndoableEditListener {
 
   private UndoManager undoer;
   private CompoundEdit compoundEdit = null;
-  private Document document = null;
-  private static Vector docs = new Vector();
-  private static Vector lsts = new Vector();
-  private static Vector undoers = new Vector();
+  private Document    document;
+
+  private static Vector<Document> docs = new Vector<>();
+  private static Vector<CompoundUndoManager> lsts = new Vector<>();
+  private static Vector<UndoManager> undoers = new Vector<>();
 
   protected static void registerDocument(Document doc, CompoundUndoManager lst, UndoManager um) {
     docs.add(doc);
@@ -75,13 +76,12 @@ public class CompoundUndoManager implements UndoableEditListener {
    * Gets the undo manager for a document that has a CompoundUndoManager
    * as an UndoableEditListener
    *
-   * @param doc
    * @return The registed undomanger for the document
    */
   public static UndoManager getUndoManagerForDocument(Document doc) {
     for (int i = 0; i < docs.size(); i++) {
       if (docs.elementAt(i) == doc)
-        return (UndoManager) undoers.elementAt(i);
+        return undoers.elementAt(i);
     }
 
     return null;
@@ -91,12 +91,11 @@ public class CompoundUndoManager implements UndoableEditListener {
    * Notifies the CompoundUndoManager for the specified Document that
    * a compound edit is about to begin.
    *
-   * @param doc
    */
   public static void beginCompoundEdit(Document doc) {
     for (int i = 0; i < docs.size(); i++) {
       if (docs.elementAt(i) == doc) {
-        CompoundUndoManager l = (CompoundUndoManager) lsts.elementAt(i);
+        CompoundUndoManager l = lsts.elementAt(i);
         l.beginCompoundEdit();
         return;
       }
@@ -107,12 +106,11 @@ public class CompoundUndoManager implements UndoableEditListener {
    * Notifies the CompoundUndoManager for the specified Document that
    * a compound edit is complete.
    *
-   * @param doc
    */
   public static void endCompoundEdit(Document doc) {
     for (int i = 0; i < docs.size(); i++) {
       if (docs.elementAt(i) == doc) {
-        CompoundUndoManager l = (CompoundUndoManager) lsts.elementAt(i);
+        CompoundUndoManager l = lsts.elementAt(i);
         l.endCompoundEdit();
         return;
       }
@@ -122,8 +120,6 @@ public class CompoundUndoManager implements UndoableEditListener {
   /**
    * Updates the enabled states of the UNDO and REDO actions
    * for the specified document
-   *
-   * @param doc
    */
   public static void updateUndo(Document doc) {
     UndoManager um = getUndoManagerForDocument(doc);
@@ -135,8 +131,6 @@ public class CompoundUndoManager implements UndoableEditListener {
 
   /**
    * Discards all edits for the specified Document
-   *
-   * @param doc
    */
   public static void discardAllEdits(Document doc) {
     UndoManager um = getUndoManagerForDocument(doc);
@@ -149,8 +143,6 @@ public class CompoundUndoManager implements UndoableEditListener {
 
   /**
    * Creates a new CompoundUndoManager
-   *
-   * @param doc
    * @param um  The UndoManager to use for this document
    */
   public CompoundUndoManager(Document doc, UndoManager um) {
@@ -161,8 +153,6 @@ public class CompoundUndoManager implements UndoableEditListener {
 
   /**
    * Creates a new CompoundUndoManager
-   *
-   * @param doc
    */
   public CompoundUndoManager(Document doc) {
     this(doc, new UndoManager());
@@ -204,7 +194,7 @@ public class CompoundUndoManager implements UndoableEditListener {
       super(i18n.str("undo"));
       putValue(Action.SMALL_ICON, UIUtils.getIcon(UIUtils.X16, "undo.png"));
       putValue(ActionManager.LARGE_ICON, UIUtils.getIcon(UIUtils.X24, "undo.png"));
-      putValue(MNEMONIC_KEY, new Integer(i18n.mnem("undo")));
+      putValue(MNEMONIC_KEY, (int) i18n.mnem("undo"));
 
       setEnabled(false);
       putValue(
@@ -239,7 +229,7 @@ public class CompoundUndoManager implements UndoableEditListener {
       super(i18n.str("redo"));
       putValue(Action.SMALL_ICON, UIUtils.getIcon(UIUtils.X16, "redo.png"));
       putValue(ActionManager.LARGE_ICON, UIUtils.getIcon(UIUtils.X24, "redo.png"));
-      putValue(MNEMONIC_KEY, new Integer(i18n.mnem("redo")));
+      putValue(MNEMONIC_KEY, (int) i18n.mnem("redo"));
 
       setEnabled(false);
       putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(

@@ -14,20 +14,12 @@ import java.io.InputStream;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
-
 /**
  * @author Bob Tantlinger
  */
 public class SourceCodeEditor extends SyntaxTextPane {
-  /**
-   *
-   */
   private static final long serialVersionUID = 1L;
 
-
-  /**
-   *
-   */
   public SourceCodeEditor() {
     super();
 
@@ -43,21 +35,13 @@ public class SourceCodeEditor extends SyntaxTextPane {
 
     setFont(new Font("Default", Font.PLAIN, 12));
 
-    /* Load default theme */
     Properties themes = new Properties();
-    InputStream in = null;
-    try {
-      in = getClass().getResource("/net/atlanticbb/tantlinger/ui/text/syntax.properties").openStream();
+    try (InputStream in = getClass().getResource("/net/atlanticbb/tantlinger/ui/text/syntax.properties").openStream()) {
       themes.load(in);
       setTheme(themes, "default");
-    } catch (Exception e) {
+    }
+    catch (Exception e) {
       e.printStackTrace();
-    } finally {
-      try {
-        in.close();
-      } catch (Exception ex) {
-
-      }
     }
   }
 
@@ -67,13 +51,12 @@ public class SourceCodeEditor extends SyntaxTextPane {
       SyntaxDocument d = (SyntaxDocument) getDocument();
       prefix = d.getSyntax().getName();
 
-    } catch (ClassCastException ex) {
-
+    }
+    catch (ClassCastException ignored) {
     }
 
     setTheme(props, prefix);
   }
-
 
   /**
    * Set a color theme from a properties file
@@ -81,8 +64,7 @@ public class SourceCodeEditor extends SyntaxTextPane {
    * @param props  The Properties object
    * @param prefix The prefix to use when getting the keys
    */
-  public void setTheme(Properties props, String prefix) //throws Exception
-  {
+  public void setTheme(Properties props, String prefix) {
     SyntaxStyle[] aStyles = getSyntaxStyles();
 
     aStyles[Token.COMMENT1].setForeground(parseColor(props.getProperty(prefix + ".comment1.fg")));
@@ -161,8 +143,7 @@ public class SourceCodeEditor extends SyntaxTextPane {
    * @param color The color string
    * @return A color object
    */
-  private Color parseColor(String color) //throws Exception
-  {
+  private Color parseColor(String color) {
     if (color == null)
       return new Color(0, 0, 0, 0);
     try {
@@ -180,8 +161,8 @@ public class SourceCodeEditor extends SyntaxTextPane {
       } else {
         //throw new Exception("Invalid color syntax");
       }
-    } catch (NumberFormatException e) {
-      //throw new Exception("Invalid color data", e);
+    }
+    catch (NumberFormatException ignored) {
     }
 
     return Color.black;
@@ -194,8 +175,7 @@ public class SourceCodeEditor extends SyntaxTextPane {
    * @param font The font string
    * @return A font style constant
    */
-  private int parseFont(String font) //throws Exception
-  {
+  private int parseFont(String font) {
     int flags = Font.PLAIN;
     if (font != null) {
 
@@ -203,20 +183,18 @@ public class SourceCodeEditor extends SyntaxTextPane {
       while (tokenizer.hasMoreTokens()) {
         String token = tokenizer.nextToken().toLowerCase();
 
-        if (token.equals("bold")) {
-          flags |= Font.BOLD;
-        } else if (token.equals("italic")) {
-          flags |= Font.ITALIC;
-        } else if (token.equals("plain")) {
-          /* Ignore */
+        switch (token) {
+          case "bold":
+            flags |= Font.BOLD;
+            break;
+          case "italic":
+            flags |= Font.ITALIC;
+            break;
+          case "plain":
+            break;
         }
-                /*else
-                {
-                    throw new Exception("Unknown font attribute");
-                }*/
       }
     }
     return flags;
   }
-
 }

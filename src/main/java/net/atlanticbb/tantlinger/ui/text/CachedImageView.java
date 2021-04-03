@@ -1,7 +1,3 @@
-/*
- * Created on Jan 20, 2006
- *
- */
 package net.atlanticbb.tantlinger.ui.text;
 
 import javax.imageio.ImageIO;
@@ -54,8 +50,6 @@ public class CachedImageView extends ImageView {
 
   /**
    * Writes an image out to the cache
-   *
-   * @param image
    */
   private void cacheImage(final Image image) {
     final File cImg = getCachedImg();
@@ -64,18 +58,16 @@ public class CachedImageView extends ImageView {
 
     hasCached = true;//set the hasCached flag so we dont write it twice
 
-    Runnable runner = new Runnable() {
-      public void run() {
-        String type = "png";//assume png for non-jpegs
-        if (cImg.getAbsolutePath().endsWith("jpg"))
-          type = "jpg";
+    Runnable runner = () -> {
+      String type = "png";//assume png for non-jpegs
+      if (cImg.getAbsolutePath().endsWith("jpg"))
+        type = "jpg";
 
-        BufferedImage bufImg = makeBufferedImage(image);
-        try {
-          ImageIO.write(bufImg, type, cImg);
-        } catch (Exception ex) {
-          ex.printStackTrace();
-        }
+      BufferedImage bufImg = makeBufferedImage(image);
+      try {
+        ImageIO.write(bufImg, type, cImg);
+      } catch (Exception ex) {
+        ex.printStackTrace();
       }
     };
 
@@ -88,8 +80,6 @@ public class CachedImageView extends ImageView {
 
   /**
    * Gets the real image URL as specified in the src attribute of the image tag
-   *
-   * @return
    */
   private String srcAttribute() {
     return (String) getElement().getAttributes().getAttribute(HTML.Attribute.SRC);
@@ -114,12 +104,13 @@ public class CachedImageView extends ImageView {
     try {
       if (diskCachedImg.exists()) {
         imgURL = diskCachedImg.toURL();
-      } else {
+      }
+      else {
         URL reference = ((HTMLDocument) getDocument()).getBase();
         imgURL = new URL(reference, src);
       }
-    } catch (MalformedURLException e) {
-
+    }
+    catch (MalformedURLException ignored) {
     }
 
     return imgURL;
@@ -144,8 +135,6 @@ public class CachedImageView extends ImageView {
    * Returns the local file of the cached version of the image.
    * The local file is named with the absolute value of the hashcode for the
    * actual image url and a "png" or "jpg" file extension
-   *
-   * @return
    */
   private File getCachedImg() {
     String iUrl = srcAttribute();
@@ -157,7 +146,6 @@ public class CachedImageView extends ImageView {
       imgType = ".jpg";
 
     int hc = Math.abs(iUrl.hashCode());
-    File cacheImg = new File(IMG_CACHE_DIR, hc + imgType);
-    return cacheImg;
+    return new File(IMG_CACHE_DIR, hc + imgType);
   }
 }

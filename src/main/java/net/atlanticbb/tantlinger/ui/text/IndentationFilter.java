@@ -1,6 +1,5 @@
 package net.atlanticbb.tantlinger.ui.text;
 
-
 import javax.swing.text.*;
 
 /**
@@ -42,20 +41,21 @@ public class IndentationFilter extends DocumentFilter {
   private String convertTabsToSpaces(String text, Document doc) {
     try {
       AbstractDocument adoc = (AbstractDocument) doc;
-      int tabSize = ((Integer) adoc.getProperty("tabSize")).intValue();
+      int tabSize = (Integer) adoc.getProperty("tabSize");
 
       String softTab = "";
       for (int i = 1; i <= tabSize; i++)
         softTab += ' ';
 
-      StringBuffer sb = new StringBuffer(text);
+      StringBuilder sb = new StringBuilder(text);
       int pos = 0;
       while ((pos = sb.indexOf("\t", pos)) != -1) {
         sb.replace(pos, pos + 1, softTab);
         pos += softTab.length();
       }
       return sb.toString();
-    } catch (Exception ex) {
+    }
+    catch (Exception ignored) {
     }
 
     return text;
@@ -63,7 +63,7 @@ public class IndentationFilter extends DocumentFilter {
 
   private String getLineIndentation(int offs, Document doc)
     throws BadLocationException {
-    StringBuffer ws = new StringBuffer();
+    StringBuilder ws = new StringBuilder();
 
     if (doc instanceof AbstractDocument) {
       AbstractDocument adoc = (AbstractDocument) doc;

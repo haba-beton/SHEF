@@ -1,6 +1,3 @@
-/*
- * Created on Aug 18, 2006
- */
 package net.atlanticbb.tantlinger.ui.text;
 
 import net.atlanticbb.tantlinger.i18n.I18n;
@@ -18,11 +15,7 @@ import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEdit;
 import java.awt.event.*;
 import java.lang.ref.WeakReference;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Vector;
-
+import java.util.*;
 
 /**
  * Manages an application-wide popup menu for JTextComponents. Any
@@ -52,7 +45,7 @@ public class TextEditPopupManager {
   public static final String UNDO = "undo";
   public static final String REDO = "redo";
 
-  private HashMap actions = new HashMap();
+  private HashMap<String,Action> actions = new HashMap<>();
 
   // The actions we add to the popup menu
   private Action cut = new DefaultEditorKit.CutAction();
@@ -63,13 +56,11 @@ public class TextEditPopupManager {
   private Action redo = new RedoAction();
 
   // maintains a list of the currently registered JTextComponents
-  private List textComps = new Vector();
-  private List undoers = new Vector();
+  private List<WeakReference<JTextComponent>> textComps = new Vector<>();
+  private List<UndoManager> undoers = new Vector<>();
 
-  private JTextComponent focusedComp;// the registered JTextComponent that is
-  // focused
+  private JTextComponent focusedComp;// the registered JTextComponent that is focused
   private UndoManager undoer; // The undomanager for the focused
-  // JTextComponent
 
   // Listeners for the JTextComponents
   private FocusListener focusHandler = new PopupFocusHandler();
@@ -117,7 +108,7 @@ public class TextEditPopupManager {
   }
 
   public Action getAction(String name) {
-    return (Action) actions.get(name);
+    return actions.get(name);
   }
 
   /**
@@ -164,7 +155,7 @@ public class TextEditPopupManager {
     tc.addMouseListener(popupHandler);
     tc.getDocument().addUndoableEditListener(undoHandler);
 
-    textComps.add(new WeakReference(tc));
+    textComps.add(new WeakReference<>(tc));
     undoers.add(um);
   }
 
@@ -186,15 +177,9 @@ public class TextEditPopupManager {
     }
   }
 
-  /**
-   * Gets the index of a registered JTextComponent
-   *
-   * @param tc
-   * @return
-   */
   protected int getIndexOfJTextComponent(JTextComponent tc) {
     for (int i = 0; i < textComps.size(); i++) {
-      WeakReference wr = (WeakReference) textComps.get(i);
+      WeakReference<JTextComponent> wr = textComps.get(i);
       if (wr.get() == tc)
         return i;
     }
@@ -208,21 +193,15 @@ public class TextEditPopupManager {
    */
   private void clearEmptyReferences() {
     for (int i = 0; i < textComps.size(); i++) {
-      WeakReference wr = (WeakReference) textComps.get(i);
-      if (wr.get() == null)
+      WeakReference<JTextComponent> wr = textComps.get(i);
+      if (wr.get() == null) {
         undoers.set(i, null);
+      }
     }
 
-    for (Iterator it = textComps.iterator(); it.hasNext(); ) {
-      WeakReference w = (WeakReference) it.next();
-      if (w.get() == null)
-        it.remove();
-    }
+    textComps.removeIf(w -> w.get() == null);
 
-    for (Iterator it = undoers.iterator(); it.hasNext(); ) {
-      if (it.next() == null)
-        it.remove();
-    }
+    undoers.removeIf(Objects::isNull);
   }
 
   /**
@@ -258,9 +237,8 @@ public class TextEditPopupManager {
     private static final long serialVersionUID = 1L;
 
     public RedoAction() {
-      super(i18n.str("redo"),
-        UIUtils.getIcon(UIUtils.X16, "redo.png"));
-      putValue(MNEMONIC_KEY, new Integer(i18n.mnem("redo")));
+      super(i18n.str("redo"),UIUtils.getIcon(UIUtils.X16, "redo.png"));
+      putValue(MNEMONIC_KEY, (int)i18n.mnem("redo"));
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -279,9 +257,8 @@ public class TextEditPopupManager {
     private static final long serialVersionUID = 1L;
 
     public UndoAction() {
-      super(i18n.str("undo"),
-        UIUtils.getIcon(UIUtils.X16, "undo.png"));
-      putValue(MNEMONIC_KEY, new Integer(i18n.mnem("undo")));
+      super(i18n.str("undo"),UIUtils.getIcon(UIUtils.X16, "undo.png"));
+      putValue(MNEMONIC_KEY, (int) i18n.mnem("undo"));
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -299,12 +276,12 @@ public class TextEditPopupManager {
   /*
    * Select all action for the registered JTextComponents
    */
-  private class NSelectAllAction extends TextAction {
+  private static class NSelectAllAction extends TextAction {
     private static final long serialVersionUID = 1L;
 
     public NSelectAllAction() {
       super(i18n.str("select_all"));
-      putValue(MNEMONIC_KEY, new Integer(i18n.mnem("select_all")));
+      putValue(MNEMONIC_KEY, (int) i18n.mnem("select_all"));
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -324,7 +301,7 @@ public class TextEditPopupManager {
         if (index != -1) {
           // set the current UndoManager for the currently focused
           // JTextComponent
-          undoer = (UndoManager) undoers.get(index);
+          undoer = undoers.get(index);
           focusedComp = tc;
           updateActions();
         }

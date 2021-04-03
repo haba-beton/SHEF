@@ -1,7 +1,3 @@
-/*
- * Created on Jun 16, 2005
- *
- */
 package net.atlanticbb.tantlinger.ui.text;
 
 import org.w3c.dom.Document;
@@ -24,7 +20,6 @@ import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.*;
-
 
 /**
  * A collection of static convenience methods for working with HTML,
@@ -63,10 +58,6 @@ public class HTMLUtils {
 
   /**
    * Incloses a chunk of HTML text in the specified tag
-   *
-   * @param enclTag   the tag to enclose the HTML in
-   * @param innerHTML the HTML to be inclosed
-   * @return
    */
   public static String createTag(HTML.Tag enclTag, String innerHTML) {
     return createTag(enclTag, new SimpleAttributeSet(), innerHTML);
@@ -75,20 +66,14 @@ public class HTMLUtils {
   /**
    * Incloses a chunk of HTML text in the specified tag
    * with the specified attribs
-   *
-   * @param enclTag
-   * @param set
-   * @param innerHTML
-   * @return
    */
   public static String createTag(HTML.Tag enclTag, AttributeSet set, String innerHTML) {
-    String t = tagOpen(enclTag, set) + innerHTML + tagClose(enclTag);
-    return t;
+    return tagOpen(enclTag, set) + innerHTML + tagClose(enclTag);
   }
 
   private static String tagOpen(HTML.Tag enclTag, AttributeSet set) {
     String t = "<" + enclTag;
-    for (Enumeration e = set.getAttributeNames(); e.hasMoreElements(); ) {
+    for (Enumeration<?> e = set.getAttributeNames(); e.hasMoreElements(); ) {
       Object name = e.nextElement();
       if (!name.toString().equals("name")) {
         Object val = set.getAttribute(name);
@@ -103,8 +88,8 @@ public class HTMLUtils {
     return "</" + t + ">";
   }
 
-  public static List getParagraphElements(JEditorPane editor) {
-    List elems = new LinkedList();
+  public static List<Element> getParagraphElements(JEditorPane editor) {
+    List<Element> elems = new LinkedList<>();
     try {
       HTMLDocument doc = (HTMLDocument) editor.getDocument();
       Element curE = getParaElement(doc, editor.getSelectionStart());
@@ -116,7 +101,8 @@ public class HTMLUtils {
         if (curE.getEndOffset() >= doc.getLength())
           break;
       }
-    } catch (ClassCastException cce) {
+    }
+    catch (ClassCastException ignored) {
     }
 
     return elems;
@@ -646,13 +632,6 @@ public class HTMLUtils {
     return tokens;
   }
 
-  /**
-   * Sets the character attributes for selection of the specified editor
-   *
-   * @param editor
-   * @param attrs
-   * @param replace if true, replaces the attrubutes
-   */
   public static void setCharacterAttributes(JEditorPane editor, AttributeSet attr, boolean replace) {
     HTMLDocument doc;
     StyledEditorKit k;
