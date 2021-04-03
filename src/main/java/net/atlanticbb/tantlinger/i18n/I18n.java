@@ -23,7 +23,7 @@ public class I18n {
   private static final String MNEM_POSTFIX = ".mnemonic";
 
   public static final Properties BUNDLE_PROPS = new Properties();
-  public static final Map I18NS = new HashMap();
+  public static final Map<String,I18n> I18NS = new HashMap<>();
 
   public static Locale locale = Locale.getDefault();
 
@@ -78,9 +78,8 @@ public class I18n {
         for (int i = 0; i < urls.length; i++)
           urls[i] = packs[i].toURL();
         return ResourceBundle.getBundle(bun, loc, URLClassLoader.newInstance(urls));
-      } catch (MalformedURLException muex) {
-
-      } catch (MissingResourceException rex) {
+      }
+      catch (MalformedURLException | MissingResourceException ignored) {
 
       }
     }
@@ -90,7 +89,7 @@ public class I18n {
 
 
   public static I18n getInstance(String _package) {
-    I18n i18n = (I18n) I18NS.get(_package);
+    I18n i18n = I18NS.get(_package);
     if (i18n == null) {
       i18n = new I18n(_package);
       I18NS.put(_package, i18n);
@@ -101,9 +100,8 @@ public class I18n {
 
   public static void setLocale(Locale loc) {
     locale = loc;
-    for (Iterator it = I18NS.values().iterator(); it.hasNext(); ) {
-      I18n i18n = (I18n) it.next();
-      i18n.bundle = null; //reset so bundle with new locale gets created...
+    for (I18n i18n : I18NS.values()) {
+      i18n.bundle = null;
     }
   }
 
@@ -115,19 +113,14 @@ public class I18n {
   }
 
   public static Locale getLocale() {
-    if (locale == null)
-      Locale.getDefault();
+    if (locale == null) {
+      locale = Locale.getDefault();
+    }
     return locale;
   }
 
-  /**
-   * Converts slashes to dots in a pathname
-   *
-   * @param path
-   * @return
-   */
   private static String slashesToDots(String path) {
-    StringBuffer sb = new StringBuffer();
+    StringBuilder sb = new StringBuilder();
     StringTokenizer st = new StringTokenizer(path, "/");
     while (st.hasMoreTokens()) {
       sb.append(".");
@@ -141,7 +134,7 @@ public class I18n {
   }
 
   private static String createBundleName(String bundlePackage, String bundleName) {
-    StringBuffer sb = new StringBuffer(slashesToDots(bundlePackage));
+    StringBuilder sb = new StringBuilder(slashesToDots(bundlePackage));
     if (!sb.toString().endsWith("."))
       sb.append('.');
     sb.append(bundleName);
@@ -154,7 +147,7 @@ public class I18n {
     else
       BUNDLE_PROPS.setProperty(_package, bundle);
 
-    I18n i18n = (I18n) I18NS.get(_package);
+    I18n i18n = I18NS.get(_package);
     if (i18n != null)
       i18n.bundle = null; //reset to null so the bundle is recreated for the new name
   }
@@ -173,26 +166,26 @@ public class I18n {
 
   public static File[] getAvailableLanguagePacks() {
     Locale[] locs = getAvailableLanguagePackLocales();
-    List packs = new ArrayList();
+    List<File> packs = new ArrayList<>();
 
-    for (int i = 0; i < locs.length; i++) {
-      String name = locs[i].toString() + ".zip";
+    for (Locale loc : locs) {
+      String name = loc.toString() + ".zip";
       File f = new File(LANG_PACK_DIR, name);
       if (f.isFile() && f.canRead())
         packs.add(f);
     }
 
-    return (File[]) packs.toArray(new File[packs.size()]);
+    return packs.toArray(new File[0]);
   }
 
   public static Locale[] getAvailableLanguagePackLocales() {
-    List locs = new ArrayList();
+    List<Locale> locs = new ArrayList<>();
     File dir = getLanguagePackDirectory();
     if (dir.isDirectory() && dir.canRead()) {
       File[] packs = dir.listFiles(new ZipFileFilter());
       if (packs != null) {
-        for (int i = 0; i < packs.length; i++) {
-          String name = packs[i].getName();
+        for (File pack : packs) {
+          String name = pack.getName();
           int p = name.lastIndexOf(".");
           if (p != -1) {
             String locStr = name.substring(0, p);
@@ -204,7 +197,7 @@ public class I18n {
       }
     }
 
-    return (Locale[]) locs.toArray(new Locale[locs.size()]);
+    return locs.toArray(new Locale[0]);
   }
 
   public static Locale localeFromString(String locStr) {
@@ -222,9 +215,7 @@ public class I18n {
   private static class ZipFileFilter implements FileFilter {
     public boolean accept(File f) {
       if (f.isFile() && f.canRead()) {
-        String name = f.getName().toLowerCase();
-        if (name.endsWith(".zip"))
-          return true;
+        return f.getName().toLowerCase().endsWith(".zip");
       }
       return false;
     }

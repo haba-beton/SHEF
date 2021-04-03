@@ -48,13 +48,13 @@ public class Demo {
     System.out.println(editor.getText());
   }
 
-
   private static Demo demo;
 
   public static void main(String... args) throws InterruptedException, InvocationTargetException {
     try {
       UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-    } catch (Exception ignore) {
+    }
+    catch (Exception ignore) {
     }
 
     SwingUtilities.invokeAndWait(() -> demo = new Demo());
@@ -67,6 +67,4 @@ public class Demo {
     demo.printHtml();
 
   }
-
-
 }

@@ -1,6 +1,3 @@
-/*
- * Created on Oct 30, 2007
- */
 package net.atlanticbb.tantlinger.ui;
 
 import org.bushe.swing.action.ActionUIFactory;
@@ -9,49 +6,19 @@ import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
 
-
 /**
- * A collection of static UI helper methods.
- *
  * @author Bob Tantlinger
  */
 public class UIUtils {
+  public static final String X16 = "net/atlanticbb/tantlinger/images/x16/";
+  public static final String X24 = "net/atlanticbb/tantlinger/images/x24/";
+  public static final String X32 = "net/atlanticbb/tantlinger/images/x32/";
+  public static final String X48 = "net/atlanticbb/tantlinger/images/x48/";
 
-  /**
-   * The 16 x 16 icon package
-   */
-  public static final String X16 = "images/x16/";
-
-  /**
-   * The 24 x 24 icon package
-   */
-  public static final String X24 = "images/x24/";
-
-  /**
-   * The 32 x 32 icon package
-   */
-  public static final String X32 = "images/x32/";
-
-  /**
-   * The 48 x 48 icon package
-   */
-  public static final String X48 = "images/x48/";
-
-
-  /**
-   * Misc icons that are unsized
-   */
-  public static final String MISC = "images/misc/";
-
-  /**
-   * Gets the icon in the specified package with the specified name.
-   * A package might be UIUtils.X16, UIUtils.X32, etc
-   *
-   * @return The icon, or null if the icon doesn't exist
-   */
   public static ImageIcon getIcon(String _package, String iconName) {
-    if (!_package.endsWith("/"))
+    if (!_package.endsWith("/")) {
       _package += "/";
+    }
     return getIcon(_package + iconName);
   }
 
@@ -60,11 +27,10 @@ public class UIUtils {
   }
 
   public static ImageIcon createImageIcon(String path) {
-
     URL u = Thread.currentThread().getContextClassLoader().getResource(path);
-    //URL u = ClassLoader.getSystemResource(path);//UIUtils.class.getResource(path);
-    if (u == null)
+    if (u == null) {
       return null;
+    }
     return new ImageIcon(u);
   }
 
