@@ -1,7 +1,3 @@
-/*
- * Created on Dec 22, 2005
- *
- */
 package net.atlanticbb.tantlinger.ui.text.dialogs;
 
 import net.atlanticbb.tantlinger.i18n.I18n;
@@ -13,9 +9,6 @@ import java.awt.*;
 
 
 public class BGColorPanel extends JPanel {
-  /**
-   *
-   */
   private static final long serialVersionUID = 1L;
 
   private static final I18n i18n = I18n.getInstance("net.atlanticbb.tantlinger.ui.text.dialogs");
@@ -25,9 +18,6 @@ public class BGColorPanel extends JPanel {
   private JButton colorButton = null;
   private Color selColor = Color.WHITE;
 
-  /**
-   * This is the default constructor
-   */
   public BGColorPanel() {
     super();
     initialize();
@@ -51,11 +41,6 @@ public class BGColorPanel extends JPanel {
     colorPanel.setBackground(selColor);
   }
 
-  /**
-   * This method initializes this
-   *
-   * @return void
-   */
   private void initialize() {
     GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
     gridBagConstraints2.gridx = 2;
@@ -94,14 +79,12 @@ public class BGColorPanel extends JPanel {
       bgColorCB = new JCheckBox();
       bgColorCB.setText(i18n.str("background")); //$NON-NLS-1$
 
-      bgColorCB.addItemListener(new java.awt.event.ItemListener() {
-        public void itemStateChanged(java.awt.event.ItemEvent e) {
-          colorButton.setEnabled(bgColorCB.isSelected());
-          if (bgColorCB.isSelected())
-            colorPanel.setBackground(selColor);
-          else
-            colorPanel.setBackground(getBackground());
-        }
+      bgColorCB.addItemListener(e -> {
+        colorButton.setEnabled(bgColorCB.isSelected());
+        if (bgColorCB.isSelected())
+          colorPanel.setBackground(selColor);
+        else
+          colorPanel.setBackground(getBackground());
       });
     }
     return bgColorCB;
@@ -130,20 +113,17 @@ public class BGColorPanel extends JPanel {
   private JButton getColorButton() {
     if (colorButton == null) {
       colorButton = new JButton();
-      colorButton.setIcon(UIUtils.getIcon(UIUtils.X16, "color.png")); //$NON-NLS-1$
+      colorButton.setIcon(UIUtils.getIcon(UIUtils.X16, "color.png"));
       colorButton.setPreferredSize(new java.awt.Dimension(20, 20));
-      colorButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          Color c = JColorChooser.showDialog(BGColorPanel.this, i18n.str("color"), selColor); //$NON-NLS-1$
-          if (c != null) {
-            selColor = c;
-            colorPanel.setBackground(c);
-            colorPanel.setToolTipText(HTMLUtils.colorToHex(c));
-          }
+      colorButton.addActionListener(e -> {
+        Color c = JColorChooser.showDialog(BGColorPanel.this, i18n.str("color"), selColor);
+        if (c != null) {
+          selColor = c;
+          colorPanel.setBackground(c);
+          colorPanel.setToolTipText(HTMLUtils.colorToHex(c));
         }
       });
     }
     return colorButton;
   }
-
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+}

@@ -5,6 +5,7 @@ import net.atlanticbb.tantlinger.ui.UIUtils;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Collections;
 import java.util.Vector;
 
 
@@ -18,19 +19,19 @@ public class HTMLFontDialog extends HTMLOptionDialog {
   private static String desc = i18n.str("font_desc");
 
   private static final Integer[] SIZES = {
-      new Integer(8),
-      new Integer(10),
-      new Integer(12),
-      new Integer(14),
-      new Integer(18),
-      new Integer(24),
-      new Integer(36)
-    };
+    8,
+    10,
+    12,
+    14,
+    18,
+    24,
+    36
+  };
 
   private JPanel jContentPane = null;
   private JLabel fontLabel = null;
-  private JComboBox fontCombo = null;
-  private JComboBox sizeCombo = null;
+  private JComboBox<String>  fontCombo = null;
+  private JComboBox<Integer> sizeCombo = null;
   private JPanel stylePanel = null;
   private JCheckBox boldCB = null;
   private JCheckBox italicCB = null;
@@ -88,44 +89,39 @@ public class HTMLFontDialog extends HTMLOptionDialog {
   }
 
   public int getFontSize() {
-    Integer i = (Integer) sizeCombo.getSelectedItem();
-    return i.intValue();
+    return (Integer) sizeCombo.getSelectedItem();
   }
 
   public void setFontSize(int size) {
-    sizeCombo.setSelectedItem(new Integer(size));
+    sizeCombo.setSelectedItem(size);
     updatePreview();
   }
 
   public String getHTML() {
-    String html = "<font "; //$NON-NLS-1$
-    html += "name=\"" + fontCombo.getSelectedItem() + "\" "; //$NON-NLS-1$ //$NON-NLS-2$
-    html += "size=\"" + (sizeCombo.getSelectedIndex() + 1) + "\">"; //$NON-NLS-1$ //$NON-NLS-2$
+    String html = "<font ";
+    html += "name=\"" + fontCombo.getSelectedItem() + "\" ";
+    html += "size=\"" + (sizeCombo.getSelectedIndex() + 1) + "\">";
+
     if (boldCB.isSelected())
-      html += "<b>"; //$NON-NLS-1$
+      html += "<b>";
     if (italicCB.isSelected())
-      html += "<i>"; //$NON-NLS-1$
+      html += "<i>";
     if (ulCB.isSelected())
-      html += "<u>"; //$NON-NLS-1$
+      html += "<u>";
 
     html += text;
 
     if (boldCB.isSelected())
-      html += "</b>"; //$NON-NLS-1$
+      html += "</b>";
     if (italicCB.isSelected())
-      html += "</i>"; //$NON-NLS-1$
+      html += "</i>";
     if (ulCB.isSelected())
-      html += "</u>"; //$NON-NLS-1$
+      html += "</u>";
 
-    html += "</font>";         //$NON-NLS-1$
+    html += "</font>";
     return html;
   }
 
-  /**
-   * This method initializes this
-   *
-   * @return void
-   */
   private void initialize(String text) {
     setContentPane(getJContentPane());
     pack();
@@ -150,7 +146,7 @@ public class HTMLFontDialog extends HTMLOptionDialog {
 
     String font = fontCombo.getSelectedItem().toString();
     Integer size = SIZES[sizeCombo.getSelectedIndex()];
-    Font f = new Font(font, style, size.intValue());
+    Font f = new Font(font, style, size);
     previewLabel.setFont(f);
 
   }
@@ -196,7 +192,7 @@ public class HTMLFontDialog extends HTMLOptionDialog {
       jContentPane.add(getSizeCombo(), gridBagConstraints2);
       jContentPane.add(getStylePanel(), gridBagConstraints21);
 
-      sizeCombo.setSelectedItem(new Integer(previewLabel.getFont().getSize()));
+      sizeCombo.setSelectedItem(previewLabel.getFont().getSize());
     }
     return jContentPane;
   }
@@ -206,25 +202,20 @@ public class HTMLFontDialog extends HTMLOptionDialog {
    *
    * @return javax.swing.JComboBox
    */
-  private JComboBox getFontCombo() {
+  private JComboBox<String> getFontCombo() {
     if (fontCombo == null) {
       GraphicsEnvironment gEnv =
         GraphicsEnvironment.getLocalGraphicsEnvironment();
-      String envfonts[] = gEnv.getAvailableFontFamilyNames();
-      Vector fonts = new Vector();
-      fonts.add("Default"); //$NON-NLS-1$
-      fonts.add("serif"); //$NON-NLS-1$
-      fonts.add("sans-serif"); //$NON-NLS-1$
+      String[] envfonts = gEnv.getAvailableFontFamilyNames();
+      Vector<String> fonts = new Vector<>();
+      fonts.add("Default");
+      fonts.add("serif");
+      fonts.add("sans-serif");
       fonts.add("monospaced");
-      for (int i = 0; i < envfonts.length; i++)
-        fonts.add(envfonts[i]);
+      Collections.addAll(fonts, envfonts);
 
-      fontCombo = new JComboBox(fonts);
-      fontCombo.addItemListener(new java.awt.event.ItemListener() {
-        public void itemStateChanged(java.awt.event.ItemEvent e) {
-          updatePreview();
-        }
-      });
+      fontCombo = new JComboBox<>(fonts);
+      fontCombo.addItemListener(e -> updatePreview());
     }
     return fontCombo;
   }
@@ -234,15 +225,11 @@ public class HTMLFontDialog extends HTMLOptionDialog {
    *
    * @return javax.swing.JComboBox
    */
-  private JComboBox getSizeCombo() {
+  private JComboBox<Integer> getSizeCombo() {
     if (sizeCombo == null) {
-      sizeCombo = new JComboBox(SIZES);
-      sizeCombo.setSelectedItem(new Integer(12));
-      sizeCombo.addItemListener(new java.awt.event.ItemListener() {
-        public void itemStateChanged(java.awt.event.ItemEvent e) {
-          updatePreview();
-        }
-      });
+      sizeCombo = new JComboBox<>(SIZES);
+      sizeCombo.setSelectedItem(12);
+      sizeCombo.addItemListener(e -> updatePreview());
     }
     return sizeCombo;
   }
@@ -304,12 +291,8 @@ public class HTMLFontDialog extends HTMLOptionDialog {
   private JCheckBox getBoldCB() {
     if (boldCB == null) {
       boldCB = new JCheckBox();
-      boldCB.setText(i18n.str("bold")); //$NON-NLS-1$
-      boldCB.addItemListener(new java.awt.event.ItemListener() {
-        public void itemStateChanged(java.awt.event.ItemEvent e) {
-          updatePreview();
-        }
-      });
+      boldCB.setText(i18n.str("bold"));
+      boldCB.addItemListener(e -> updatePreview());
     }
     return boldCB;
   }
@@ -322,43 +305,25 @@ public class HTMLFontDialog extends HTMLOptionDialog {
   private JCheckBox getItalicCB() {
     if (italicCB == null) {
       italicCB = new JCheckBox();
-      italicCB.setText(i18n.str("italic")); //$NON-NLS-1$
-      italicCB.addItemListener(new java.awt.event.ItemListener() {
-        public void itemStateChanged(java.awt.event.ItemEvent e) {
-          updatePreview();
-        }
-      });
+      italicCB.setText(i18n.str("italic"));
+      italicCB.addItemListener(e -> updatePreview());
     }
     return italicCB;
   }
 
-  /**
-   * This method initializes ulCB
-   *
-   * @return javax.swing.JCheckBox
-   */
   private JCheckBox getUlCB() {
     if (ulCB == null) {
       ulCB = new JCheckBox();
-      ulCB.setText(i18n.str("underline")); //$NON-NLS-1$
-      ulCB.addItemListener(new java.awt.event.ItemListener() {
-        public void itemStateChanged(java.awt.event.ItemEvent e) {
-          updatePreview();
-        }
-      });
+      ulCB.setText(i18n.str("underline"));
+      ulCB.addItemListener(e -> updatePreview());
     }
     return ulCB;
   }
 
-  /**
-   * This method initializes previewPanel
-   *
-   * @return javax.swing.JPanel
-   */
   private JPanel getPreviewPanel() {
     if (previewPanel == null) {
       previewLabel = new JLabel();
-      previewLabel.setText("AaBbYyZz"); //$NON-NLS-1$
+      previewLabel.setText("AaBbYyZz");
       JPanel spacer = new JPanel(new FlowLayout(FlowLayout.LEFT));
       spacer.setBackground(Color.WHITE);
       spacer.add(previewLabel);
@@ -375,8 +340,6 @@ public class HTMLFontDialog extends HTMLOptionDialog {
 
   /**
    * This method initializes spacerPanel
-   *
-   * @return javax.swing.JPanel
    */
   private JPanel getSpacerPanel() {
     if (spacerPanel == null) {
@@ -384,6 +347,4 @@ public class HTMLFontDialog extends HTMLOptionDialog {
     }
     return spacerPanel;
   }
-
-
-}  //  @jve:decl-index=0:visual-constraint="48,14"
+}

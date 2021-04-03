@@ -1,7 +1,3 @@
-/*
- * Created on Jan 17, 2006
- *
- */
 package net.atlanticbb.tantlinger.ui.text.dialogs;
 
 import net.atlanticbb.tantlinger.i18n.I18n;
@@ -12,11 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Map;
 
-
 public class ElementStyleDialog extends OptionDialog {
-  /**
-   *
-   */
   private static final long serialVersionUID = 1L;
 
   private static final I18n i18n = I18n.getInstance("net.atlanticbb.tantlinger.ui.text.dialogs");

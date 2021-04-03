@@ -1,7 +1,3 @@
-/*
- * Created on Dec 23, 2005
- *
- */
 package net.atlanticbb.tantlinger.ui.text.dialogs;
 
 import javax.swing.*;
@@ -11,9 +7,6 @@ import java.util.Map;
 
 public class CellAttributesPanel extends HTMLAttributeEditorPanel {
 
-  /**
-   *
-   */
   private static final long serialVersionUID = 1L;
   private AlignmentAttributesPanel alignPanel = null;
   private SizeAttributesPanel sizePanel = null;
@@ -26,14 +19,11 @@ public class CellAttributesPanel extends HTMLAttributeEditorPanel {
   private JSpinner rowSpanField = null;
   private JPanel expansionPanel = null;
 
-  /**
-   * This is the default constructor
-   */
   public CellAttributesPanel() {
-    this(new Hashtable());
+    this(new Hashtable<>());
   }
 
-  public CellAttributesPanel(Hashtable attr) {
+  public CellAttributesPanel(Hashtable<String,String> attr) {
     super(attr);
     initialize();
     alignPanel.setAttributes(getAttributes());
@@ -45,13 +35,12 @@ public class CellAttributesPanel extends HTMLAttributeEditorPanel {
     alignPanel.updateComponentsFromAttribs();
     sizePanel.updateComponentsFromAttribs();
 
-    if (attribs.containsKey("colspan")) //$NON-NLS-1$
-    {
+    if (attribs.containsKey("colspan")) {
       colSpanCB.setSelected(true);
       colSpanField.setEnabled(true);
       try {
         colSpanField.getModel().setValue(
-          new Integer(attribs.get("colspan").toString())); //$NON-NLS-1$
+          new Integer(attribs.get("colspan")));
       } catch (Exception ex) {
         ex.printStackTrace();
       }
@@ -60,14 +49,14 @@ public class CellAttributesPanel extends HTMLAttributeEditorPanel {
       colSpanField.setEnabled(false);
     }
 
-    if (attribs.containsKey("rowspan")) //$NON-NLS-1$
-    {
+    if (attribs.containsKey("rowspan")) {
       rowSpanCB.setSelected(true);
       rowSpanField.setEnabled(true);
       try {
         rowSpanField.getModel().setValue(
-          new Integer(attribs.get("rowspan").toString())); //$NON-NLS-1$
-      } catch (Exception ex) {
+          new Integer(attribs.get("rowspan")));
+      }
+      catch (Exception ex) {
         ex.printStackTrace();
       }
     } else {
@@ -75,54 +64,47 @@ public class CellAttributesPanel extends HTMLAttributeEditorPanel {
       rowSpanField.setEnabled(false);
     }
 
-    if (attribs.containsKey("bgcolor")) //$NON-NLS-1$
-    {
+    if (attribs.containsKey("bgcolor")) {
       bgColorPanel.setSelected(true);
-      bgColorPanel.setColor(attribs.get("bgcolor").toString()); //$NON-NLS-1$
-    } else {
+      bgColorPanel.setColor(attribs.get("bgcolor"));
+    }
+    else {
       bgColorPanel.setSelected(false);
     }
 
-    dontWrapCB.setSelected(attribs.containsKey("nowrap"));  //$NON-NLS-1$
+    dontWrapCB.setSelected(attribs.containsKey("nowrap"));
   }
-
 
   public void updateAttribsFromComponents() {
     alignPanel.updateAttribsFromComponents();
     sizePanel.updateAttribsFromComponents();
     if (dontWrapCB.isSelected())
-      attribs.put("nowrap", "nowrap"); //$NON-NLS-1$ //$NON-NLS-2$
+      attribs.put("nowrap", "nowrap");
     else
-      attribs.remove("nowrap"); //$NON-NLS-1$
+      attribs.remove("nowrap");
 
     if (bgColorPanel.isSelected())
-      attribs.put("bgcolor", bgColorPanel.getColor()); //$NON-NLS-1$
+      attribs.put("bgcolor", bgColorPanel.getColor());
     else
-      attribs.remove("bgcolor"); //$NON-NLS-1$
+      attribs.remove("bgcolor");
 
     if (colSpanCB.isSelected())
-      attribs.put("colspan", colSpanField.getModel().getValue().toString()); //$NON-NLS-1$
+      attribs.put("colspan", colSpanField.getModel().getValue().toString());
     else
-      attribs.remove("colspan"); //$NON-NLS-1$
+      attribs.remove("colspan");
 
     if (rowSpanCB.isSelected())
-      attribs.put("rowspan", rowSpanField.getModel().getValue().toString()); //$NON-NLS-1$
+      attribs.put("rowspan", rowSpanField.getModel().getValue().toString());
     else
-      attribs.remove("rowspan"); //$NON-NLS-1$
+      attribs.remove("rowspan");
   }
 
-
-  public void setAttributes(Map attr) {
+  public void setAttributes(Map<String,String> attr) {
     alignPanel.setAttributes(attr);
     sizePanel.setAttributes(attr);
     super.setAttributes(attr);
   }
 
-  /**
-   * This method initializes this
-   *
-   * @return void
-   */
   private void initialize() {
     GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
     gridBagConstraints31.gridx = 0;
@@ -170,8 +152,6 @@ public class CellAttributesPanel extends HTMLAttributeEditorPanel {
     this.add(getBgColorPanel(), gridBagConstraints3);
     this.add(getSpanPanel(), gridBagConstraints21);
     this.add(getExpansionPanel(), gridBagConstraints31);
-
-
   }
 
   /**
@@ -276,11 +256,7 @@ public class CellAttributesPanel extends HTMLAttributeEditorPanel {
       colSpanCB = new JCheckBox();
       colSpanCB.setText(i18n.str("colspan")); //$NON-NLS-1$
       colSpanCB.setPreferredSize(new java.awt.Dimension(85, 25));
-      colSpanCB.addItemListener(new java.awt.event.ItemListener() {
-        public void itemStateChanged(java.awt.event.ItemEvent e) {
-          colSpanField.setEnabled(colSpanCB.isSelected());
-        }
-      });
+      colSpanCB.addItemListener(e -> colSpanField.setEnabled(colSpanCB.isSelected()));
     }
     return colSpanCB;
   }
@@ -293,12 +269,8 @@ public class CellAttributesPanel extends HTMLAttributeEditorPanel {
   private JCheckBox getRowSpanCB() {
     if (rowSpanCB == null) {
       rowSpanCB = new JCheckBox();
-      rowSpanCB.setText(i18n.str("rowspan")); //$NON-NLS-1$
-      rowSpanCB.addItemListener(new java.awt.event.ItemListener() {
-        public void itemStateChanged(java.awt.event.ItemEvent e) {
-          rowSpanField.setEnabled(rowSpanCB.isSelected());
-        }
-      });
+      rowSpanCB.setText(i18n.str("rowspan"));
+      rowSpanCB.addItemListener(e -> rowSpanField.setEnabled(rowSpanCB.isSelected()));
     }
     return rowSpanCB;
   }
@@ -341,4 +313,4 @@ public class CellAttributesPanel extends HTMLAttributeEditorPanel {
     return expansionPanel;
   }
 
-}  //  @jve:decl-index=0:visual-constraint="42,7"
+}
