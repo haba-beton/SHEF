@@ -38,16 +38,7 @@ public abstract class HTMLAttributeEditorPanel extends JPanel {
     return attribs;
   }
 
-  /**
-   * Subclasses should implement this method to set
-   * component values to the values in the attribs hashtable.
-   */
   public abstract void updateComponentsFromAttribs();
 
-  /**
-   * Subclasses should implement this method to set
-   * values in the attribs hashtable from the states
-   * of any components on the panel.
-   */
   public abstract void updateAttribsFromComponents();
 }

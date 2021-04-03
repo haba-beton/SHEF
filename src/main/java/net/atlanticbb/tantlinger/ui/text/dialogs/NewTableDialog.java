@@ -1,7 +1,3 @@
-/*
- * Created on Dec 24, 2005
- *
- */
 package net.atlanticbb.tantlinger.ui.text.dialogs;
 
 import net.atlanticbb.tantlinger.i18n.I18n;
@@ -11,43 +7,34 @@ import net.atlanticbb.tantlinger.ui.UIUtils;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.Map;
 
 public class NewTableDialog extends OptionDialog {
-  /**
-   *
-   */
-  private static final long serialVersionUID = 1L;
-
   private static final I18n i18n = I18n.getInstance("net.atlanticbb.tantlinger.ui.text.dialogs");
 
   private LayoutPanel layoutPanel = new LayoutPanel();
   private TableAttributesPanel propsPanel;
-  private static Icon icon = UIUtils.getIcon(UIUtils.X48, "table.png"); //$NON-NLS-1$
+  private static Icon icon = UIUtils.getIcon(UIUtils.X48, "table.png");
 
   public NewTableDialog(Frame parent) {
-    super(parent, i18n.str("new_table"), i18n.str("new_table_desc"), icon);         //$NON-NLS-1$ //$NON-NLS-2$
+    super(parent, i18n.str("new_table"), i18n.str("new_table_desc"), icon);
     init();
   }
 
   public NewTableDialog(Dialog parent) {
-    super(parent, i18n.str("new_table"), i18n.str("new_table_desc"), icon);         //$NON-NLS-1$ //$NON-NLS-2$
+    super(parent, i18n.str("new_table"), i18n.str("new_table_desc"), icon);
     init();
   }
 
   private void init() {
-    //default attribs
-    Hashtable ht = new Hashtable();
-    ht.put("border", "1"); //$NON-NLS-1$ //$NON-NLS-2$
-    ht.put("width", "100%"); //$NON-NLS-1$ //$NON-NLS-2$
+    Hashtable<String,String> ht = new Hashtable<>();
+    ht.put("border", "1");
+    ht.put("width", "100%");
     propsPanel = new TableAttributesPanel();
     propsPanel.setAttributes(ht);
 
     propsPanel.setBorder(
-      BorderFactory.createCompoundBorder(
-        BorderFactory.createTitledBorder(i18n.str("properties")),  //$NON-NLS-1$
-        BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+      BorderFactory.createCompoundBorder(BorderFactory.createTitledBorder(i18n.str("properties")), BorderFactory.createEmptyBorder(5, 5, 5, 5)));
 
     JPanel mainPanel = new JPanel(new BorderLayout());
     mainPanel.add(layoutPanel, BorderLayout.NORTH);
@@ -59,34 +46,30 @@ public class NewTableDialog extends OptionDialog {
   }
 
   public String getHTML() {
-    String html = "<table"; //$NON-NLS-1$
-    Map attribs = propsPanel.getAttributes();
+    String html = "<table";
+    Map<String,String> attribs = propsPanel.getAttributes();
 
-    for (Iterator e = attribs.keySet().iterator(); e.hasNext(); ) {
-      String key = e.next().toString();
-      String val = attribs.get(key).toString();
-      html += ' ' + key + "=\"" + val + "\"";             //$NON-NLS-1$ //$NON-NLS-2$
+    for (String s : attribs.keySet()) {
+      String val = attribs.get(s);
+      html += ' ' + s + "=\"" + val + "\"";
     }
 
-    html += ">\n"; //$NON-NLS-1$
+    html += ">\n";
 
     int numRows = layoutPanel.getRows();
     int numCols = layoutPanel.getColumns();
     for (int row = 1; row <= numRows; row++) {
-      html += "<tr>\n"; //$NON-NLS-1$
+      html += "<tr>\n";
       for (int col = 1; col <= numCols; col++) {
-        html += "\t<td>\n</td>\n"; //$NON-NLS-1$
+        html += "\t<td>\n</td>\n";
       }
-      html += "</tr>\n"; //$NON-NLS-1$
+      html += "</tr>\n";
     }
 
-    return html + "</table>"; //$NON-NLS-1$
+    return html + "</table>";
   }
 
-  private class LayoutPanel extends JPanel {
-    /**
-     *
-     */
+  private static class LayoutPanel extends JPanel {
     private static final long serialVersionUID = 1L;
     private JLabel rowsLabel = null;
     private JLabel colsLabel = null;
@@ -94,9 +77,6 @@ public class NewTableDialog extends OptionDialog {
     private JSpinner rowsField = null;
     private JSpinner colsField = null;
 
-    /**
-     * This is the default constructor
-     */
     public LayoutPanel() {
       this(1, 1);
     }
@@ -116,11 +96,6 @@ public class NewTableDialog extends OptionDialog {
       return Integer.parseInt(colsField.getModel().getValue().toString());
     }
 
-    /**
-     * This method initializes this
-     *
-     * @return void
-     */
     private void initialize() {
       GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
       gridBagConstraints7.fill = java.awt.GridBagConstraints.NONE;
@@ -141,7 +116,7 @@ public class NewTableDialog extends OptionDialog {
       gridBagConstraints1.insets = new java.awt.Insets(0, 0, 0, 5);
       gridBagConstraints1.gridy = 0;
       colsLabel = new JLabel();
-      colsLabel.setText(i18n.str("columns")); //$NON-NLS-1$
+      colsLabel.setText(i18n.str("columns"));
       GridBagConstraints gridBagConstraints = new GridBagConstraints();
       gridBagConstraints.gridx = 0;
       gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
@@ -149,11 +124,10 @@ public class NewTableDialog extends OptionDialog {
       gridBagConstraints.weighty = 0.0;
       gridBagConstraints.gridy = 0;
       rowsLabel = new JLabel();
-      rowsLabel.setText(i18n.str("rows")); //$NON-NLS-1$
+      rowsLabel.setText(i18n.str("rows"));
       this.setLayout(new GridBagLayout());
       this.setSize(330, 60);
       this.setPreferredSize(new java.awt.Dimension(330, 60));
-      //this.setMaximumSize(this.getPreferredSize());
       this.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder(null, i18n.str("layout"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null), javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5))); //$NON-NLS-1$
       this.add(rowsLabel, gridBagConstraints);
       this.add(colsLabel, gridBagConstraints1);
@@ -161,11 +135,6 @@ public class NewTableDialog extends OptionDialog {
       this.add(getColsField(), gridBagConstraints7);
     }
 
-    /**
-     * This method initializes rowsField
-     *
-     * @return javax.swing.JSpinner
-     */
     private JSpinner getRowsField() {
       if (rowsField == null) {
         rowsField = new JSpinner(new SpinnerNumberModel(iRows, 1, 999, 1));
@@ -173,11 +142,6 @@ public class NewTableDialog extends OptionDialog {
       return rowsField;
     }
 
-    /**
-     * This method initializes colsField
-     *
-     * @return javax.swing.JSpinner
-     */
     private JSpinner getColsField() {
       if (colsField == null) {
         colsField = new JSpinner(new SpinnerNumberModel(iCols, 1, 999, 1));

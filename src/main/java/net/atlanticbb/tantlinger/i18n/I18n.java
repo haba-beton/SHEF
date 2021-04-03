@@ -1,8 +1,4 @@
-/*
- * Created on Nov 6, 2007
- */
 package net.atlanticbb.tantlinger.i18n;
-
 
 import java.io.File;
 import java.io.FileFilter;
@@ -10,7 +6,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.*;
-
 
 /**
  * @author Bob Tantlinger
@@ -75,8 +70,9 @@ public class I18n {
     if (packs != null && packs.length > 0) {
       URL[] urls = new URL[packs.length];
       try {
-        for (int i = 0; i < urls.length; i++)
-          urls[i] = packs[i].toURL();
+        for (int i = 0; i < urls.length; i++) {
+          urls[i] = packs[i].toURI().toURL();
+        }
         return ResourceBundle.getBundle(bun, loc, URLClassLoader.newInstance(urls));
       }
       catch (MalformedURLException | MissingResourceException ignored) {
@@ -84,9 +80,8 @@ public class I18n {
       }
     }
 
-    return ResourceBundle.getBundle(bun, loc); //just return default
+    return ResourceBundle.getBundle(bun, loc);
   }
-
 
   public static I18n getInstance(String _package) {
     I18n i18n = I18NS.get(_package);

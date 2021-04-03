@@ -1,7 +1,3 @@
-/*
- * Created on Jan 18, 2006
- *
- */
 package net.atlanticbb.tantlinger.ui.text.dialogs;
 
 import net.atlanticbb.tantlinger.i18n.I18n;
@@ -13,19 +9,14 @@ import java.awt.*;
 import java.util.Map;
 
 public class ListDialog extends OptionDialog {
-  /**
-   *
-   */
-  private static final long serialVersionUID = 1L;
-
   private static final I18n i18n = I18n.getInstance("net.atlanticbb.tantlinger.ui.text.dialogs");
 
   public static final int UNORDERED = ListAttributesPanel.UL_LIST;
   public static final int ORDERED = ListAttributesPanel.OL_LIST;
 
-  private static Icon icon = UIUtils.getIcon(UIUtils.X48, "categories.png"); //$NON-NLS-1$
-  private static String title = i18n.str("list_properties"); //$NON-NLS-1$
-  private static String desc = i18n.str("list_properties_desc"); //$NON-NLS-1$
+  private static Icon icon = UIUtils.getIcon(UIUtils.X48, "categories.png");
+  private static String title = i18n.str("list_properties");
+  private static String desc = i18n.str("list_properties_desc");
 
   private ListAttributesPanel listAttrPanel;
 

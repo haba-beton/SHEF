@@ -1,7 +1,3 @@
-/*
- * Created on Jan 18, 2006
- *
- */
 package net.atlanticbb.tantlinger.ui.text.dialogs;
 
 import javax.swing.*;
@@ -9,48 +5,39 @@ import java.awt.*;
 import java.util.Hashtable;
 
 public class ListAttributesPanel extends HTMLAttributeEditorPanel {
-  /**
-   *
-   */
-  private static final long serialVersionUID = 1L;
-  public static final int UL_LIST = 0;
-  public static final int OL_LIST = 1;
+  public  static final int  UL_LIST = 0;
+  public  static final int  OL_LIST = 1;
 
-  private static final String UL = i18n.str("unordered_list"); //$NON-NLS-1$
-  private static final String OL = i18n.str("ordered_list");     //$NON-NLS-1$
-  private static final String LIST_TYPES[] = {UL, OL};
+  private static final String   UL = i18n.str("unordered_list");
+  private static final String   OL = i18n.str("ordered_list");
+  private static final String[] LIST_TYPES = {UL, OL};
 
-  private static final String OL_TYPES[] = {"1", "a", "A", "i", "I"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-  private static final String OL_TYPE_LABELS[] =
-    {
-      "1, 2, 3, ...", //$NON-NLS-1$
-      "a, b, c, ...", //$NON-NLS-1$
-      "A, B, C, ...", //$NON-NLS-1$
-      "i, ii, iii, ...", //$NON-NLS-1$
-      "I, II, III, ..." //$NON-NLS-1$
-    };
+  private static final String[] OL_TYPES = {"1", "a", "A", "i", "I"};
+  private static final String[] OL_TYPE_LABELS = {
+    "1, 2, 3, ...",
+    "a, b, c, ...",
+    "A, B, C, ...",
+    "i, ii, iii, ...",
+    "I, II, III, ..."
+  };
 
-  private static final String UL_TYPES[] = {"disc", "square", "circle"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-  private static final String UL_TYPE_LABELS[] =
-    {
-      i18n.str("solid_circle"), i18n.str("solid_square"), i18n.str("open_circle") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-    };
+  private static final String[] UL_TYPES = {"disc", "square", "circle"};
+  private static final String[] UL_TYPE_LABELS = {
+    i18n.str("solid_circle"), i18n.str("solid_square"), i18n.str("open_circle")
+  };
 
   private JLabel typeLabel = null;
-  private JComboBox typeCombo = null;
-  private JComboBox styleCombo = null;
+  private JComboBox<String> typeCombo = null;
+  private JComboBox<String> styleCombo = null;
   private JSpinner startAtField = null;
   private JCheckBox styleCB = null;
   private JCheckBox startAtCB = null;
 
-  /**
-   * This method initializes
-   */
   public ListAttributesPanel() {
-    this(new Hashtable());
+    this(new Hashtable<>());
   }
 
-  public ListAttributesPanel(Hashtable ht) {
+  public ListAttributesPanel(Hashtable<String,String> ht) {
     super();
     initialize();
     setAttributes(ht);
@@ -69,13 +56,16 @@ public class ListAttributesPanel extends HTMLAttributeEditorPanel {
   private void updateForType() {
     styleCombo.removeAllItems();
     if (typeCombo.getSelectedItem().equals(UL)) {
-      for (int i = 0; i < UL_TYPE_LABELS.length; i++)
-        styleCombo.addItem(UL_TYPE_LABELS[i]);
+      for (String ulTypeLabel : UL_TYPE_LABELS) {
+        styleCombo.addItem(ulTypeLabel);
+      }
       startAtCB.setEnabled(false);
       startAtField.setEnabled(false);
-    } else {
-      for (int i = 0; i < OL_TYPE_LABELS.length; i++)
-        styleCombo.addItem(OL_TYPE_LABELS[i]);
+    }
+    else {
+      for (String olTypeLabel : OL_TYPE_LABELS) {
+        styleCombo.addItem(olTypeLabel);
+      }
       startAtCB.setEnabled(true);
       startAtField.setEnabled(startAtCB.isSelected());
     }
@@ -83,21 +73,22 @@ public class ListAttributesPanel extends HTMLAttributeEditorPanel {
 
   private int getIndexForStyle(String s) {
     if (typeCombo.getSelectedIndex() == UL_LIST) {
-      for (int i = 0; i < UL_TYPES.length; i++)
-        if (UL_TYPES[i].equals(s))
+      for (int i = 0; i < UL_TYPES.length; i++) {
+        if (UL_TYPES[i].equals(s)) {
           return i;
-    } else {
-      for (int i = 0; i < OL_TYPES.length; i++)
-        if (OL_TYPES[i].equals(s))
-          return i;
+        }
+      }
     }
-
+    else {
+      for (int i = 0; i < OL_TYPES.length; i++) {
+        if (OL_TYPES[i].equals(s)) {
+          return i;
+        }
+      }
+    }
     return 0;
   }
 
-  /**
-   * This method initializes this
-   */
   private void initialize() {
     GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
     gridBagConstraints2.gridx = 0;
@@ -134,7 +125,7 @@ public class ListAttributesPanel extends HTMLAttributeEditorPanel {
     gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
     gridBagConstraints.gridy = 0;
     typeLabel = new JLabel();
-    typeLabel.setText(i18n.str("list_type")); //$NON-NLS-1$
+    typeLabel.setText(i18n.str("list_type"));
     this.setLayout(new GridBagLayout());
     this.setSize(new java.awt.Dimension(234, 159));
     this.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
@@ -147,28 +138,27 @@ public class ListAttributesPanel extends HTMLAttributeEditorPanel {
   }
 
   public void updateComponentsFromAttribs() {
-    //updateForType();
-    if (attribs.containsKey("type")) //$NON-NLS-1$
-    {
+    if (attribs.containsKey("type")) {
       styleCB.setSelected(true);
       styleCombo.setEnabled(true);
-      int i = getIndexForStyle(attribs.get("type").toString()); //$NON-NLS-1$
+      int i = getIndexForStyle(attribs.get("type"));
       styleCombo.setSelectedIndex(i);
-    } else {
+    }
+    else {
       styleCB.setSelected(false);
       styleCombo.setEnabled(false);
     }
 
-    if (attribs.containsKey("start")) //$NON-NLS-1$
-    {
+    if (attribs.containsKey("start")) {
       startAtCB.setSelected(true);
       startAtField.setEnabled(true);
       try {
-        int n = Integer.parseInt(attribs.get("start").toString()); //$NON-NLS-1$
-        startAtField.getModel().setValue(new Integer(n));
-      } catch (Exception ex) {
+        startAtField.getModel().setValue(Integer.parseInt(attribs.get("start")));
       }
-    } else {
+      catch (Exception ignored) {
+      }
+    }
+    else {
       startAtCB.setSelected(false);
       startAtField.setEnabled(false);
     }
@@ -176,96 +166,62 @@ public class ListAttributesPanel extends HTMLAttributeEditorPanel {
 
   public void updateAttribsFromComponents() {
     if (styleCB.isSelected()) {
-      if (typeCombo.getSelectedIndex() == UL_LIST)
-        attribs.put("type", UL_TYPES[styleCombo.getSelectedIndex()]); //$NON-NLS-1$
-      else
-        attribs.put("type", OL_TYPES[styleCombo.getSelectedIndex()]); //$NON-NLS-1$
-    } else
-      attribs.remove("type"); //$NON-NLS-1$
+      if (typeCombo.getSelectedIndex() == UL_LIST) {
+        attribs.put("type", UL_TYPES[styleCombo.getSelectedIndex()]);
+      }
+      else {
+        attribs.put("type", OL_TYPES[styleCombo.getSelectedIndex()]);
+      }
+    }
+    else {
+      attribs.remove("type");
+    }
 
-    if (startAtCB.isSelected())
-      attribs.put("start", startAtField.getModel().getValue().toString()); //$NON-NLS-1$
-    else
-      attribs.remove("start"); //$NON-NLS-1$
+    if (startAtCB.isSelected()) {
+      attribs.put("start", startAtField.getModel().getValue().toString());
+    }
+    else {
+      attribs.remove("start");
+    }
   }
 
-  /**
-   * This method initializes typeCombo
-   *
-   * @return javax.swing.JComboBox
-   */
-  private JComboBox getTypeCombo() {
+  private JComboBox<String> getTypeCombo() {
     if (typeCombo == null) {
-      typeCombo = new JComboBox(LIST_TYPES);
-      typeCombo.addItemListener(new java.awt.event.ItemListener() {
-        public void itemStateChanged(java.awt.event.ItemEvent e) {
-          updateForType();
-        }
-      });
+      typeCombo = new JComboBox<>(LIST_TYPES);
+      typeCombo.addItemListener(e -> updateForType());
     }
     return typeCombo;
   }
 
-
-  /**
-   * This method initializes styleCombo
-   *
-   * @return javax.swing.JComboBox
-   */
-  private JComboBox getStyleCombo() {
+  private JComboBox<String> getStyleCombo() {
     if (styleCombo == null) {
-      styleCombo = new JComboBox(UL_TYPE_LABELS);
+      styleCombo = new JComboBox<>(UL_TYPE_LABELS);
     }
     return styleCombo;
   }
 
-  /**
-   * This method initializes startAtField
-   *
-   * @return javax.swing.JSpinner
-   */
   private JSpinner getStartAtField() {
     if (startAtField == null) {
       startAtField = new JSpinner(new SpinnerNumberModel(1, 1, 999, 1));
-
     }
     return startAtField;
   }
 
-  /**
-   * This method initializes styleCB
-   *
-   * @return javax.swing.JCheckBox
-   */
   private JCheckBox getStyleCB() {
     if (styleCB == null) {
       styleCB = new JCheckBox();
-      styleCB.setText(i18n.str("style")); //$NON-NLS-1$
-      styleCB.addItemListener(new java.awt.event.ItemListener() {
-        public void itemStateChanged(java.awt.event.ItemEvent e) {
-          styleCombo.setEnabled(styleCB.isSelected());
-        }
-      });
+      styleCB.setText(i18n.str("style"));
+      styleCB.addItemListener(e -> styleCombo.setEnabled(styleCB.isSelected()));
     }
     return styleCB;
   }
 
-  /**
-   * This method initializes startAtCB
-   *
-   * @return javax.swing.JCheckBox
-   */
   private JCheckBox getStartAtCB() {
     if (startAtCB == null) {
       startAtCB = new JCheckBox();
-      startAtCB.setText(i18n.str("start_at")); //$NON-NLS-1$
-      startAtCB.addItemListener(new java.awt.event.ItemListener() {
-        public void itemStateChanged(java.awt.event.ItemEvent e) {
-          startAtField.setEnabled(startAtCB.isSelected());
-        }
-      });
+      startAtCB.setText(i18n.str("start_at"));
+      startAtCB.addItemListener(e -> startAtField.setEnabled(startAtCB.isSelected()));
     }
     return startAtCB;
   }
-
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+}
