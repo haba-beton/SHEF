@@ -1,6 +1,3 @@
-/*
- * Created on Nov 3, 2007
- */
 package net.atlanticbb.tantlinger.ui.text;
 
 import novaworx.syntax.SyntaxFactory;
@@ -14,9 +11,6 @@ import java.io.InputStream;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
-/**
- * @author Bob Tantlinger
- */
 public class SourceCodeEditor extends SyntaxTextPane {
   private static final long serialVersionUID = 1L;
 
@@ -58,12 +52,6 @@ public class SourceCodeEditor extends SyntaxTextPane {
     setTheme(props, prefix);
   }
 
-  /**
-   * Set a color theme from a properties file
-   *
-   * @param props  The Properties object
-   * @param prefix The prefix to use when getting the keys
-   */
   public void setTheme(Properties props, String prefix) {
     SyntaxStyle[] aStyles = getSyntaxStyles();
 
@@ -120,20 +108,7 @@ public class SourceCodeEditor extends SyntaxTextPane {
     setBackground(parseColor(props.getProperty(prefix + ".text.bg")));
     setCaretColor(parseColor(props.getProperty(prefix + ".caret.fg")));
     setBracketHighlightColor(parseColor(props.getProperty(prefix + ".brackethighlight.fg")));
-    //setSelectionColor(parseColor(props.getProperty(prefix + ".selectioncolor.bg")));
     setLineHighlightColor(parseColor(props.getProperty(prefix + ".linehighlight.fg")));
-        /*gutter.setForeground(parseColor(props.getProperty(prefix + ".gutter.fg")));
-        gutter.setBackground(parseColor(props.getProperty(prefix + ".gutter.bg")));
-        gutter.setDividerForeground(parseColor(props.getProperty(prefix + ".divider.fg")));
-        gutter.setDividerBackground(parseColor(props.getProperty(prefix + ".divider.bg")));
-        gutter.setCurrentLineForeground(parseColor(props.getProperty(prefix + ".currentline.fg")));
-        gutter.setCurrentLineBackground(parseColor(props.getProperty(prefix + ".currentline.bg")));
-        gutter.setLineIntervalForeground(parseColor(props.getProperty(prefix + ".lineinterval.fg")));
-        gutter.setLineIntervalBackground(parseColor(props.getProperty(prefix + ".lineinterval.bg")));
-        gutter.setSelectionForeground(parseColor(props.getProperty(prefix + ".gutterselection.fg")));
-        gutter.setSelectionBackground(parseColor(props.getProperty(prefix + ".gutterselection.bg")));
-        gutter.setBracketScopeForeground(parseColor(props.getProperty(prefix + ".bracketscope.fg")));
-        gutter.setBracketScopeBackground(parseColor(props.getProperty(prefix + ".bracketscope.bg")));*/
   }
 
   /**
@@ -152,13 +127,15 @@ public class SourceCodeEditor extends SyntaxTextPane {
         int g = Integer.parseInt(color.substring(2, 4), 16);
         int b = Integer.parseInt(color.substring(4, 6), 16);
         return new Color(r, g, b);
-      } else if (color.length() == 8) {
+      }
+      else if (color.length() == 8) {
         int a = Integer.parseInt(color.substring(0, 2), 16);
         int r = Integer.parseInt(color.substring(2, 4), 16);
         int g = Integer.parseInt(color.substring(4, 6), 16);
         int b = Integer.parseInt(color.substring(6, 8), 16);
         return new Color(r, g, b, a);
-      } else {
+      }
+      else {
         //throw new Exception("Invalid color syntax");
       }
     }

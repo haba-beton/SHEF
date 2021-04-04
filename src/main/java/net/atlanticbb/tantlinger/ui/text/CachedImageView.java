@@ -103,7 +103,7 @@ public class CachedImageView extends ImageView {
 
     try {
       if (diskCachedImg.exists()) {
-        imgURL = diskCachedImg.toURL();
+        imgURL = diskCachedImg.toURI().toURL();
       }
       else {
         URL reference = ((HTMLDocument) getDocument()).getBase();

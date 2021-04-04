@@ -2,18 +2,10 @@ package net.atlanticbb.tantlinger.ui.text;
 
 import javax.swing.text.*;
 
-/**
- * {@link DocumentFilter} which manages auto indentation and soft tabs.
- *
- * @author Bob Tantlinger
- */
 public class IndentationFilter extends DocumentFilter {
   private boolean isSoftTabs;
   private boolean isAutoIndent;
 
-  /**
-   * Creates a filter that uses regular tabs and that auto indents
-   */
   public IndentationFilter() {
     this(false, true);
   }
@@ -81,34 +73,18 @@ public class IndentationFilter extends DocumentFilter {
     return ws.toString();
   }
 
-
-  /**
-   * @return the isAutoIndent
-   */
   public boolean isAutoIndent() {
     return isAutoIndent;
   }
 
-
-  /**
-   * @param isAutoIndent the isAutoIndent to set
-   */
   public void setAutoIndent(boolean isAutoIndent) {
     this.isAutoIndent = isAutoIndent;
   }
 
-
-  /**
-   * @return the isSoftTabs
-   */
   public boolean isSoftTabs() {
     return isSoftTabs;
   }
 
-
-  /**
-   * @param isSoftTabs the isSoftTabs to set
-   */
   public void setSoftTabs(boolean isSoftTabs) {
     this.isSoftTabs = isSoftTabs;
   }

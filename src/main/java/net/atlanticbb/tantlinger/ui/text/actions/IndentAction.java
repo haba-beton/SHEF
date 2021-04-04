@@ -28,7 +28,6 @@ public class IndentAction extends HTMLTextEditAction {
     else
       throw new IllegalArgumentException("Invalid indentation direction");
     this.direction = direction;
-
   }
 
   protected void sourceEditPerformed(ActionEvent e, JEditorPane editor) {
