@@ -30,18 +30,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.Vector;
 
-
-/**
- * A find and replace dialog for JTextComponents
- */
 public class TextFinderDialog extends JDialog {
-  /**
-   *
-   */
-  private static final long serialVersionUID = 1L;
-
   private ImageIcon warnIcon = UIUtils.getIcon(UIUtils.X48, "error.png");
-
 
   private static final I18n i18n = I18n.getInstance("net.atlanticbb.tantlinger.ui.text.dialogs");
 
@@ -71,7 +61,7 @@ public class TextFinderDialog extends JDialog {
   protected boolean searchUp = false;
   protected String searchData;
 
-  private static final String TITLE = i18n.str("find_and_replace"); //$NON-NLS-1$
+  private static final String TITLE = i18n.str("find_and_replace");
   //private JTextComponent textComp;
 
   public TextFinderDialog(Frame owner, JTextComponent tc, int index) {
@@ -138,23 +128,17 @@ public class TextFinderDialog extends JDialog {
     JPanel p01 = new JPanel(new FlowLayout());
     JPanel p = new JPanel(new GridLayout(2, 1, 2, 8));
 
-    ActionListener findAction = new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        findNext(false, true);
-      }
-    };
+    ActionListener findAction = e -> findNext(false, true);
 
     JButton btFind = new JButton(i18n.str("find_next"));
     btFind.addActionListener(findAction);
     btFind.setMnemonic('f');
     p.add(btFind);
 
-    ActionListener closeAction = new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        setVisible(false);
-        //txtFind1 = null;
-        //txtFind2 = null;
-      }
+    ActionListener closeAction = e -> {
+      setVisible(false);
+      //txtFind1 = null;
+      //txtFind2 = null;
     };
 
     JButton btClose = new JButton(i18n.str("close"));
@@ -221,31 +205,25 @@ public class TextFinderDialog extends JDialog {
     JPanel p02 = new JPanel(new FlowLayout());
     p = new JPanel(new GridLayout(3, 1, 2, 8));
 
-    ActionListener replaceAction = new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        findNext(true, true);
-      }
-    };
+    ActionListener replaceAction = e -> findNext(true, true);
     JButton btReplace = new JButton(i18n.str("replace"));
     btReplace.addActionListener(replaceAction);
     btReplace.setMnemonic('r');
     p.add(btReplace);
 
-    ActionListener replaceAllAction = new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        int counter = 0;
-        while (true) {
-          int result = findNext(true, false);
-          if (result < 0)    // error
-            return;
-          else if (result == 0)    // no more
-            break;
-          counter++;
-        }
-        JOptionPane.showMessageDialog(owner,
-          counter + " " + i18n.str("replacements_prompt"), "Info",
-          JOptionPane.INFORMATION_MESSAGE);
+    ActionListener replaceAllAction = e -> {
+      int counter = 0;
+      while (true) {
+        int result = findNext(true, false);
+        if (result < 0)    // error
+          return;
+        else if (result == 0)    // no more
+          break;
+        counter++;
       }
+      JOptionPane.showMessageDialog(owner,
+        counter + " " + i18n.str("replacements_prompt"), "Info",
+        JOptionPane.INFORMATION_MESSAGE);
     };
     JButton btReplaceAll = new JButton(i18n.str("replace_all"));
     btReplaceAll.addActionListener(replaceAllAction);
@@ -324,7 +302,8 @@ public class TextFinderDialog extends JDialog {
     String key = "";
     try {
       key = docFind.getText(0, docFind.getLength());
-    } catch (BadLocationException ex) {
+    }
+    catch (BadLocationException ignored) {
     }
 
     if (key.length() == 0) {
@@ -333,10 +312,10 @@ public class TextFinderDialog extends JDialog {
     }
 
     if (modelWord.isSelected()) {
-      for (int k = 0; k < WORD_SEPARATORS.length; k++) {
-        if (key.indexOf(WORD_SEPARATORS[k]) >= 0) {
+      for (char wordSeparator : WORD_SEPARATORS) {
+        if (key.indexOf(wordSeparator) >= 0) {
           warning(i18n.str("illegal_character_prompt") +
-            " \'" + WORD_SEPARATORS[k] + "\'");
+            " '" + wordSeparator + "'");
           return -1;
         }
       }
@@ -346,14 +325,15 @@ public class TextFinderDialog extends JDialog {
     if (doReplace) {
       try {
         replacement = docReplace.getText(0, docReplace.getLength());
-      } catch (BadLocationException ex) {
+      }
+      catch (BadLocationException ignored) {
       }
     }
 
     if (modelUp.isSelected() != searchUp)
       searchUp = modelUp.isSelected();
 
-    String searchData = "";
+    String searchData;
     try {
       searchData = monitor.getDocument().getText(
         0, monitor.getDocument().getLength());
@@ -428,8 +408,8 @@ public class TextFinderDialog extends JDialog {
   }
 
   protected boolean isSeparator(char ch) {
-    for (int k = 0; k < WORD_SEPARATORS.length; k++)
-      if (ch == WORD_SEPARATORS[k])
+    for (char wordSeparator : WORD_SEPARATORS)
+      if (ch == wordSeparator)
         return true;
     return false;
   }
@@ -440,18 +420,15 @@ public class TextFinderDialog extends JDialog {
   }
 
 
-  private class DialogLayout implements LayoutManager {
+  private static class DialogLayout implements LayoutManager {
     protected static final int COMP_TWO_COL = 0;
     protected static final int COMP_BIG = 1;
     protected static final int COMP_BUTTON = 2;
 
     protected int m_divider = -1;
-    protected int m_hGap = 10;
-    protected int m_vGap = 5;
-    protected Vector m_v = new Vector();
-
-    public DialogLayout() {
-    }
+    protected int m_hGap;
+    protected int m_vGap;
+    protected Vector<Component> m_v = new Vector<>();
 
     public DialogLayout(int hGap, int vGap) {
       m_hGap = hGap;
@@ -498,14 +475,14 @@ public class TextFinderDialog extends JDialog {
         h + insets.top + insets.bottom);
     }
 
-    protected Dimension preferredLayoutSize(Vector v, int type) {
+    protected Dimension preferredLayoutSize(Vector<Component> v, int type) {
       int w = 0;
       int h = 0;
       switch (type) {
         case COMP_TWO_COL:
           int divider = getDivider(v);
           for (int k = 1; k < v.size(); k += 2) {
-            Component comp = (Component) v.elementAt(k);
+            Component comp = v.elementAt(k);
             Dimension d = comp.getPreferredSize();
             w = Math.max(w, d.width);
             h += d.height + m_vGap;
@@ -515,7 +492,7 @@ public class TextFinderDialog extends JDialog {
 
         case COMP_BIG:
           for (int k = 0; k < v.size(); k++) {
-            Component comp = (Component) v.elementAt(k);
+            Component comp = v.elementAt(k);
             Dimension d = comp.getPreferredSize();
             w = Math.max(w, d.width);
             h += d.height + m_vGap;
@@ -529,7 +506,7 @@ public class TextFinderDialog extends JDialog {
           h = d.height;
           return new Dimension(w * v.size() - m_hGap, h);
       }
-      throw new IllegalArgumentException("Illegal type " + type); //$NON-NLS-1$
+      throw new IllegalArgumentException("Illegal type " + type);
     }
 
     public Dimension minimumLayoutSize(Container parent) {
@@ -564,13 +541,13 @@ public class TextFinderDialog extends JDialog {
       m_v.removeAllElements();
     }
 
-    protected int layoutComponents(Vector v, int type, int x, int y, int w) {
+    protected int layoutComponents(Vector<Component> v, int type, int x, int y, int w) {
       switch (type) {
         case COMP_TWO_COL:
           int divider = getDivider(v);
           for (int k = 1; k < v.size(); k += 2) {
-            Component comp1 = (Component) v.elementAt(k - 1);
-            Component comp2 = (Component) v.elementAt(k);
+            Component comp1 = v.elementAt(k - 1);
+            Component comp2 = v.elementAt(k);
             Dimension d = comp2.getPreferredSize();
 
             comp1.setBounds(x, y, divider, d.height);
@@ -582,7 +559,7 @@ public class TextFinderDialog extends JDialog {
 
         case COMP_BIG:
           for (int k = 0; k < v.size(); k++) {
-            Component comp = (Component) v.elementAt(k);
+            Component comp = v.elementAt(k);
             Dimension d = comp.getPreferredSize();
             comp.setBounds(x, y, w, d.height);
             y += d.height + m_vGap;
@@ -595,13 +572,13 @@ public class TextFinderDialog extends JDialog {
           int ww = d.width * v.size() + m_hGap * (v.size() - 1);
           int xx = x + Math.max(0, (w - ww) / 2);
           for (int k = 0; k < v.size(); k++) {
-            Component comp = (Component) v.elementAt(k);
+            Component comp = v.elementAt(k);
             comp.setBounds(xx, y, d.width, d.height);
             xx += d.width + m_hGap;
           }
           return y + d.height;
       }
-      throw new IllegalArgumentException("Illegal type " + type); //$NON-NLS-1$
+      throw new IllegalArgumentException("Illegal type " + type);
     }
 
     public int getHGap() {
@@ -621,13 +598,13 @@ public class TextFinderDialog extends JDialog {
       return m_divider;
     }
 
-    protected int getDivider(Vector v) {
+    protected int getDivider(Vector<Component> v) {
       if (m_divider > 0)
         return m_divider;
 
       int divider = 0;
       for (int k = 0; k < v.size(); k += 2) {
-        Component comp = (Component) v.elementAt(k);
+        Component comp = v.elementAt(k);
         Dimension d = comp.getPreferredSize();
         divider = Math.max(divider, d.width);
       }
@@ -635,11 +612,11 @@ public class TextFinderDialog extends JDialog {
       return divider;
     }
 
-    protected Dimension getMaxDimension(Vector v) {
+    protected Dimension getMaxDimension(Vector<Component> v) {
       int w = 0;
       int h = 0;
       for (int k = 0; k < v.size(); k++) {
-        Component comp = (Component) v.elementAt(k);
+        Component comp = v.elementAt(k);
         Dimension d = comp.getPreferredSize();
         w = Math.max(w, d.width);
         h = Math.max(h, d.height);

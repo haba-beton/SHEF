@@ -6,9 +6,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
 
-/**
- * @author Bob Tantlinger
- */
 public class UIUtils {
   public static final String X16 = "net/atlanticbb/tantlinger/images/x16/";
   public static final String X24 = "net/atlanticbb/tantlinger/images/x24/";
@@ -142,8 +139,6 @@ public class UIUtils {
       int square = Math.max(ico.getIconWidth(), ico.getIconHeight()) + 6;
       Dimension size = new Dimension(square, square);
       button.setPreferredSize(size);
-      //button.setMinimumSize(size);
-      //button.setMaximumSize(size);
     }
 
     if (!focusable) {

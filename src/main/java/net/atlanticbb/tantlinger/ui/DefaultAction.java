@@ -50,30 +50,7 @@ public class DefaultAction extends BasicAction implements EnabledUpdater {
     return shouldBeEnabled();
   }
 
-
-//    public void updateEnabledState() {
-//        boolean shouldBe = shouldBeEnabled();
-//        if(shouldBe != isEnabled())
-//            setEnabled(shouldBe);
-//    }
-
-//     public void putContextValue(Object key, Object contextValue) {
-//         if(getContext() != null && getContext().containsKey(key) && getContext().get(key) == contextValue) {
-//            return;
-//        }
-//
-//        super.putContextValue(key, contextValue);
-//    }
-
-  /**
-   * Catch all for anything thrown in the execute() method.
-   * This implementation shows an ExceptionDialog.
-   * (non-Javadoc)
-   *
-   * @see org.bushe.swing.action.BasicAction#actionPerformedCatch(java.lang.Throwable)
-   */
   protected void actionPerformedCatch(Throwable t) {
-    //UIUtils.showError(/*DesktopApp.getMainFrame()*/, t);
     t.printStackTrace();
   }
 }

@@ -8,18 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-/**
- * This class implements a standard data entry dialog with "OK" and
- * "Cancel" buttons. Subclasses can override the isDataValid(),
- * okButtonPressed(), and cancelButtonPressed() methods to perform
- * implementation specific processing.
- * <p>
- * By default, the dialog is modal, and has a JPanel with a
- * BorderLayout for its content pane.
- *
- * @author David Fraser
- * @author Michael Harris
- */
 public class StandardDialog extends JDialog {
   private static final long serialVersionUID = 1L;
 
@@ -73,9 +61,6 @@ public class StandardDialog extends JDialog {
     setModal(true);
     setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
-    // Setup the internal content pane to hold the user content pane
-    // and the standard button panel
-
     JPanel internalContentPane = new JPanel();
 
     internalContentPane.setLayout(
@@ -96,11 +81,7 @@ public class StandardDialog extends JDialog {
     };
 
 
-    Action cancelAction = new AbstractAction(i18n.str("cancel")) //$NON-NLS-1$
-    {
-      /**
-       *
-       */
+    Action cancelAction = new AbstractAction(i18n.str("cancel")) {
       private static final long serialVersionUID = 1L;
 
       public void actionPerformed(ActionEvent actionEvent) {
@@ -120,16 +101,10 @@ public class StandardDialog extends JDialog {
     JPanel spacer = new JPanel(new FlowLayout(orientation));
     spacer.add(buttonPanel);
 
-    //internalContentPane.add(buttonPanel, BorderLayout.SOUTH);
     internalContentPane.add(spacer, BorderLayout.SOUTH);
 
-    // Initialise the user content pane with a JPanel
     myUserContentPane = new JPanel(new BorderLayout());
-    //setContentPane(new JPanel(new BorderLayout()));
     super.setContentPane(internalContentPane);
-
-    // Finally, add a listener for the window close button.
-    // Process this event the same as the "Cancel" button.
 
     WindowAdapter windowAdapter = new WindowAdapter() {
       public void windowClosing(WindowEvent windowEvent) {

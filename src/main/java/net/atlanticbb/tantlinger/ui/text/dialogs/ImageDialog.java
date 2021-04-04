@@ -1,7 +1,3 @@
-/*
- * Created on Jan 14, 2006
- *
- */
 package net.atlanticbb.tantlinger.ui.text.dialogs;
 
 import net.atlanticbb.tantlinger.i18n.I18n;
@@ -9,21 +5,15 @@ import net.atlanticbb.tantlinger.ui.UIUtils;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Iterator;
 import java.util.Map;
 
-
 public class ImageDialog extends HTMLOptionDialog {
-  /**
-   *
-   */
-  private static final long serialVersionUID = 1L;
 
   private static final I18n i18n = I18n.getInstance("net.atlanticbb.tantlinger.ui.text.dialogs");
 
-  private static Icon icon = UIUtils.getIcon(UIUtils.X48, "image.png"); //$NON-NLS-1$
-  private static String title = i18n.str("image"); //$NON-NLS-1$
-  private static String desc = i18n.str("image_desc"); //$NON-NLS-1$
+  private static Icon icon = UIUtils.getIcon(UIUtils.X48, "image.png");
+  private static String title = i18n.str("image");
+  private static String desc = i18n.str("image_desc");
 
   private ImagePanel imagePanel;
 
@@ -44,37 +34,36 @@ public class ImageDialog extends HTMLOptionDialog {
     setResizable(false);
   }
 
-  public void setImageAttributes(Map attr) {
+  public void setImageAttributes(Map<String,String> attr) {
     imagePanel.setAttributes(attr);
   }
 
-  public Map getImageAttributes() {
+  public Map<String,String> getImageAttributes() {
     return imagePanel.getAttributes();
   }
 
-  private String createImgAttributes(Map ht) {
-    String html = ""; //$NON-NLS-1$
-    for (Iterator e = ht.keySet().iterator(); e.hasNext(); ) {
-      Object k = e.next();
-      if (k.toString().equals("a") || k.toString().equals("name")) //$NON-NLS-1$ //$NON-NLS-2$
+  private String createImgAttributes(Map<String,String> ht) {
+    String html = "";
+    for (String k : ht.keySet()) {
+      if (k.equals("a") || k.equals("name"))
         continue;
-      html += " " + k + "=" + "\"" + ht.get(k) + "\""; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+      html += " " + k + "=" + "\"" + ht.get(k) + "\"";
     }
 
     return html;
   }
 
   public String getHTML() {
-    Map imgAttr = imagePanel.getAttributes();
-    boolean hasLink = imgAttr.containsKey("a"); //$NON-NLS-1$
-    String html = ""; //$NON-NLS-1$
+    Map<String,String> imgAttr = imagePanel.getAttributes();
+    boolean hasLink = imgAttr.containsKey("a");
+    String html = "";
     if (hasLink) {
-      html = "<a " + imgAttr.get("a") + ">";             //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+      html = "<a " + imgAttr.get("a") + ">";
     }
-    html += "<img" + createImgAttributes(imgAttr) + ">"; //$NON-NLS-1$ //$NON-NLS-2$
+    html += "<img" + createImgAttributes(imgAttr) + ">";
 
     if (hasLink)
-      html += "</a>"; //$NON-NLS-1$
+      html += "</a>";
 
     return html;
   }

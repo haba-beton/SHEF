@@ -6,13 +6,12 @@ import java.util.Hashtable;
 
 public class TableAttributesPanel extends HTMLAttributeEditorPanel {
 
-  private static final long serialVersionUID = 1L;
   private static final String[] ALIGNMENTS = {"left", "center", "right"};
   private static final String[] MEASUREMENTS = {"percent", "pixels"};
 
   private JCheckBox widthCB = null;
   private JSpinner widthField = null;
-  private JComboBox widthCombo = null;
+  private JComboBox<String> widthCombo = null;
   private JCheckBox alignCB = null;
   private JCheckBox cellSpacingCB = null;
   private JSpinner cellSpacingField = null;
@@ -20,36 +19,26 @@ public class TableAttributesPanel extends HTMLAttributeEditorPanel {
   private JSpinner borderField = null;
   private JCheckBox cellPaddingCB = null;
   private JSpinner cellPaddingField = null;
-  private JComboBox alignCombo = null;
+  private JComboBox<String> alignCombo = null;
   private BGColorPanel bgPanel = null;
   private JPanel expansionPanel = null;
 
-
-  /**
-   * This is the default constructor
-   */
   public TableAttributesPanel() {
-    this(new Hashtable());
-    //super();
-    //initialize();
-    //Hashtable ht = new Hashtable();
-    //ht.put("width", "100%");
-    //ht.put("border", "1");
-    //setComponentStates(ht);
+    this(new Hashtable<>());
   }
 
-  public TableAttributesPanel(Hashtable attribs) {
+  public TableAttributesPanel(Hashtable<String,String> attribs) {
     super(attribs);
     initialize();
     updateComponentsFromAttribs();
   }
 
   public void updateComponentsFromAttribs() {
-    if (attribs.containsKey("width")) //$NON-NLS-1$
+    if (attribs.containsKey("width"))
     {
       widthCB.setSelected(true);
-      String w = attribs.get("width").toString(); //$NON-NLS-1$
-      if (w.endsWith("%"))                             //$NON-NLS-1$
+      String w = attribs.get("width");
+      if (w.endsWith("%"))
         w = w.substring(0, w.length() - 1);
       else
         widthCombo.setSelectedIndex(1);
@@ -66,23 +55,23 @@ public class TableAttributesPanel extends HTMLAttributeEditorPanel {
       widthCombo.setEnabled(false);
     }
 
-    if (attribs.containsKey("align")) //$NON-NLS-1$
+    if (attribs.containsKey("align"))
     {
       alignCB.setSelected(true);
       alignCombo.setEnabled(true);
-      alignCombo.setSelectedItem(attribs.get("align")); //$NON-NLS-1$
+      alignCombo.setSelectedItem(attribs.get("align"));
     } else {
       alignCB.setSelected(false);
       alignCombo.setEnabled(false);
     }
 
-    if (attribs.containsKey("border")) //$NON-NLS-1$
+    if (attribs.containsKey("border"))
     {
       borderCB.setSelected(true);
       borderField.setEnabled(true);
       try {
         borderField.getModel().setValue(
-          new Integer(attribs.get("border").toString())); //$NON-NLS-1$
+          new Integer(attribs.get("border")));
       } catch (Exception ex) {
         ex.printStackTrace();
       }
@@ -91,13 +80,13 @@ public class TableAttributesPanel extends HTMLAttributeEditorPanel {
       borderField.setEnabled(false);
     }
 
-    if (attribs.containsKey("cellpadding")) //$NON-NLS-1$
+    if (attribs.containsKey("cellpadding"))
     {
       cellPaddingCB.setSelected(true);
       cellPaddingField.setEnabled(true);
       try {
         cellPaddingField.getModel().setValue(
-          new Integer(attribs.get("cellpadding").toString())); //$NON-NLS-1$
+          new Integer(attribs.get("cellpadding")));
       } catch (Exception ex) {
         ex.printStackTrace();
       }
@@ -106,13 +95,13 @@ public class TableAttributesPanel extends HTMLAttributeEditorPanel {
       cellPaddingField.setEnabled(false);
     }
 
-    if (attribs.containsKey("cellspacing")) //$NON-NLS-1$
+    if (attribs.containsKey("cellspacing"))
     {
       cellSpacingCB.setSelected(true);
       cellSpacingField.setEnabled(true);
       try {
         cellSpacingField.getModel().setValue(
-          new Integer(attribs.get("cellspacing").toString())); //$NON-NLS-1$
+          new Integer(attribs.get("cellspacing")));
       } catch (Exception ex) {
         ex.printStackTrace();
       }
@@ -121,10 +110,10 @@ public class TableAttributesPanel extends HTMLAttributeEditorPanel {
       cellSpacingField.setEnabled(false);
     }
 
-    if (attribs.containsKey("bgcolor")) //$NON-NLS-1$
+    if (attribs.containsKey("bgcolor"))
     {
       bgPanel.setSelected(true);
-      bgPanel.setColor(attribs.get("bgcolor").toString()); //$NON-NLS-1$
+      bgPanel.setColor(attribs.get("bgcolor"));
     } else {
       bgPanel.setSelected(false);
     }
@@ -134,46 +123,46 @@ public class TableAttributesPanel extends HTMLAttributeEditorPanel {
     if (widthCB.isSelected()) {
       String w = widthField.getModel().getValue().toString();
       if (widthCombo.getSelectedIndex() == 0)
-        w += "%"; //$NON-NLS-1$
-      attribs.put("width", w); //$NON-NLS-1$
+        w += "%";
+      attribs.put("width", w);
     } else
-      attribs.remove("width"); //$NON-NLS-1$
+      attribs.remove("width");
 
     if (alignCB.isSelected())
-      attribs.put("align", alignCombo.getSelectedItem().toString()); //$NON-NLS-1$
+      attribs.put("align", alignCombo.getSelectedItem().toString());
     else
-      attribs.remove("align"); //$NON-NLS-1$
+      attribs.remove("align");
 
     if (borderCB.isSelected())
-      attribs.put("border",  //$NON-NLS-1$
+      attribs.put("border",
         borderField.getModel().getValue().toString());
     else
-      attribs.remove("border"); //$NON-NLS-1$
+      attribs.remove("border");
 
     if (cellSpacingCB.isSelected())
-      attribs.put("cellspacing",  //$NON-NLS-1$
+      attribs.put("cellspacing",
         cellSpacingField.getModel().getValue().toString());
     else
-      attribs.remove("cellspacing"); //$NON-NLS-1$
+      attribs.remove("cellspacing");
 
     if (cellPaddingCB.isSelected())
-      attribs.put("cellpadding",  //$NON-NLS-1$
+      attribs.put("cellpadding",
         cellPaddingField.getModel().getValue().toString());
     else
-      attribs.remove("cellpadding"); //$NON-NLS-1$
+      attribs.remove("cellpadding");
 
     if (bgPanel.isSelected())
-      attribs.put("bgcolor", bgPanel.getColor()); //$NON-NLS-1$
+      attribs.put("bgcolor", bgPanel.getColor());
     else
-      attribs.remove("bgcolor"); //$NON-NLS-1$
+      attribs.remove("bgcolor");
   }
 
-  public void setComponentStates(Hashtable attribs) {
-    if (attribs.containsKey("width")) //$NON-NLS-1$
+  public void setComponentStates(Hashtable<String,String> attribs) {
+    if (attribs.containsKey("width"))
     {
       widthCB.setSelected(true);
-      String w = attribs.get("width").toString(); //$NON-NLS-1$
-      if (w.endsWith("%"))                             //$NON-NLS-1$
+      String w = attribs.get("width");
+      if (w.endsWith("%"))
         w = w.substring(0, w.length() - 1);
       else
         widthCombo.setSelectedIndex(1);
@@ -189,21 +178,21 @@ public class TableAttributesPanel extends HTMLAttributeEditorPanel {
     }
 
 
-    if (attribs.containsKey("align")) //$NON-NLS-1$
+    if (attribs.containsKey("align"))
     {
       alignCB.setSelected(true);
-      alignCombo.setSelectedItem(attribs.get("align")); //$NON-NLS-1$
+      alignCombo.setSelectedItem(attribs.get("align"));
     } else {
       alignCB.setSelected(false);
       alignCombo.setEnabled(false);
     }
 
-    if (attribs.containsKey("border")) //$NON-NLS-1$
+    if (attribs.containsKey("border"))
     {
       borderCB.setSelected(true);
       try {
         borderField.getModel().setValue(
-          new Integer(attribs.get("border").toString())); //$NON-NLS-1$
+          new Integer(attribs.get("border")));
       } catch (Exception ex) {
         ex.printStackTrace();
       }
@@ -212,12 +201,12 @@ public class TableAttributesPanel extends HTMLAttributeEditorPanel {
       borderField.setEnabled(false);
     }
 
-    if (attribs.containsKey("cellpadding")) //$NON-NLS-1$
+    if (attribs.containsKey("cellpadding"))
     {
       cellPaddingCB.setSelected(true);
       try {
         cellPaddingField.getModel().setValue(
-          new Integer(attribs.get("cellpadding").toString())); //$NON-NLS-1$
+          new Integer(attribs.get("cellpadding")));
       } catch (Exception ex) {
         ex.printStackTrace();
       }
@@ -226,12 +215,12 @@ public class TableAttributesPanel extends HTMLAttributeEditorPanel {
       cellPaddingField.setEnabled(false);
     }
 
-    if (attribs.containsKey("cellspacing")) //$NON-NLS-1$
+    if (attribs.containsKey("cellspacing"))
     {
       cellSpacingCB.setSelected(true);
       try {
         cellSpacingField.getModel().setValue(
-          new Integer(attribs.get("cellspacing").toString())); //$NON-NLS-1$
+          new Integer(attribs.get("cellspacing")));
       } catch (Exception ex) {
         ex.printStackTrace();
       }
@@ -240,22 +229,16 @@ public class TableAttributesPanel extends HTMLAttributeEditorPanel {
       cellSpacingField.setEnabled(false);
     }
 
-    if (attribs.containsKey("bgcolor")) //$NON-NLS-1$
+    if (attribs.containsKey("bgcolor"))
     {
       bgPanel.setSelected(true);
-      bgPanel.setColor(attribs.get("bgcolor").toString()); //$NON-NLS-1$
+      bgPanel.setColor(attribs.get("bgcolor"));
     } else {
       bgPanel.setSelected(false);
     }
 
   }
 
-
-  /**
-   * This method initializes this
-   *
-   * @return void
-   */
   private void initialize() {
     GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
     gridBagConstraints12.gridx = 0;
@@ -357,33 +340,20 @@ public class TableAttributesPanel extends HTMLAttributeEditorPanel {
     this.add(getAlignCombo(), gridBagConstraints4);
     this.add(getBGPanel(), gridBagConstraints11);
     this.add(getExpansionPanel(), gridBagConstraints12);
-
   }
 
-  /**
-   * This method initializes widthCB
-   *
-   * @return javax.swing.JCheckBox
-   */
   private JCheckBox getWidthCB() {
     if (widthCB == null) {
       widthCB = new JCheckBox();
-      widthCB.setText(i18n.str("width"));             //$NON-NLS-1$
-      widthCB.addItemListener(new java.awt.event.ItemListener() {
-        public void itemStateChanged(java.awt.event.ItemEvent e) {
-          widthField.setEnabled(widthCB.isSelected());
-          widthCombo.setEnabled(widthCB.isSelected());
-        }
+      widthCB.setText(i18n.str("width"));
+      widthCB.addItemListener(e -> {
+        widthField.setEnabled(widthCB.isSelected());
+        widthCombo.setEnabled(widthCB.isSelected());
       });
     }
     return widthCB;
   }
 
-  /**
-   * This method initializes widthField
-   *
-   * @return javax.swing.JSpinner
-   */
   private JSpinner getWidthField() {
     if (widthField == null) {
       widthField = new JSpinner(new SpinnerNumberModel(100, 1, 999, 1));
@@ -392,27 +362,17 @@ public class TableAttributesPanel extends HTMLAttributeEditorPanel {
     return widthField;
   }
 
-  /**
-   * This method initializes widthCombo
-   *
-   * @return javax.swing.JComboBox
-   */
-  private JComboBox getWidthCombo() {
+  private JComboBox<String> getWidthCombo() {
     if (widthCombo == null) {
-      widthCombo = new JComboBox(MEASUREMENTS);
+      widthCombo = new JComboBox<>(MEASUREMENTS);
     }
     return widthCombo;
   }
 
-  /**
-   * This method initializes alignCB
-   *
-   * @return javax.swing.JCheckBox
-   */
   private JCheckBox getAlignCB() {
     if (alignCB == null) {
       alignCB = new JCheckBox();
-      alignCB.setText(i18n.str("align")); //$NON-NLS-1$
+      alignCB.setText(i18n.str("align"));
       alignCB.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           alignCombo.setEnabled(alignCB.isSelected());
@@ -422,29 +382,15 @@ public class TableAttributesPanel extends HTMLAttributeEditorPanel {
     return alignCB;
   }
 
-  /**
-   * This method initializes cellSpacingCB
-   *
-   * @return javax.swing.JCheckBox
-   */
   private JCheckBox getCellSpacingCB() {
     if (cellSpacingCB == null) {
       cellSpacingCB = new JCheckBox();
-      cellSpacingCB.setText(i18n.str("cellspacing")); //$NON-NLS-1$
-      cellSpacingCB.addItemListener(new java.awt.event.ItemListener() {
-        public void itemStateChanged(java.awt.event.ItemEvent e) {
-          cellSpacingField.setEnabled(cellSpacingCB.isSelected());
-        }
-      });
+      cellSpacingCB.setText(i18n.str("cellspacing"));
+      cellSpacingCB.addItemListener(e -> cellSpacingField.setEnabled(cellSpacingCB.isSelected()));
     }
     return cellSpacingCB;
   }
 
-  /**
-   * This method initializes cellSpacingField
-   *
-   * @return javax.swing.JSpinner
-   */
   private JSpinner getCellSpacingField() {
     if (cellSpacingField == null) {
       cellSpacingField = new JSpinner(new SpinnerNumberModel(1, 0, 999, 1));
@@ -453,29 +399,15 @@ public class TableAttributesPanel extends HTMLAttributeEditorPanel {
     return cellSpacingField;
   }
 
-  /**
-   * This method initializes borderCB
-   *
-   * @return javax.swing.JCheckBox
-   */
   private JCheckBox getBorderCB() {
     if (borderCB == null) {
       borderCB = new JCheckBox();
-      borderCB.setText(i18n.str("border")); //$NON-NLS-1$
-      borderCB.addItemListener(new java.awt.event.ItemListener() {
-        public void itemStateChanged(java.awt.event.ItemEvent e) {
-          borderField.setEnabled(borderCB.isSelected());
-        }
-      });
+      borderCB.setText(i18n.str("border"));
+      borderCB.addItemListener(e -> borderField.setEnabled(borderCB.isSelected()));
     }
     return borderCB;
   }
 
-  /**
-   * This method initializes borderField
-   *
-   * @return javax.swing.JSpinner
-   */
   private JSpinner getBorderField() {
     if (borderField == null) {
       borderField = new JSpinner(new SpinnerNumberModel(1, 0, 999, 1));
@@ -484,29 +416,15 @@ public class TableAttributesPanel extends HTMLAttributeEditorPanel {
     return borderField;
   }
 
-  /**
-   * This method initializes cellPaddingCB
-   *
-   * @return javax.swing.JCheckBox
-   */
   private JCheckBox getCellPaddingCB() {
     if (cellPaddingCB == null) {
       cellPaddingCB = new JCheckBox();
-      cellPaddingCB.setText(i18n.str("cellpadding")); //$NON-NLS-1$
-      cellPaddingCB.addItemListener(new java.awt.event.ItemListener() {
-        public void itemStateChanged(java.awt.event.ItemEvent e) {
-          cellPaddingField.setEnabled(cellPaddingCB.isSelected());
-        }
-      });
+      cellPaddingCB.setText(i18n.str("cellpadding"));
+      cellPaddingCB.addItemListener(e -> cellPaddingField.setEnabled(cellPaddingCB.isSelected()));
     }
     return cellPaddingCB;
   }
 
-  /**
-   * This method initializes cellPaddingField
-   *
-   * @return javax.swing.JSpinner
-   */
   private JSpinner getCellPaddingField() {
     if (cellPaddingField == null) {
       cellPaddingField = new JSpinner(new SpinnerNumberModel(1, 0, 999, 1));
@@ -515,23 +433,13 @@ public class TableAttributesPanel extends HTMLAttributeEditorPanel {
     return cellPaddingField;
   }
 
-  /**
-   * This method initializes alignCombo
-   *
-   * @return javax.swing.JComboBox
-   */
-  private JComboBox getAlignCombo() {
+  private JComboBox<String> getAlignCombo() {
     if (alignCombo == null) {
-      alignCombo = new JComboBox(ALIGNMENTS);
+      alignCombo = new JComboBox<>(ALIGNMENTS);
     }
     return alignCombo;
   }
 
-  /**
-   * This method initializes tempPanel
-   *
-   * @return javax.swing.JPanel
-   */
   private JPanel getBGPanel() {
     if (bgPanel == null) {
       bgPanel = new BGColorPanel();
@@ -540,16 +448,10 @@ public class TableAttributesPanel extends HTMLAttributeEditorPanel {
     return bgPanel;
   }
 
-  /**
-   * This method initializes expansionPanel
-   *
-   * @return javax.swing.JPanel
-   */
   private JPanel getExpansionPanel() {
     if (expansionPanel == null) {
       expansionPanel = new JPanel();
     }
     return expansionPanel;
   }
-
-}  //  @jve:decl-index=0:visual-constraint="16,10"
+}

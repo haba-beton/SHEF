@@ -10,7 +10,6 @@ import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.*;
 
-
 public class SpecialCharDialog extends JDialog {
   private static final long serialVersionUID = 1L;
 
@@ -112,7 +111,6 @@ public class SpecialCharDialog extends JDialog {
         }
       }
     }
-
   }
 
   public boolean isInsertEntity() {

@@ -1,7 +1,3 @@
-/*
- * Created on Jan 17, 2006
- *
- */
 package net.atlanticbb.tantlinger.ui.text.dialogs;
 
 import net.atlanticbb.tantlinger.ui.text.TextEditPopupManager;
@@ -10,34 +6,24 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Hashtable;
 
-
 public class StyleAttributesPanel extends HTMLAttributeEditorPanel {
-  /**
-   *
-   */
   private static final long serialVersionUID = 1L;
   private JLabel classLabel = null;
   private JLabel idLabel = null;
   private JTextField classField = null;
   private JTextField idField = null;
 
-  /**
-   * This method initializes
-   */
   public StyleAttributesPanel() {
-    this(new Hashtable());
+    this(new Hashtable<>());
   }
 
-  public StyleAttributesPanel(Hashtable attr) {
+  public StyleAttributesPanel(Hashtable<String,String> attr) {
     super();
     initialize();
     setAttributes(attr);
     this.updateComponentsFromAttribs();
   }
 
-  /**
-   * This method initializes this
-   */
   private void initialize() {
     GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
     gridBagConstraints4.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -58,14 +44,14 @@ public class StyleAttributesPanel extends HTMLAttributeEditorPanel {
     gridBagConstraints1.insets = new java.awt.Insets(0, 0, 5, 5);
     gridBagConstraints1.gridy = 1;
     idLabel = new JLabel();
-    idLabel.setText(i18n.str("id")); //$NON-NLS-1$
+    idLabel.setText(i18n.str("id"));
     GridBagConstraints gridBagConstraints = new GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
     gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
     gridBagConstraints.gridy = 0;
     classLabel = new JLabel();
-    classLabel.setText(i18n.str("class")); //$NON-NLS-1$
+    classLabel.setText(i18n.str("class"));
     this.setLayout(new GridBagLayout());
     this.setSize(new java.awt.Dimension(210, 60));
     this.setPreferredSize(new java.awt.Dimension(210, 60));
@@ -82,35 +68,23 @@ public class StyleAttributesPanel extends HTMLAttributeEditorPanel {
   }
 
   public void updateComponentsFromAttribs() {
-    if (attribs.containsKey("class")) //$NON-NLS-1$
-      classField.setText(attribs.get("class").toString()); //$NON-NLS-1$
-    else
-      classField.setText(""); //$NON-NLS-1$
-
-    if (attribs.containsKey("id")) //$NON-NLS-1$
-      idField.setText(attribs.get("id").toString()); //$NON-NLS-1$
-    else
-      idField.setText("");         //$NON-NLS-1$
+    classField.setText(attribs.getOrDefault("class", ""));
+    idField.setText(attribs.getOrDefault("id", ""));
   }
 
   public void updateAttribsFromComponents() {
-    if (!classField.getText().equals("")) //$NON-NLS-1$
-      attribs.put("class", classField.getText()); //$NON-NLS-1$
+    if (!classField.getText().equals(""))
+      attribs.put("class", classField.getText());
     else
-      attribs.remove("class"); //$NON-NLS-1$
+      attribs.remove("class");
 
-    if (!idField.getText().equals("")) //$NON-NLS-1$
-      attribs.put("id", idField.getText()); //$NON-NLS-1$
+    if (!idField.getText().equals(""))
+      attribs.put("id", idField.getText());
     else
-      attribs.remove("id"); //$NON-NLS-1$
+      attribs.remove("id");
 
   }
 
-  /**
-   * This method initializes classField
-   *
-   * @return javax.swing.JTextField
-   */
   private JTextField getClassField() {
     if (classField == null) {
       classField = new JTextField();
@@ -118,16 +92,10 @@ public class StyleAttributesPanel extends HTMLAttributeEditorPanel {
     return classField;
   }
 
-  /**
-   * This method initializes idField
-   *
-   * @return javax.swing.JTextField
-   */
   private JTextField getIdField() {
     if (idField == null) {
       idField = new JTextField();
     }
     return idField;
   }
-
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+}

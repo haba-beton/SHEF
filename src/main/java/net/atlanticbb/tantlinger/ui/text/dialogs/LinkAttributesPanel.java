@@ -1,7 +1,3 @@
-/*
- * Created on Jan 15, 2006
- *
- */
 package net.atlanticbb.tantlinger.ui.text.dialogs;
 
 import net.atlanticbb.tantlinger.ui.text.TextEditPopupManager;
@@ -9,36 +5,26 @@ import net.atlanticbb.tantlinger.ui.text.TextEditPopupManager;
 import javax.swing.*;
 import java.awt.*;
 
-
 public class LinkAttributesPanel extends HTMLAttributeEditorPanel {
-  /**
-   *
-   */
   private static final long serialVersionUID = 1L;
-  private static final String NEW_WIN = "New Window"; //$NON-NLS-1$
-  private static final String SAME_WIN = "Same Window"; //$NON-NLS-1$
-  private static final String SAME_FRAME = "Same Frame"; //$NON-NLS-1$
-  private static final String TARGET_LABELS[] =
-    {NEW_WIN, SAME_WIN, SAME_FRAME};
-  private static final String TARGETS[] = {"_blank", "_top", "_self"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+  private static final String NEW_WIN = "New Window";
+  private static final String SAME_WIN = "Same Window";
+  private static final String SAME_FRAME = "Same Frame";
+  private static final String[] TARGET_LABELS = {NEW_WIN, SAME_WIN, SAME_FRAME};
+  private static final String[] TARGETS = {"_blank", "_top", "_self"};
   private JCheckBox nameCB = null;
   private JCheckBox titleCB = null;
   private JCheckBox openInCB = null;
   private JTextField nameField = null;
   private JTextField titleField = null;
-  private JComboBox openInCombo = null;
+  private JComboBox<String> openInCombo = null;
   private JPanel spacerPanel = null;
 
-
-  /**
-   * This method initializes
-   */
   public LinkAttributesPanel() {
     super();
     initialize();
     updateComponentsFromAttribs();
   }
-
 
   public void setEnabled(boolean b) {
     super.setEnabled(b);
@@ -50,9 +36,6 @@ public class LinkAttributesPanel extends HTMLAttributeEditorPanel {
     openInCombo.setEnabled(openInCB.isSelected() && b);
   }
 
-  /**
-   * This method initializes this
-   */
   private void initialize() {
     GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
     gridBagConstraints6.gridx = 0;
@@ -100,7 +83,7 @@ public class LinkAttributesPanel extends HTMLAttributeEditorPanel {
     gridBagConstraints.gridy = 0;
     this.setLayout(new GridBagLayout());
     this.setSize(new java.awt.Dimension(320, 118));
-    this.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder(null, i18n.str("attributes"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null), javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5))); //$NON-NLS-1$
+    this.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder(null, i18n.str("attributes"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null), javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5)));
     this.add(getNameCB(), gridBagConstraints);
     this.add(getTitleCB(), gridBagConstraints1);
     this.add(getOpenInCB(), gridBagConstraints2);
@@ -116,31 +99,30 @@ public class LinkAttributesPanel extends HTMLAttributeEditorPanel {
   }
 
   public void updateComponentsFromAttribs() {
-    if (attribs.containsKey("name")) //$NON-NLS-1$
-    {
+    if (attribs.containsKey("name")) {
       nameCB.setSelected(true);
       nameField.setEditable(true);
-      nameField.setText(attribs.get("name").toString()); //$NON-NLS-1$
-    } else {
+      nameField.setText(attribs.get("name"));
+    }
+    else {
       nameCB.setSelected(false);
       nameField.setEditable(false);
     }
 
 
-    if (attribs.containsKey("title")) //$NON-NLS-1$
-    {
+    if (attribs.containsKey("title")) {
       titleCB.setSelected(true);
       titleField.setEditable(true);
-      titleField.setText(attribs.get("title").toString()); //$NON-NLS-1$
-    } else {
+      titleField.setText(attribs.get("title"));
+    }
+    else {
       titleCB.setSelected(false);
       titleField.setEditable(false);
     }
 
-    if (attribs.containsKey("target")) //$NON-NLS-1$
-    {
+    if (attribs.containsKey("target")) {
       openInCB.setSelected(true);
-      String val = attribs.get("target").toString(); //$NON-NLS-1$
+      String val = attribs.get("target");
       openInCombo.setEnabled(true);
       for (int i = 0; i < TARGETS.length; i++) {
         if (val.equals(TARGETS[i])) {
@@ -148,7 +130,8 @@ public class LinkAttributesPanel extends HTMLAttributeEditorPanel {
           break;
         }
       }
-    } else {
+    }
+    else {
       openInCB.setSelected(false);
       openInCombo.setEnabled(false);
     }
@@ -156,80 +139,48 @@ public class LinkAttributesPanel extends HTMLAttributeEditorPanel {
 
   public void updateAttribsFromComponents() {
     if (openInCB.isSelected())
-      attribs.put("target", TARGETS[openInCombo.getSelectedIndex()]); //$NON-NLS-1$
+      attribs.put("target", TARGETS[openInCombo.getSelectedIndex()]);
     else
-      attribs.remove("target"); //$NON-NLS-1$
+      attribs.remove("target");
 
     if (titleCB.isSelected())
-      attribs.put("title", titleField.getText()); //$NON-NLS-1$
+      attribs.put("title", titleField.getText());
     else
-      attribs.remove("title"); //$NON-NLS-1$
+      attribs.remove("title");
 
     if (nameCB.isSelected())
-      attribs.put("name", nameField.getText()); //$NON-NLS-1$
+      attribs.put("name", nameField.getText());
     else
-      attribs.remove("name"); //$NON-NLS-1$
+      attribs.remove("name");
   }
 
-  /**
-   * This method initializes nameCB
-   *
-   * @return javax.swing.JCheckBox
-   */
   private JCheckBox getNameCB() {
     if (nameCB == null) {
       nameCB = new JCheckBox();
-      nameCB.setText(i18n.str("name")); //$NON-NLS-1$
-      nameCB.addItemListener(new java.awt.event.ItemListener() {
-        public void itemStateChanged(java.awt.event.ItemEvent e) {
-          nameField.setEditable(nameCB.isSelected());
-        }
-      });
+      nameCB.setText(i18n.str("name"));
+      nameCB.addItemListener(e -> nameField.setEditable(nameCB.isSelected()));
     }
     return nameCB;
   }
 
-  /**
-   * This method initializes titleCB
-   *
-   * @return javax.swing.JCheckBox
-   */
   private JCheckBox getTitleCB() {
     if (titleCB == null) {
       titleCB = new JCheckBox();
-      titleCB.setText(i18n.str("title")); //$NON-NLS-1$
-      titleCB.addItemListener(new java.awt.event.ItemListener() {
-        public void itemStateChanged(java.awt.event.ItemEvent e) {
-          titleField.setEditable(titleCB.isSelected());
-        }
-      });
+      titleCB.setText(i18n.str("title"));
+      titleCB.addItemListener(e -> titleField.setEditable(titleCB.isSelected()));
     }
     return titleCB;
   }
 
-  /**
-   * This method initializes openInCB
-   *
-   * @return javax.swing.JCheckBox
-   */
   private JCheckBox getOpenInCB() {
     if (openInCB == null) {
       openInCB = new JCheckBox();
-      openInCB.setText(i18n.str("open_in")); //$NON-NLS-1$
-      openInCB.addItemListener(new java.awt.event.ItemListener() {
-        public void itemStateChanged(java.awt.event.ItemEvent e) {
-          openInCombo.setEnabled(openInCB.isSelected());
-        }
-      });
+      openInCB.setText(i18n.str("open_in"));
+      openInCB.addItemListener(e -> openInCombo.setEnabled(openInCB.isSelected()));
     }
     return openInCB;
   }
 
-  /**
-   * This method initializes nameField
-   *
-   * @return javax.swing.JTextField
-   */
   private JTextField getNameField() {
     if (nameField == null) {
       nameField = new JTextField();
@@ -237,11 +188,6 @@ public class LinkAttributesPanel extends HTMLAttributeEditorPanel {
     return nameField;
   }
 
-  /**
-   * This method initializes titleField
-   *
-   * @return javax.swing.JTextField
-   */
   private JTextField getTitleField() {
     if (titleField == null) {
       titleField = new JTextField();
@@ -249,28 +195,17 @@ public class LinkAttributesPanel extends HTMLAttributeEditorPanel {
     return titleField;
   }
 
-  /**
-   * This method initializes openInCombo
-   *
-   * @return javax.swing.JComboBox
-   */
-  private JComboBox getOpenInCombo() {
+  private JComboBox<String> getOpenInCombo() {
     if (openInCombo == null) {
-      openInCombo = new JComboBox(TARGET_LABELS);
+      openInCombo = new JComboBox<>(TARGET_LABELS);
     }
     return openInCombo;
   }
 
-  /**
-   * This method initializes spacerPanel
-   *
-   * @return javax.swing.JPanel
-   */
   private JPanel getSpacerPanel() {
     if (spacerPanel == null) {
       spacerPanel = new JPanel();
     }
     return spacerPanel;
   }
-
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+}

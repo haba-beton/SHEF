@@ -1,7 +1,3 @@
-/*
- * Created on Dec 24, 2005
- *
- */
 package net.atlanticbb.tantlinger.ui.text.dialogs;
 
 import javax.swing.*;
@@ -10,22 +6,15 @@ import java.util.Hashtable;
 import java.util.Map;
 
 public class RowAttributesPanel extends HTMLAttributeEditorPanel {
-  /**
-   *
-   */
-  private static final long serialVersionUID = 1L;
   private AlignmentAttributesPanel alignPanel = null;
   private BGColorPanel bgColorPanel = null;
   private JPanel expansionPanel = null;
 
-  /**
-   * This is the default constructor
-   */
   public RowAttributesPanel() {
-    this(new Hashtable());
+    this(new Hashtable<>());
   }
 
-  public RowAttributesPanel(Hashtable attr) {
+  public RowAttributesPanel(Hashtable<String,String> attr) {
     super(attr);
     initialize();
     alignPanel.setAttributes(getAttributes());
@@ -35,12 +24,10 @@ public class RowAttributesPanel extends HTMLAttributeEditorPanel {
   public void updateComponentsFromAttribs() {
     if (attribs.containsKey("bgcolor")) {
       bgColorPanel.setSelected(true);
-      bgColorPanel.setColor(attribs.get("bgcolor").toString());
+      bgColorPanel.setColor(attribs.get("bgcolor"));
     }
-
     alignPanel.updateComponentsFromAttribs();
   }
-
 
   public void updateAttribsFromComponents() {
     if (bgColorPanel.isSelected())
@@ -50,26 +37,19 @@ public class RowAttributesPanel extends HTMLAttributeEditorPanel {
     alignPanel.updateAttribsFromComponents();
   }
 
-  public void setComponentStates(Hashtable attribs) {
+  public void setComponentStates(Hashtable<String,String> attribs) {
     if (attribs.containsKey("bgcolor")) {
       bgColorPanel.setSelected(true);
-      bgColorPanel.setColor(attribs.get("bgcolor").toString());
+      bgColorPanel.setColor(attribs.get("bgcolor"));
     }
-
     alignPanel.setComponentStates(attribs);
-
   }
 
-  public void setAttributes(Map attr) {
+  public void setAttributes(Map<String,String> attr) {
     alignPanel.setAttributes(attr);
     super.setAttributes(attr);
   }
 
-  /**
-   * This method initializes this
-   *
-   * @return void
-   */
   private void initialize() {
     GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
     gridBagConstraints2.gridx = 0;
@@ -97,11 +77,6 @@ public class RowAttributesPanel extends HTMLAttributeEditorPanel {
     this.add(getExpansionPanel(), gridBagConstraints2);
   }
 
-  /**
-   * This method initializes alignPanel
-   *
-   * @return javax.swing.JPanel
-   */
   private AlignmentAttributesPanel getAlignPanel() {
     if (alignPanel == null) {
       alignPanel = new AlignmentAttributesPanel();
@@ -109,11 +84,6 @@ public class RowAttributesPanel extends HTMLAttributeEditorPanel {
     return alignPanel;
   }
 
-  /**
-   * This method initializes bgColorPanel
-   *
-   * @return javax.swing.JPanel
-   */
   private BGColorPanel getBgColorPanel() {
     if (bgColorPanel == null) {
       bgColorPanel = new BGColorPanel();
@@ -121,16 +91,10 @@ public class RowAttributesPanel extends HTMLAttributeEditorPanel {
     return bgColorPanel;
   }
 
-  /**
-   * This method initializes expansionPanel
-   *
-   * @return javax.swing.JPanel
-   */
   private JPanel getExpansionPanel() {
     if (expansionPanel == null) {
       expansionPanel = new JPanel();
     }
     return expansionPanel;
   }
-
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+}

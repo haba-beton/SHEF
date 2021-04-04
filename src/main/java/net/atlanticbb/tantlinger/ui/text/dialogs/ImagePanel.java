@@ -1,7 +1,3 @@
-/*
- * Created on Jan 16, 2006
- *
- */
 package net.atlanticbb.tantlinger.ui.text.dialogs;
 
 import net.atlanticbb.tantlinger.ui.text.HTMLUtils;
@@ -11,13 +7,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.Map;
 
 public class ImagePanel extends HTMLAttributeEditorPanel {
-  /**
-   *
-   */
   private static final long serialVersionUID = 1L;
   private ImageAttributesPanel imageAttrPanel;
   private LinkAttributesPanel linkAttrPanel;
@@ -25,21 +17,20 @@ public class ImagePanel extends HTMLAttributeEditorPanel {
   private JCheckBox linkCB;
 
   public ImagePanel() {
-    this(new Hashtable());
+    this(new Hashtable<>());
   }
 
-  public ImagePanel(Hashtable at) {
+  public ImagePanel(Hashtable<String,String> at) {
     super();
     initialize();
     setAttributes(at);
     updateComponentsFromAttribs();
   }
 
-  private String createAttribs(Map ht) {
-    String html = ""; //$NON-NLS-1$
-    for (Iterator e = ht.keySet().iterator(); e.hasNext(); ) {
-      Object k = e.next();
-      html += " " + k + "=" + "\"" + ht.get(k) + "\""; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+  private String createAttribs(Map<String,String> ht) {
+    String html = "";
+    for (String k : ht.keySet()) {
+      html += " " + k + "=" + "\"" + ht.get(k) + "\"";
     }
 
     return html;
@@ -47,22 +38,19 @@ public class ImagePanel extends HTMLAttributeEditorPanel {
 
   public void updateComponentsFromAttribs() {
     imageAttrPanel.setAttributes(attribs);
-    if (attribs.containsKey("a")) //$NON-NLS-1$
-    {
+    if (attribs.containsKey("a")) {
       linkCB.setSelected(true);
       linkAttrPanel.setEnabled(true);
       linkUrlField.setEditable(true);
-      Map ht = HTMLUtils.tagAttribsToMap(attribs.get("a").toString()); //$NON-NLS-1$
-      if (ht.containsKey("href")) //$NON-NLS-1$
-        linkUrlField.setText(ht.get("href").toString()); //$NON-NLS-1$
-      else
-        linkUrlField.setText(""); //$NON-NLS-1$
+      Map<String,String> ht = HTMLUtils.tagAttribsToMap(attribs.get("a"));
+      linkUrlField.setText(ht.getOrDefault("href", ""));
       linkAttrPanel.setAttributes(ht);
-    } else {
+    }
+    else {
       linkCB.setSelected(false);
       linkAttrPanel.setEnabled(false);
       linkUrlField.setEditable(false);
-      linkAttrPanel.setAttributes(new HashMap());
+      linkAttrPanel.setAttributes(new HashMap<>());
     }
   }
 
@@ -70,20 +58,19 @@ public class ImagePanel extends HTMLAttributeEditorPanel {
     imageAttrPanel.updateAttribsFromComponents();
     linkAttrPanel.updateAttribsFromComponents();
     if (linkCB.isSelected()) {
-      Map ht = linkAttrPanel.getAttributes();
-      ht.put("href", linkUrlField.getText()); //$NON-NLS-1$
-      attribs.put("a", createAttribs(ht)); //$NON-NLS-1$
+      Map<String,String> ht = linkAttrPanel.getAttributes();
+      ht.put("href", linkUrlField.getText());
+      attribs.put("a", createAttribs(ht));
     } else {
-      attribs.remove("a"); //$NON-NLS-1$
+      attribs.remove("a");
     }
   }
 
   private void initialize() {
     JTabbedPane tabs = new JTabbedPane();
     linkAttrPanel = new LinkAttributesPanel();
-    linkCB = new JCheckBox(i18n.str("link")); //$NON-NLS-1$
+    linkCB = new JCheckBox(i18n.str("link"));
     linkUrlField = new JTextField();
-    //linkUrlField.setEditable(true);
     JPanel urlPanel = new JPanel(new GridBagLayout());
 
     GridBagConstraints gbc = new GridBagConstraints();
@@ -107,24 +94,19 @@ public class ImagePanel extends HTMLAttributeEditorPanel {
 
     imageAttrPanel = new ImageAttributesPanel();
     imageAttrPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-    tabs.addTab(i18n.str("image"), imageAttrPanel); //$NON-NLS-1$
-    tabs.addTab(i18n.str("link"), linkPanel);         //$NON-NLS-1$
+    tabs.addTab(i18n.str("image"), imageAttrPanel);
+    tabs.addTab(i18n.str("link"), linkPanel);        
 
     setLayout(new BorderLayout());
     add(tabs);
 
     linkAttrPanel.setEnabled(linkCB.isSelected());
     linkUrlField.setEditable(linkCB.isSelected());
-    linkCB.addItemListener(new java.awt.event.ItemListener() {
-      public void itemStateChanged(java.awt.event.ItemEvent e) {
-        linkAttrPanel.setEnabled(linkCB.isSelected());
-        linkUrlField.setEditable(linkCB.isSelected());
-      }
+    linkCB.addItemListener(e -> {
+      linkAttrPanel.setEnabled(linkCB.isSelected());
+      linkUrlField.setEditable(linkCB.isSelected());
     });
 
-    //TextEditPopupManager popupMan = new TextEditPopupManager();
-    //popupMan.addJTextComponent(linkUrlField);
     TextEditPopupManager.getInstance().registerJTextComponent(linkUrlField);
   }
-
 }
