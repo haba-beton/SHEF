@@ -30,11 +30,7 @@ public class PasteAction extends HTMLTextEditAction {
     putValue(SMALL_ICON, UIUtils.getIcon(UIUtils.X16, "paste.png"));
     putValue(ActionManager.LARGE_ICON, UIUtils.getIcon(UIUtils.X24,"paste.png"));
     putValue(ACCELERATOR_KEY,KeyStroke.getKeyStroke(KeyEvent.VK_V,Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-    addShouldBeEnabledDelegate(a -> {
-      //return getCurrentEditor() != null &&
-      //    Toolkit.getDefaultToolkit().getSystemClipboard().getContents(PasteAction.this) != null;
-      return true;
-    });
+    addShouldBeEnabledDelegate(a -> true);
 
     putValue(Action.SHORT_DESCRIPTION, getValue(Action.NAME));
   }

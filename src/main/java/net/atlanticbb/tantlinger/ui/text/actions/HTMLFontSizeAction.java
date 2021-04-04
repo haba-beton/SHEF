@@ -1,7 +1,3 @@
-/*
- * Created on Feb 27, 2005
- *
- */
 package net.atlanticbb.tantlinger.ui.text.actions;
 
 import net.atlanticbb.tantlinger.ui.text.HTMLUtils;
@@ -13,16 +9,7 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledEditorKit;
 import java.awt.event.ActionEvent;
 
-
-/**
- * Action which edits HTML font size
- *
- * @author Bob Tantlinger
- */
 public class HTMLFontSizeAction extends HTMLTextEditAction {
-  /**
-   *
-   */
   private static final long serialVersionUID = 1L;
   public static final int XXSMALL = 0;
   public static final int XSMALL = 1;
@@ -36,23 +23,12 @@ public class HTMLFontSizeAction extends HTMLTextEditAction {
   private static final String MED = i18n.str("medium");
   private static final String LRG = i18n.str("large");
 
-  public static final int FONT_SIZES[] = {8, 10, 12, 14, 18, 24, 36/*28*/};
+  public static final int[] FONT_SIZES = {8, 10, 12, 14, 18, 24, 36};
 
-  public static final String SIZES[] =
-    {
-      "xx-" + SML, "x-" + SML, SML, MED,
-      LRG, "x-" + LRG, "xx-" + LRG
-    };
+  public static final String[] SIZES = {"xx-" + SML, "x-" + SML, SML, MED, LRG, "x-" + LRG, "xx-" + LRG};
 
   private int size;
 
-  /**
-   * Creates a new HTMLFontSizeAction
-   *
-   * @param size one of the FONT_SIZES
-   *             (XXSMALL, xSMALL, SMALL, MEDIUM, LARGE, XLARGE, XXLARGE)
-   * @throws IllegalArgumentException
-   */
   public HTMLFontSizeAction(int size) throws IllegalArgumentException {
     super("");
     if (size < 0 || size > 6)
@@ -64,16 +40,12 @@ public class HTMLFontSizeAction extends HTMLTextEditAction {
   }
 
   protected void updateWysiwygContextState(JEditorPane ed) {
-        /*HTMLDocument document = (HTMLDocument)ed.getDocument();        
-        int caret = (ed.getCaretPosition() > 0) 
-            ? (ed.getCaretPosition() - 1) : ed.getCaretPosition();
-               
-        AttributeSet at = document.getCharacterElement(caret).getAttributes();*/
     AttributeSet at = HTMLUtils.getCharacterAttributes(ed);
     if (at.isDefined(StyleConstants.FontSize)) {
       setSelected(at.containsAttribute(
-        StyleConstants.FontSize, new Integer(FONT_SIZES[size])));
-    } else {
+        StyleConstants.FontSize, FONT_SIZES[size]));
+    }
+    else {
       setSelected(size == MEDIUM);
     }
   }
@@ -81,7 +53,6 @@ public class HTMLFontSizeAction extends HTMLTextEditAction {
   protected void updateSourceContextState(JEditorPane ed) {
     setSelected(false);
   }
-
 
   protected void sourceEditPerformed(ActionEvent e, JEditorPane editor) {
     String prefix = "<font size=" + (size + 1) + ">";
@@ -99,9 +70,6 @@ public class HTMLFontSizeAction extends HTMLTextEditAction {
     }
   }
 
-  /* (non-Javadoc)
-   * @see com.bob.blah.HTMLTextEditAction#wysiwygEditPerformed(java.awt.event.ActionEvent, javax.swing.JTextPane)
-   */
   protected void wysiwygEditPerformed(ActionEvent e, JEditorPane editor) {
     Action a = new StyledEditorKit.FontSizeAction(SIZES[size], FONT_SIZES[size]);
     a.actionPerformed(e);

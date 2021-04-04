@@ -1,6 +1,3 @@
-/*
- * Created on Nov 19, 2007
- */
 package net.atlanticbb.tantlinger.ui.text.actions;
 
 import net.atlanticbb.tantlinger.ui.text.CompoundUndoManager;
@@ -14,10 +11,6 @@ import javax.swing.text.html.HTMLEditorKit;
 import java.awt.event.ActionEvent;
 import java.util.*;
 
-
-/**
- * @author Bob Tantlinger
- */
 public class IndentAction extends HTMLTextEditAction {
   private static final long serialVersionUID = 1L;
 
@@ -26,9 +19,6 @@ public class IndentAction extends HTMLTextEditAction {
 
   protected int direction;
 
-  /**
-   * @param name
-   */
   public IndentAction(int direction) throws IllegalArgumentException {
     super("");
     if (direction == INDENT)
@@ -41,17 +31,11 @@ public class IndentAction extends HTMLTextEditAction {
 
   }
 
-  /* (non-Javadoc)
-   * @see net.atlanticbb.tantlinger.ui.text.actions.HTMLTextEditAction#sourceEditPerformed(java.awt.event.ActionEvent, javax.swing.JEditorPane)
-   */
   protected void sourceEditPerformed(ActionEvent e, JEditorPane editor) {
-    // TODO Auto-generated method stub
-
   }
 
   private void insertHTML(String html, HTML.Tag tag, HTML.Tag root, ActionEvent e) {
-    HTMLEditorKit.InsertHTMLTextAction a =
-      new HTMLEditorKit.InsertHTMLTextAction("insertHTML", html, root, tag);//$NON-NLS-1$
+    HTMLEditorKit.InsertHTMLTextAction a = new HTMLEditorKit.InsertHTMLTextAction("insertHTML", html, root, tag);
     a.actionPerformed(e);
   }
 

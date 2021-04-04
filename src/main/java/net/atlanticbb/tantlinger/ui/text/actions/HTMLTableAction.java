@@ -1,7 +1,3 @@
-/*
- * Created on Feb 26, 2005
- *
- */
 package net.atlanticbb.tantlinger.ui.text.actions;
 
 import net.atlanticbb.tantlinger.ui.UIUtils;
@@ -17,20 +13,12 @@ import javax.swing.text.html.HTMLDocument;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
-/**
- * Action which shows a dialog to insert an HTML table
- *
- * @author Bob Tantlinger
- */
 public class HTMLTableAction extends HTMLTextEditAction {
-  /**
-   *
-   */
   private static final long serialVersionUID = 1L;
 
   public HTMLTableAction() {
     super(i18n.str("table_"));
-    putValue(MNEMONIC_KEY, new Integer(i18n.mnem("table_")));
+    putValue(MNEMONIC_KEY, (int) i18n.mnem("table_"));
 
     putValue(SMALL_ICON, UIUtils.getIcon(UIUtils.X16, "table.png"));
     putValue(Action.SHORT_DESCRIPTION, getValue(Action.NAME));
@@ -75,18 +63,12 @@ public class HTMLTableAction extends HTMLTextEditAction {
     CompoundUndoManager.endCompoundEdit(document);
   }
 
-  /**
-   * Creates the dialog
-   *
-   * @param ed
-   * @return the dialog
-   */
   private NewTableDialog createNewTableDialog(JTextComponent ed) {
     Window w = SwingUtilities.getWindowAncestor(ed);
     NewTableDialog d = null;
-    if (w != null && w instanceof Frame)
+    if (w instanceof Frame)
       d = new NewTableDialog((Frame) w);
-    else if (w != null && w instanceof Dialog)
+    else if (w instanceof Dialog)
       d = new NewTableDialog((Dialog) w);
 
     return d;

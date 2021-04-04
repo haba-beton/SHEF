@@ -34,28 +34,26 @@ public class HTMLBlockAction extends HTMLTextEditAction {
   public static final int OL = 10;
   public static final int UL = 11;
 
-  private static final int[] KEYS =
-    {
-      KeyEvent.VK_D, KeyEvent.VK_ENTER, KeyEvent.VK_1, KeyEvent.VK_2,
-      KeyEvent.VK_3, KeyEvent.VK_4, KeyEvent.VK_5, KeyEvent.VK_6,
-      KeyEvent.VK_R, KeyEvent.VK_Q, KeyEvent.VK_N, KeyEvent.VK_U
-    };
+  private static final int[] KEYS = {
+    KeyEvent.VK_D, KeyEvent.VK_ENTER, KeyEvent.VK_1, KeyEvent.VK_2,
+    KeyEvent.VK_3, KeyEvent.VK_4, KeyEvent.VK_5, KeyEvent.VK_6,
+    KeyEvent.VK_R, KeyEvent.VK_Q, KeyEvent.VK_N, KeyEvent.VK_U
+  };
 
-  public static final String[] ELEMENT_TYPES =
-    {
-      i18n.str("body_text"),
-      i18n.str("paragraph"),
-      i18n.str("heading") + " 1",
-      i18n.str("heading") + " 2",
-      i18n.str("heading") + " 3",
-      i18n.str("heading") + " 4",
-      i18n.str("heading") + " 5",
-      i18n.str("heading") + " 6",
-      i18n.str("preformatted"),
-      i18n.str("blockquote"),
-      i18n.str("ordered_list"),
-      i18n.str("unordered_list")
-    };
+  public static final String[] ELEMENT_TYPES = {
+    i18n.str("body_text"),
+    i18n.str("paragraph"),
+    i18n.str("heading") + " 1",
+    i18n.str("heading") + " 2",
+    i18n.str("heading") + " 3",
+    i18n.str("heading") + " 4",
+    i18n.str("heading") + " 5",
+    i18n.str("heading") + " 6",
+    i18n.str("preformatted"),
+    i18n.str("blockquote"),
+    i18n.str("ordered_list"),
+    i18n.str("unordered_list")
+  };
 
   private int type;
 

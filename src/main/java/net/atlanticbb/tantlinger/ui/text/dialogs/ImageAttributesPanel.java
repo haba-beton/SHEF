@@ -142,7 +142,6 @@ public class ImageAttributesPanel extends HTMLAttributeEditorPanel {
     }
   }
 
-
   public void updateAttribsFromComponents() {
     attribs.put("src", imgUrlField.getText());
 

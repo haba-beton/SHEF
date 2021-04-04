@@ -18,14 +18,9 @@ import java.io.Reader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * @author Bob Tantlinger
- */
 public class PasteFormattedAction extends HTMLTextEditAction {
-  private static final long serialVersionUID = 1L;
 
   public PasteFormattedAction() {
-
     super(i18n.str("paste_formatted"));
     putValue(MNEMONIC_KEY, (int)i18n.mnem("paste_formatted"));
     putValue(SMALL_ICON, UIUtils.getIcon(UIUtils.X16, "paste.png"));
@@ -122,13 +117,13 @@ public class PasteFormattedAction extends HTMLTextEditAction {
 
     //when html content is retrieved from the transferable, the copied part
     //is surrounded with the comments <!--StartFragment--> and <!--EndFragment--> on windows
-    text = text.replaceAll("<\\!\\-\\-StartFragment\\-\\->", "");
-    text = text.replaceAll("<\\!\\-\\-EndFragment\\-\\->", "");
+    text = text.replaceAll("<!--StartFragment-->", "");
+    text = text.replaceAll("<!--EndFragment-->", "");
 
     //gets rid of 'class' and 'id' attributes in the tags.
     //It really doesn't make much sense to include these attribs in HTML
     //pasted in from the wild.
-    String r = "<([^>]*)(?:class|id)\\s*=\\s*(?:'[^']*'|\"\"[^\"\"]*\"\"|[^\\s>]+)([^>]*)>";
+    String r = "<([^>]*)(?:class|id)\\s*=\\s*(?:'[^']*'|\"\"[^\"]*\"\"|[^\\s>]+)([^>]*)>";
     p = Pattern.compile(r, flags);
     //run it twice for each attrib
     m = p.matcher(text);
@@ -146,7 +141,6 @@ public class PasteFormattedAction extends HTMLTextEditAction {
 
     try {
       while ((ch = reader.read()) != -1) {
-        //System.err.print((char)ch);
         sb.append((char) ch);
       }
     }

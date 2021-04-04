@@ -5,16 +5,13 @@ import java.awt.*;
 import java.util.Hashtable;
 
 public class AlignmentAttributesPanel extends HTMLAttributeEditorPanel {
-  private static final long serialVersionUID = 1L;
   private static final String[] VERT_ALIGNMENTS = {"top", "middle", "bottom"};
   private static final String[] HORIZ_ALIGNMENTS = {"left", "center", "right", "justify"};
-
 
   private JCheckBox vAlignCB = null;
   private JCheckBox hAlignCB = null;
   private JComboBox<String> vLocCombo = null;
   private JComboBox<String> hLocCombo = null;
-
 
   public AlignmentAttributesPanel() {
     this(new Hashtable<>());

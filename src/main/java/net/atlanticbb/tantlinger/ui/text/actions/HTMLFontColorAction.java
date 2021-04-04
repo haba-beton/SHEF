@@ -1,7 +1,3 @@
-/*
- * Created on Feb 28, 2005
- *
- */
 package net.atlanticbb.tantlinger.ui.text.actions;
 
 import net.atlanticbb.tantlinger.ui.UIUtils;
@@ -12,22 +8,13 @@ import javax.swing.text.StyledEditorKit;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
-
-/**
- * Action which edits HTML font color
- *
- * @author Bob Tantlinger
- */
 public class HTMLFontColorAction extends HTMLTextEditAction {
 
-  /**
-   *
-   */
   private static final long serialVersionUID = 1L;
 
   public HTMLFontColorAction() {
     super(i18n.str("color_"));
-    putValue(MNEMONIC_KEY, new Integer(i18n.mnem("color_")));
+    putValue(MNEMONIC_KEY,(int)i18n.mnem("color_"));
     this.putValue(SMALL_ICON, UIUtils.getIcon(UIUtils.X16, "color.png"));
   }
 
@@ -63,9 +50,7 @@ public class HTMLFontColorAction extends HTMLTextEditAction {
     Window win = SwingUtilities.getWindowAncestor(c);
     if (win != null)
       c = win;
-    Color color =
-      JColorChooser.showDialog(c, "Color", Color.black);   //$NON-NLS-1$
-    return color;
+    return JColorChooser.showDialog(c, "Color", Color.black);
   }
 
 }

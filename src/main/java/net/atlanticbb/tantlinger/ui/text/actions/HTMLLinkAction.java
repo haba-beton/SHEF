@@ -1,7 +1,3 @@
-/*
- * Created on Feb 26, 2005
- *
- */
 package net.atlanticbb.tantlinger.ui.text.actions;
 
 import net.atlanticbb.tantlinger.ui.UIUtils;
@@ -14,21 +10,12 @@ import javax.swing.text.html.HTML;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
-
-/**
- * Action which displays a dialog to insert a hyperlink
- *
- * @author Bob Tantlinger
- */
 public class HTMLLinkAction extends HTMLTextEditAction {
-  /**
-   *
-   */
   private static final long serialVersionUID = 1L;
 
   public HTMLLinkAction() {
     super(i18n.str("hyperlink_"));
-    putValue(MNEMONIC_KEY, new Integer(i18n.mnem("hyperlink_")));
+    putValue(MNEMONIC_KEY, (int) i18n.mnem("hyperlink_"));
 
     putValue(SMALL_ICON, UIUtils.getIcon(UIUtils.X16, "link.png"));
     putValue(Action.SHORT_DESCRIPTION, getValue(Action.NAME));
@@ -40,7 +27,6 @@ public class HTMLLinkAction extends HTMLTextEditAction {
       return;
 
     dlg.setLocationRelativeTo(dlg.getParent());
-    //dlg.setName(editor.getSelectedText());
     dlg.setLinkText(editor.getSelectedText());
     dlg.setVisible(true);
     if (dlg.hasUserCancelled())
@@ -75,9 +61,9 @@ public class HTMLLinkAction extends HTMLTextEditAction {
   protected HyperlinkDialog createDialog(JTextComponent ed) {
     Window w = SwingUtilities.getWindowAncestor(ed);
     HyperlinkDialog d = null;
-    if (w != null && w instanceof Frame)
+    if (w instanceof Frame)
       d = new HyperlinkDialog((Frame) w);
-    else if (w != null && w instanceof Dialog)
+    else if (w instanceof Dialog)
       d = new HyperlinkDialog((Dialog) w);
 
 

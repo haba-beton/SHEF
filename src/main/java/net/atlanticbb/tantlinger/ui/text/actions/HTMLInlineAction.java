@@ -20,16 +20,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
-
-/**
- * Action which toggles inline HTML elements
- *
- * @author Bob Tantlinger
- */
 public class HTMLInlineAction extends HTMLTextEditAction {
-  /**
-   *
-   */
   private static final long serialVersionUID = 1L;
 
   public static final int EM = 0;
@@ -43,8 +34,7 @@ public class HTMLInlineAction extends HTMLTextEditAction {
   public static final int UNDERLINE = 8;
   public static final int STRIKE = 9;
 
-  public static final String[] INLINE_TYPES =
-    {
+  public static final String[] INLINE_TYPES = {
       i18n.str("emphasis"),
       i18n.str("strong"),
       i18n.str("code"),
@@ -57,8 +47,7 @@ public class HTMLInlineAction extends HTMLTextEditAction {
       i18n.str("strikethrough")
     };
 
-  private static final int[] MNEMS =
-    {
+  private static final int[] MNEMS = {
       i18n.mnem("emphasis"),
       i18n.mnem("strong"),
       i18n.mnem("code"),
@@ -73,19 +62,13 @@ public class HTMLInlineAction extends HTMLTextEditAction {
 
   private int type;
 
-  /**
-   * Creates a new HTMLInlineAction
-   *
-   * @param itype an inline element type (BOLD, ITALIC, STRIKE, etc)
-   * @throws IllegalArgumentException
-   */
   public HTMLInlineAction(int itype) throws IllegalArgumentException {
     super("");
     type = itype;
     if (type < 0 || type >= INLINE_TYPES.length)
       throw new IllegalArgumentException("Illegal Argument");
     putValue(NAME, (INLINE_TYPES[type]));
-    putValue(MNEMONIC_KEY, new Integer(MNEMS[type]));
+    putValue(MNEMONIC_KEY, MNEMS[type]);
 
     Icon ico = null;
     KeyStroke ks = null;
@@ -172,10 +155,7 @@ public class HTMLInlineAction extends HTMLTextEditAction {
     CompoundUndoManager.beginCompoundEdit(editor.getDocument());
     toggleStyle(editor);
     CompoundUndoManager.endCompoundEdit(editor.getDocument());
-
-    //HTMLUtils.printAttribs(HTMLUtils.getCharacterAttributes(editor));
   }
-
 
   private boolean isDefined(AttributeSet attr) {
     boolean hasSC = false;
@@ -202,20 +182,11 @@ public class HTMLInlineAction extends HTMLTextEditAction {
     HTML.Tag tag = getTag();
 
     if (enable) {
-      //System.err.println("adding style");
       attr = new SimpleAttributeSet();
       attr.addAttribute(tag, new SimpleAttributeSet());
-      //doesn't replace any attribs, just adds the new one
       HTMLUtils.setCharacterAttributes(editor, attr);
-    } else {
-      //System.err.println("clearing style");
-      //Kind of a ham-fisted way to do this, but sometimes there are
-      //CSS attributes, someties there are HTML.Tag attributes, and sometimes
-      //there are both. So, we have to remove 'em all to make sure this type
-      //gets completely disabled
-
-      //remove the CSS style
-      //STRONG, EM, CITE, CODE have no CSS analogs
+    }
+    else {
       if (type == BOLD)
         HTMLUtils.removeCharacterAttribute(editor, CSS.Attribute.FONT_WEIGHT, "bold");
       else if (type == ITALIC)

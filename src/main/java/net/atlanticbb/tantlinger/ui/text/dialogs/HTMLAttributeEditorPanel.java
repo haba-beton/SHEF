@@ -7,13 +7,6 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
-/**
- * This abstract class should be subclassed to create any
- * sort of panel that is used to modify html element attributes..
- * e.g an HTML table dialog
- *
- * @author Bob Tantlinger
- */
 public abstract class HTMLAttributeEditorPanel extends JPanel {
   static final I18n i18n = I18n.getInstance("net.atlanticbb.tantlinger.ui.text.dialogs");
 

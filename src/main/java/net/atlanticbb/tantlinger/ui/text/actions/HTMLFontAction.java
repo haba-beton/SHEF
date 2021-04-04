@@ -1,7 +1,3 @@
-/*
- * Created on Jan 18, 2006
- *
- */
 package net.atlanticbb.tantlinger.ui.text.actions;
 
 import net.atlanticbb.tantlinger.ui.text.CompoundUndoManager;
@@ -14,20 +10,10 @@ import javax.swing.text.html.HTMLDocument;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
-
-/**
- * Action which edits an HTML font
- *
- * @author Bob Tantlinger
- */
 public class HTMLFontAction extends HTMLTextEditAction {
-  /**
-   *
-   */
-  private static final long serialVersionUID = 1L;
 
   public HTMLFontAction() {
-    super(i18n.str("font_"));         //$NON-NLS-1$
+    super(i18n.str("font_"));
   }
 
   protected void sourceEditPerformed(ActionEvent e, JEditorPane editor) {
@@ -67,10 +53,10 @@ public class HTMLFontAction extends HTMLTextEditAction {
     if (!d.hasUserCancelled()) {
       MutableAttributeSet tagAttrs = new SimpleAttributeSet();
       tagAttrs.addAttribute(StyleConstants.FontFamily, d.getFontName());
-      tagAttrs.addAttribute(StyleConstants.FontSize, new Integer(d.getFontSize()));
-      tagAttrs.addAttribute(StyleConstants.Bold, new Boolean(d.isBold()));
-      tagAttrs.addAttribute(StyleConstants.Italic, new Boolean(d.isItalic()));
-      tagAttrs.addAttribute(StyleConstants.Underline, new Boolean(d.isUnderline()));
+      tagAttrs.addAttribute(StyleConstants.FontSize, d.getFontSize());
+      tagAttrs.addAttribute(StyleConstants.Bold, d.isBold());
+      tagAttrs.addAttribute(StyleConstants.Italic, d.isItalic());
+      tagAttrs.addAttribute(StyleConstants.Underline, d.isUnderline());
 
       CompoundUndoManager.beginCompoundEdit(editor.getDocument());
       HTMLUtils.setCharacterAttributes(editor, tagAttrs);
@@ -80,16 +66,15 @@ public class HTMLFontAction extends HTMLTextEditAction {
 
   private HTMLFontDialog createDialog(JTextComponent ed) {
     Window w = SwingUtilities.getWindowAncestor(ed);
-    String t = ""; //$NON-NLS-1$
+    String t = "";
     if (ed.getSelectedText() != null)
       t = ed.getSelectedText();
     HTMLFontDialog d = null;
-    if (w != null && w instanceof Frame)
+    if (w instanceof Frame)
       d = new HTMLFontDialog((Frame) w, t);
-    else if (w != null && w instanceof Dialog)
+    else if (w instanceof Dialog)
       d = new HTMLFontDialog((Dialog) w, t);
 
     return d;
   }
-
 }

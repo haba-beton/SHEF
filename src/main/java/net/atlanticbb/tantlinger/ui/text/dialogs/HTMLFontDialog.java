@@ -8,7 +8,6 @@ import java.awt.*;
 import java.util.Collections;
 import java.util.Vector;
 
-
 public class HTMLFontDialog extends HTMLOptionDialog {
   private static final long serialVersionUID = 1L;
 
@@ -144,9 +143,8 @@ public class HTMLFontDialog extends HTMLOptionDialog {
     else
       previewLabel.setBorder(null);
 
-    String font = fontCombo.getSelectedItem().toString();
-    Integer size = SIZES[sizeCombo.getSelectedIndex()];
-    Font f = new Font(font, style, size);
+    @SuppressWarnings("MagicConstant")
+    Font f = new Font(fontCombo.getSelectedItem().toString(), style, SIZES[sizeCombo.getSelectedIndex()]);
     previewLabel.setFont(f);
 
   }

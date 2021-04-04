@@ -1,7 +1,3 @@
-/*
- * Created on Feb 26, 2005
- *
- */
 package net.atlanticbb.tantlinger.ui.text.actions;
 
 import net.atlanticbb.tantlinger.i18n.I18n;
@@ -13,10 +9,6 @@ import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 import java.awt.event.ActionEvent;
 
-
-/**
- * @author Bob Tantlinger
- */
 public abstract class HTMLTextEditAction extends DefaultAction {
   static final I18n i18n = I18n.getInstance("net.atlanticbb.tantlinger.ui.text.actions");
 
@@ -36,9 +28,6 @@ public abstract class HTMLTextEditAction extends DefaultAction {
     updateEnabledState();
   }
 
-  /* (non-Javadoc)
-   * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-   */
   public void execute(ActionEvent e) throws Exception {
     if (getEditMode() == WYSIWYG)
       wysiwygEditPerformed(e, getCurrentEditor());
@@ -57,10 +46,8 @@ public abstract class HTMLTextEditAction extends DefaultAction {
 
   protected JEditorPane getCurrentEditor() {
     try {
-      JEditorPane ep = (JEditorPane) getContextValue(EDITOR);
-      return ep;
-    } catch (ClassCastException cce) {
-      //cce.printStackTrace();
+      return (JEditorPane) getContextValue(EDITOR);
+    } catch (ClassCastException ignored) {
     }
 
     return null;
@@ -88,5 +75,4 @@ public abstract class HTMLTextEditAction extends DefaultAction {
   protected abstract void wysiwygEditPerformed(ActionEvent e, JEditorPane editor);
 
   protected abstract void sourceEditPerformed(ActionEvent e, JEditorPane editor);
-
 }
