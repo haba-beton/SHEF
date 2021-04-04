@@ -9,11 +9,6 @@ import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 import java.awt.event.ActionEvent;
 
-/**
- * Action which clears inline text styles
- *
- * @author Bob Tantlinger
- */
 public class ClearStylesAction extends HTMLTextEditAction {
 
   public ClearStylesAction() {
@@ -40,23 +35,6 @@ public class ClearStylesAction extends HTMLTextEditAction {
 
     kit.getInputAttributes().removeAttributes(kit.getInputAttributes());
     kit.getInputAttributes().addAttributes(attrs);
-        
-        /*//boolean shouldClearSel = false;
-        if(editor.getSelectedText() == null)
-        {
-            editor.replaceSelection("  ");
-            editor.setSelectionStart(editor.getCaretPosition() - 1);
-            editor.setSelectionEnd(editor.getSelectionStart() + 1); 
-            document.setCharacterAttributes(editor.getSelectionStart(), 
-                editor.getSelectionEnd() - editor.getSelectionStart(), attrs, true);
-            editor.setSelectionStart(editor.getCaretPosition());
-            editor.setSelectionEnd(editor.getCaretPosition());
-        }
-        else
-        {
-            document.setCharacterAttributes(editor.getSelectionStart(), 
-                editor.getSelectionEnd() - editor.getSelectionStart(), attrs, true);
-        }*/
   }
 
   protected void sourceEditPerformed(ActionEvent e, JEditorPane editor) {

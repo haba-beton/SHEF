@@ -1,15 +1,8 @@
-/*
- * Created on Nov 2, 2007
- */
 package net.atlanticbb.tantlinger.ui.text.actions;
 
 import net.atlanticbb.tantlinger.ui.text.CompoundUndoManager;
 import org.bushe.swing.action.ActionList;
 
-
-/**
- * @author Bob Tantlinger
- */
 public class HTMLEditorActionFactory {
   public static ActionList createEditActionList() {
     ActionList list = new ActionList("edit");

@@ -687,12 +687,9 @@ public class HTMLUtils {
    * name-value pairs:<br>
    * href > http://blah.com<br>
    * target > _self
-   *
-   * @param atts
-   * @return
    */
-  public static Map tagAttribsToMap(String atts) {
-    Map attribs = new HashMap();
+  public static Map<String,String> tagAttribsToMap(String atts) {
+    Map<String,String> attribs = new HashMap<>();
 
     StringTokenizer st = new StringTokenizer(atts.trim(), " ");
     String lastAtt = null;

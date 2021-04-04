@@ -46,11 +46,11 @@ public class ListDialog extends OptionDialog {
     return listAttrPanel.getListType();
   }
 
-  public void setListAttributes(Map attr) {
+  public void setListAttributes(Map<String,String> attr) {
     listAttrPanel.setAttributes(attr);
   }
 
-  public Map getListAttributes() {
+  public Map<String,String> getListAttributes() {
     return listAttrPanel.getAttributes();
   }
 }

@@ -37,11 +37,11 @@ public class ElementStyleDialog extends OptionDialog {
     setResizable(false);
   }
 
-  public void setStyleAttributes(Map attr) {
+  public void setStyleAttributes(Map<String,String> attr) {
     stylePanel.setAttributes(attr);
   }
 
-  public Map getStyleAttributes() {
+  public Map<String,String> getStyleAttributes() {
     return stylePanel.getAttributes();
   }
 }

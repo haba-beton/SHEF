@@ -1,7 +1,3 @@
-/*
- * Created on Feb 26, 2005
- *
- */
 package net.atlanticbb.tantlinger.ui.text.actions;
 
 import net.atlanticbb.tantlinger.ui.UIUtils;
@@ -16,24 +12,15 @@ import javax.swing.text.Element;
 import javax.swing.text.html.HTML;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
-import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-/**
- * Action which formats HTML block level elements
- *
- * @author Bob Tantlinger
- */
 public class HTMLBlockAction extends HTMLTextEditAction {
-  /**
-   *
-   */
-  private static final long serialVersionUID = 1L;
+
   public static final int DIV = 0;
   public static final int P = 1;
   public static final int H1 = 2;
@@ -47,7 +34,7 @@ public class HTMLBlockAction extends HTMLTextEditAction {
   public static final int OL = 10;
   public static final int UL = 11;
 
-  private static final int KEYS[] =
+  private static final int[] KEYS =
     {
       KeyEvent.VK_D, KeyEvent.VK_ENTER, KeyEvent.VK_1, KeyEvent.VK_2,
       KeyEvent.VK_3, KeyEvent.VK_4, KeyEvent.VK_5, KeyEvent.VK_6,
@@ -56,54 +43,48 @@ public class HTMLBlockAction extends HTMLTextEditAction {
 
   public static final String[] ELEMENT_TYPES =
     {
-      i18n.str("body_text"), //$NON-NLS-1$
-      i18n.str("paragraph"), //$NON-NLS-1$
-      i18n.str("heading") + " 1", //$NON-NLS-1$ //$NON-NLS-2$
-      i18n.str("heading") + " 2", //$NON-NLS-1$ //$NON-NLS-2$
-      i18n.str("heading") + " 3", //$NON-NLS-1$ //$NON-NLS-2$
-      i18n.str("heading") + " 4", //$NON-NLS-1$ //$NON-NLS-2$
-      i18n.str("heading") + " 5", //$NON-NLS-1$ //$NON-NLS-2$
-      i18n.str("heading") + " 6", //$NON-NLS-1$ //$NON-NLS-2$
-      i18n.str("preformatted"),          //$NON-NLS-1$
-      i18n.str("blockquote"), //$NON-NLS-1$
-      i18n.str("ordered_list"), //$NON-NLS-1$
-      i18n.str("unordered_list")         //$NON-NLS-1$
+      i18n.str("body_text"),
+      i18n.str("paragraph"),
+      i18n.str("heading") + " 1",
+      i18n.str("heading") + " 2",
+      i18n.str("heading") + " 3",
+      i18n.str("heading") + " 4",
+      i18n.str("heading") + " 5",
+      i18n.str("heading") + " 6",
+      i18n.str("preformatted"),
+      i18n.str("blockquote"),
+      i18n.str("ordered_list"),
+      i18n.str("unordered_list")
     };
 
   private int type;
 
-  /**
-   * Creates a new HTMLBlockAction
-   *
-   * @param type A block type - P, PRE, BLOCKQUOTE, H1, H2, etc
-   * @throws IllegalArgumentException
-   */
   public HTMLBlockAction(int type) throws IllegalArgumentException {
-    super(""); //$NON-NLS-1$
+    super("");
     if (type < 0 || type >= ELEMENT_TYPES.length)
-      throw new IllegalArgumentException("Illegal argument"); //$NON-NLS-1$
+      throw new IllegalArgumentException("Illegal argument");
 
     this.type = type;
     putValue(NAME, ELEMENT_TYPES[type]);
     putValue(Action.ACCELERATOR_KEY,
-      KeyStroke.getKeyStroke(KEYS[type], Event.ALT_MASK));
+      KeyStroke.getKeyStroke(KEYS[type], InputEvent.ALT_MASK));
     if (type == P)
-      putValue(MNEMONIC_KEY, new Integer(i18n.mnem("paragraph"))); //$NON-NLS-1$
+      putValue(MNEMONIC_KEY, (int) i18n.mnem("paragraph"));
     else if (type == PRE)
-      putValue(MNEMONIC_KEY, new Integer(i18n.mnem("preformatted"))); //$NON-NLS-1$
+      putValue(MNEMONIC_KEY, (int) i18n.mnem("preformatted"));
     else if (type == BLOCKQUOTE)
-      putValue(MNEMONIC_KEY, new Integer(i18n.mnem("blockquote"))); //$NON-NLS-1$
+      putValue(MNEMONIC_KEY, (int) i18n.mnem("blockquote"));
     else if (type == OL) {
-      putValue(SMALL_ICON,
-        UIUtils.getIcon(UIUtils.X16, "listordered.png")); //$NON-NLS-1$
-      putValue(MNEMONIC_KEY, new Integer(i18n.mnem("ordered_list"))); //$NON-NLS-1$
-    } else if (type == UL) {
-      putValue(SMALL_ICON,
-        UIUtils.getIcon(UIUtils.X16, "listunordered.png")); //$NON-NLS-1$
-      putValue(MNEMONIC_KEY, new Integer(i18n.mnem("unordered_list"))); //$NON-NLS-1$
-    } else {
-      String s = type + ""; //$NON-NLS-1$
-      putValue(Action.MNEMONIC_KEY, new Integer(s.charAt(0)));
+      putValue(SMALL_ICON, UIUtils.getIcon(UIUtils.X16, "listordered.png"));
+      putValue(MNEMONIC_KEY, (int) i18n.mnem("ordered_list"));
+    }
+    else if (type == UL) {
+      putValue(SMALL_ICON, UIUtils.getIcon(UIUtils.X16, "listunordered.png"));
+      putValue(MNEMONIC_KEY, (int) i18n.mnem("unordered_list"));
+    }
+    else {
+      String s = type + "";
+      putValue(Action.MNEMONIC_KEY, (int) s.charAt(0));
     }
     putValue(ActionManager.BUTTON_TYPE, ActionManager.BUTTON_TYPE_VALUE_RADIO);
     putValue(Action.SHORT_DESCRIPTION, getValue(Action.NAME));
@@ -114,23 +95,20 @@ public class HTMLBlockAction extends HTMLTextEditAction {
     Element elem = document.getParagraphElement(ed.getCaretPosition());
 
     String elemName = elem.getName();
-    if (elemName.equals("p-implied")) //$NON-NLS-1$
+    if (elemName.equals("p-implied"))
       elemName = elem.getParentElement().getName();
 
-    if (type == DIV && (elemName.equals("div") || elemName.equals("body") || elemName.equals("td"))) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-    {
+    if (type == DIV && (elemName.equals("div") || elemName.equals("body") || elemName.equals("td"))) {
       setSelected(true);
-    } else if (type == UL) {
-      Element listElem = HTMLUtils.getListParent(elem);
-      setSelected(listElem != null && (listElem.getName().equals("ul")));                   //$NON-NLS-1$
-    } else if (type == OL) {
-      Element listElem = HTMLUtils.getListParent(elem);
-      setSelected(listElem != null && (listElem.getName().equals("ol")));  //$NON-NLS-1$
-    } else if (elemName.equals(getTag().toString().toLowerCase())) {
-      setSelected(true);
-    } else {
-      setSelected(false);
     }
+    else if (type == UL) {
+      Element listElem = HTMLUtils.getListParent(elem);
+      setSelected(listElem != null && (listElem.getName().equals("ul")));
+    }
+    else if (type == OL) {
+      Element listElem = HTMLUtils.getListParent(elem);
+      setSelected(listElem != null && (listElem.getName().equals("ol")));
+    } else setSelected(elemName.equals(getTag().toString().toLowerCase()));
   }
 
   protected void updateSourceContextState(JEditorPane ed) {
@@ -139,11 +117,11 @@ public class HTMLBlockAction extends HTMLTextEditAction {
 
   protected void sourceEditPerformed(ActionEvent e, JEditorPane editor) {
     String tag = getTag().toString();
-    String prefix = "\n<" + tag + ">\n\t"; //$NON-NLS-1$ //$NON-NLS-2$
-    String postfix = "\n</" + tag + ">\n"; //$NON-NLS-1$ //$NON-NLS-2$
+    String prefix = "\n<" + tag + ">\n\t";
+    String postfix = "\n</" + tag + ">\n";
     if (type == OL || type == UL) {
-      prefix += "<li>"; //$NON-NLS-1$
-      postfix = "</li>" + postfix; //$NON-NLS-1$
+      prefix += "<li>";
+      postfix = "</li>" + postfix;
     }
 
     String sel = editor.getSelectedText();
@@ -195,7 +173,7 @@ public class HTMLBlockAction extends HTMLTextEditAction {
 
   private void insertHTML(String html, HTML.Tag tag, HTML.Tag root, ActionEvent e) {
     HTMLEditorKit.InsertHTMLTextAction a =
-      new HTMLEditorKit.InsertHTMLTextAction("insertHTML", html, root, tag);             //$NON-NLS-1$
+      new HTMLEditorKit.InsertHTMLTextAction("insertHTML", html, root, tag);
     a.actionPerformed(e);
   }
 
@@ -205,11 +183,12 @@ public class HTMLBlockAction extends HTMLTextEditAction {
     try {
       w.write();
       String html = out.toString();
-      html = html.substring(html.indexOf('>') + 1, html.length());
+      html = html.substring(html.indexOf('>') + 1);
       html = html.substring(0, html.lastIndexOf('<'));
-      html = '<' + replaceTag.toString() + '>' + html + "</" + replaceTag.toString() + '>'; //$NON-NLS-1$
+      html = '<' + replaceTag.toString() + '>' + html + "</" + replaceTag.toString() + '>';
       document.setOuterHTML(listParent, html);
-    } catch (Exception idiotic) {
+    }
+    catch (Exception ignored) {
     }
   }
 
@@ -243,7 +222,7 @@ public class HTMLBlockAction extends HTMLTextEditAction {
       HTML.Tag root = getRootTag(elem);
       String txt = HTMLUtils.getElementHTML(elem, false);
       editor.setCaretPosition(elem.getEndOffset());
-      insertHTML("<p>" + txt + "</p>", HTML.Tag.P, root, e); //$NON-NLS-1$ //$NON-NLS-2$
+      insertHTML("<p>" + txt + "</p>", HTML.Tag.P, root, e);
       HTMLUtils.removeElement(elem);
     }
 
@@ -259,15 +238,15 @@ public class HTMLBlockAction extends HTMLTextEditAction {
     Element curTD = HTMLUtils.getParent(curE, HTML.Tag.TD);
     HTML.Tag tag = getTag();
     HTML.Tag rootTag = getRootTag(curE);
-    String html = ""; //$NON-NLS-1$
+    String html = "";
 
     if (isListType()) {
-      html = "<" + getTag() + ">"; //$NON-NLS-1$ //$NON-NLS-2$
+      html = "<" + getTag() + ">";
       tag = HTML.Tag.LI;
     }
 
     //a list to hold the elements we want to change
-    List elToRemove = new ArrayList();
+    List<Element> elToRemove = new ArrayList<>();
     elToRemove.add(curE);
 
     while (true) {
@@ -286,7 +265,7 @@ public class HTMLBlockAction extends HTMLTextEditAction {
     }
 
     if (isListType())
-      html += "</" + getTag() + ">"; //$NON-NLS-1$ //$NON-NLS-2$
+      html += "</" + getTag() + ">";
 
     //set the caret to the start of the last selected block element
     editor.setCaretPosition(curE.getStartOffset());
@@ -296,8 +275,7 @@ public class HTMLBlockAction extends HTMLTextEditAction {
     insertHTML(html, getTag(), rootTag, e);
 
     //now, remove the elements that were changed.
-    for (Iterator it = elToRemove.iterator(); it.hasNext(); ) {
-      Element c = (Element) it.next();
+    for (Element c : elToRemove) {
       HTMLUtils.removeElement(c);
     }
   }
@@ -306,11 +284,6 @@ public class HTMLBlockAction extends HTMLTextEditAction {
     return type == OL || type == UL;
   }
 
-  /**
-   * Gets the tag
-   *
-   * @return
-   */
   public HTML.Tag getTag() {
     HTML.Tag tag = HTML.Tag.DIV;
 

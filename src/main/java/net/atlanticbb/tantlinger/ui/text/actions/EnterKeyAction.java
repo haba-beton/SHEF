@@ -74,34 +74,32 @@ public class EnterKeyAction extends DecoratedTextAction {
 
             editor.setCaretPosition(caret + 1);
           }
-          else// empty list item
-          {
+          else {
             Element listParentElem = HTMLUtils.getListParent(parentElem).getParentElement();
             //System.out.println(listParentElem.getName());
 
-            if (isListItem(HTML.getTag(listParentElem.getName())))//nested list
-            {
+            if (isListItem(HTML.getTag(listParentElem.getName()))) {
               //System.out.println("nested list============");
 
               //document.insertAfterEnd(parentElem, (toListItem("")));
               //editor.setCaretPosition(elem.getEndOffset());
-              HTML.Tag listParentTag = HTML.getTag(HTMLUtils.getListParent(listParentElem).toString());
+//              HTML.Tag listParentTag = HTML.getTag(HTMLUtils.getListParent(listParentElem).toString());
                             /*HTMLEditorKit.InsertHTMLTextAction a = 
                                 new HTMLEditorKit.InsertHTMLTextAction("insert",
                                 "", listParentTag, HTML.Tag.LI);                            
                             a.actionPerformed(e);*/
-              int start = parentElem.getStartOffset();
+//              int start = parentElem.getStartOffset();
 
-              Element nextElem = HTMLUtils.getNextElement(document, parentElem);
+//              Element nextElem = HTMLUtils.getNextElement(document, parentElem);
 
-              int len = nextElem.getEndOffset() - start;
+//              int len = nextElem.getEndOffset() - start;
 
               String ml = HTMLUtils.getElementHTML(listParentElem, true);
               //System.out.println(ml);
               //System.out.println("------------------");
 
-              ml = ml.replaceFirst("\\<li\\>\\s*\\<\\/li\\>\\s*\\<\\/ul\\>", "</ul>");
-              ml = ml.replaceFirst("\\<ul\\>\\s*\\<\\/ul\\>", "");
+              ml = ml.replaceFirst("<li>\\s*</li>\\s*</ul>", "</ul>");
+              ml = ml.replaceFirst("<ul>\\s*</ul>", "");
               //System.out.println(ml);
 
               document.setOuterHTML(listParentElem, ml);

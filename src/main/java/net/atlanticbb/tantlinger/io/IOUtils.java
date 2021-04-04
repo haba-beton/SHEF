@@ -5,11 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Various IO utility methods
- *
- * @author Bob Tantlinger
- */
 public class IOUtils {
   private static final int BUFFER_SIZE = 1024 * 4;
   private static final NullCopyMonitor nullMon = new NullCopyMonitor();
@@ -191,9 +186,10 @@ public class IOUtils {
 
     if (src.isDirectory()) {
       if (!dest.exists()) {
+        //noinspection ResultOfMethodCallIgnored
         dest.mkdirs();
       }
-      // Go through the contents of the directory
+
       String[] list = src.list();
 
       Arrays.sort(list);

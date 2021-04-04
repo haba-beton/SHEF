@@ -14,11 +14,7 @@ import javax.swing.text.html.HTML;
 import javax.swing.text.html.HTMLDocument;
 import java.awt.event.ActionEvent;
 
-/**
- * Action which aligns HTML elements
- *
- * @author Bob Tantlinger
- */
+@SuppressWarnings("unused")
 public class HTMLAlignAction extends HTMLTextEditAction {
   public static final int LEFT = 0;
   public static final int CENTER = 1;

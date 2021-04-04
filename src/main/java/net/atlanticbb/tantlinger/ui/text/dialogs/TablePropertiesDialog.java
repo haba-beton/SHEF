@@ -1,9 +1,4 @@
-/*
- * Created on Dec 21, 2005
- *
- */
 package net.atlanticbb.tantlinger.ui.text.dialogs;
-
 
 import net.atlanticbb.tantlinger.i18n.I18n;
 import net.atlanticbb.tantlinger.ui.OptionDialog;
@@ -16,16 +11,12 @@ import java.awt.*;
 import java.util.Map;
 
 public class TablePropertiesDialog extends OptionDialog {
-  /**
-   *
-   */
-  private static final long serialVersionUID = 1L;
 
   private static final I18n i18n = I18n.getInstance("net.atlanticbb.tantlinger.ui.text.dialogs");
 
-  private static Icon icon = UIUtils.getIcon(UIUtils.X48, "table.png"); //$NON-NLS-1$
-  private static String title = i18n.str("table_properties"); //$NON-NLS-1$
-  private static String desc = i18n.str("table_properties_desc"); //$NON-NLS-1$
+  private static Icon icon = UIUtils.getIcon(UIUtils.X48, "table.png");
+  private static String title = i18n.str("table_properties");
+  private static String desc = i18n.str("table_properties_desc");
 
   private TableAttributesPanel tableProps = new TableAttributesPanel();
   private RowAttributesPanel rowProps = new RowAttributesPanel();
@@ -43,43 +34,43 @@ public class TablePropertiesDialog extends OptionDialog {
 
   private void init() {
     Border emptyBorder = new EmptyBorder(5, 5, 5, 5);
-    Border titleBorder = BorderFactory.createTitledBorder(i18n.str("table_properties")); //$NON-NLS-1$
+    Border titleBorder = BorderFactory.createTitledBorder(i18n.str("table_properties"));
 
     tableProps.setBorder(BorderFactory.createCompoundBorder(emptyBorder, titleBorder));
     rowProps.setBorder(emptyBorder);
     cellProps.setBorder(emptyBorder);
 
     JTabbedPane tabs = new JTabbedPane();
-    tabs.add(tableProps, i18n.str("table"));         //$NON-NLS-1$
-    tabs.add(rowProps, i18n.str("row")); //$NON-NLS-1$
-    tabs.add(cellProps, i18n.str("cell")); //$NON-NLS-1$
+    tabs.add(tableProps, i18n.str("table"));
+    tabs.add(rowProps, i18n.str("row"));
+    tabs.add(cellProps, i18n.str("cell"));
 
     setContentPane(tabs);
     setSize(440, 375);
     setResizable(false);
   }
 
-  public void setTableAttributes(Map at) {
+  public void setTableAttributes(Map<String,String> at) {
     tableProps.setAttributes(at);
   }
 
-  public void setRowAttributes(Map at) {
+  public void setRowAttributes(Map<String,String> at) {
     rowProps.setAttributes(at);
   }
 
-  public void setCellAttributes(Map at) {
+  public void setCellAttributes(Map<String,String> at) {
     cellProps.setAttributes(at);
   }
 
-  public Map getTableAttributes() {
+  public Map<String,String> getTableAttributes() {
     return tableProps.getAttributes();
   }
 
-  public Map getRowAttribures() {
+  public Map<String,String> getRowAttribures() {
     return rowProps.getAttributes();
   }
 
-  public Map getCellAttributes() {
+  public Map<String,String> getCellAttributes() {
     return cellProps.getAttributes();
   }
 }
