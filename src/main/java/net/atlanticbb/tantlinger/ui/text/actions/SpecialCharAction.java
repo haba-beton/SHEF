@@ -1,7 +1,3 @@
-/*
- * Created on Jan 24, 2006
- *
- */
 package net.atlanticbb.tantlinger.ui.text.actions;
 
 import net.atlanticbb.tantlinger.ui.UIUtils;
@@ -13,15 +9,12 @@ import java.awt.event.ActionEvent;
 
 
 public class SpecialCharAction extends BasicEditAction {
-  /**
-   *
-   */
   private static final long serialVersionUID = 1L;
   SpecialCharDialog dialog;
 
   public SpecialCharAction() {
-    super(i18n.str("special_character_"));  //$NON-NLS-1$
-    putValue(SMALL_ICON, UIUtils.getIcon(UIUtils.X16, "copyright.png")); //$NON-NLS-1$
+    super(i18n.str("special_character_"));
+    putValue(SMALL_ICON, UIUtils.getIcon(UIUtils.X16, "copyright.png"));
     putValue(Action.SHORT_DESCRIPTION, getValue(Action.NAME));
   }
 

@@ -62,37 +62,35 @@ public class IndentAction extends HTMLTextEditAction {
     return level;
   }
 
-  private Map getListElems(List elems) {
-    Map lis = new HashMap();
-    for (Iterator it = elems.iterator(); it.hasNext(); ) {
-      Element li = HTMLUtils.getParent((Element) it.next(), HTML.Tag.LI);
+  private Map<Element,List<Element>> getListElems(List<Element> elems) {
+    Map<Element,List<Element>> lis = new HashMap<>();
+    for (Element elem : elems) {
+      Element li = HTMLUtils.getParent(elem, HTML.Tag.LI);
       if (li != null) {
         Element listEl = HTMLUtils.getListParent(li);
         if (!lis.containsKey(listEl)) {
-          lis.put(listEl, new ArrayList());
+          lis.put(listEl, new ArrayList<>());
         }
 
-        List elList = (List) lis.get(listEl);
-        elList.add(li);
+        lis.get(listEl).add(li);
       }
     }
-
     return lis;
   }
 
-  private void unindent(ActionEvent e, JEditorPane editor) {
-    List elems = getParagraphElements(editor);
+  private void unindent(ActionEvent e,JEditorPane editor) {
+    List<Element> elems = getParagraphElements(editor);
     if (elems.size() == 0)
       return;
 
-    List listElems = getLeadingTralingListElems(elems);
+    List<Element> listElems = getLeadingTralingListElems(elems);
     elems.removeAll(listElems);
 
-    Set elsToIndent = new HashSet();
-    Set elsToOutdent = new HashSet();
+    Set<Element> elsToIndent = new HashSet<>();
+    Set<Element> elsToOutdent = new HashSet<>();
     Element lastBqParent = null;
     for (int i = 0; i < elems.size(); i++) {
-      Element el = (Element) elems.get(i);
+      Element el = elems.get(i);
       Element bqParent = HTMLUtils.getParent(el, HTML.Tag.BLOCKQUOTE);
       if (bqParent == null)
         continue;
@@ -116,17 +114,17 @@ public class IndentAction extends HTMLTextEditAction {
 
     HTMLDocument doc = (HTMLDocument) editor.getDocument();
     adjustListElemsIndent(listElems, doc);
-    blockquoteElements(new ArrayList(elsToIndent), doc);
-    unblockquoteElements(new ArrayList(elsToOutdent), doc);
+    blockquoteElements(new ArrayList<>(elsToIndent), doc);
+    unblockquoteElements(new ArrayList<>(elsToOutdent), doc);
 
 
   }
 
-  private void adjustListElemsIndent(List elems, HTMLDocument doc) {
-    Set rootLists = new HashSet();
-    Set liElems = new HashSet();
-    for (int i = 0; i < elems.size(); i++) {
-      Element liEl = HTMLUtils.getParent((Element) elems.get(i), HTML.Tag.LI);
+  private void adjustListElemsIndent(List<Element> elems, HTMLDocument doc) {
+    Set<Element> rootLists = new HashSet<>();
+    Set<Element> liElems   = new HashSet<>();
+    for (Element elem : elems) {
+      Element liEl = HTMLUtils.getParent(elem, HTML.Tag.LI);
       if (liEl == null)
         continue;
       liElems.add(liEl);
@@ -139,21 +137,21 @@ public class IndentAction extends HTMLTextEditAction {
       }
     }
 
-    for (Iterator it = rootLists.iterator(); it.hasNext(); ) {
-      Element rl = (Element) it.next();
-      String newHtml = buildListHTML(rl, new ArrayList(liElems));
+    for (Element rl : rootLists) {
+      String newHtml = buildListHTML(rl, new ArrayList<>(liElems));
       System.err.println(newHtml);
       try {
         doc.setInnerHTML(rl, newHtml);
-      } catch (Exception ex) {
+      }
+      catch (Exception ex) {
         ex.printStackTrace();
       }
     }
   }
 
-  private List getItems(Element list, List selLiElems, int level) {
+  private List<ListItem> getItems(Element list, List<Element> selLiElems, int level) {
     int c = list.getElementCount();
-    List items = new ArrayList();
+    List<ListItem> items = new ArrayList<>();
     for (int i = 0; i < c; i++) {
       Element e = list.getElement(i);
       if (e.getName().equals("li")) {
@@ -163,7 +161,8 @@ public class IndentAction extends HTMLTextEditAction {
         if (selLiElems.contains(e)) {
           if (direction == INDENT) {
             item.level++;
-          } else {
+          }
+          else {
             if (item.level > 0) {
               item.level--;
             }
@@ -171,38 +170,38 @@ public class IndentAction extends HTMLTextEditAction {
         }
         item.html = HTMLUtils.getElementHTML(e, true);
         items.add(item);
-      } else if (HTMLUtils.getListParent(e) == e) {
+      }
+      else if (HTMLUtils.getListParent(e) == e) {
         items.addAll(getItems(e, selLiElems, level + 1));
       }
     }
     return items;
   }
 
-  private String buildListHTML(Element list, List liItems) {
-    List items = getItems(list, liItems, 0);
+  private String buildListHTML(Element list, List<Element> liItems) {
+    List<ListItem> items = getItems(list,liItems,0);
     ListItem lastItem = null;
-    StringBuffer html = new StringBuffer();
-    for (int i = 0; i < items.size(); i++) {
-      ListItem item = (ListItem) items.get(i);
-      if (lastItem != null && (lastItem.level != item.level || !lastItem.listTag.equals(item.listTag))) {
-        if (lastItem.level > item.level) {
-          html.append(openOrCloseList(lastItem.listTag, -1 * (lastItem.level - item.level)));
-          html.append(item.html);
-        } else if (item.level > lastItem.level) {
-          html.append(openOrCloseList(item.listTag, (item.level - lastItem.level)));
-          html.append(item.html);
+    StringBuilder html = new StringBuilder();
+    for (ListItem listItem : items) {
+      if (lastItem != null && (lastItem.level != listItem.level || !lastItem.listTag.equals(listItem.listTag))) {
+        if (lastItem.level > listItem.level) {
+          html.append(openOrCloseList(lastItem.listTag, -1 * (lastItem.level - listItem.level)));
+          html.append(listItem.html);
+        } else if (listItem.level > lastItem.level) {
+          html.append(openOrCloseList(listItem.listTag, (listItem.level - lastItem.level)));
+          html.append(listItem.html);
         } else {
           //html.append("</" + lastItem.listTag + ">");
           //html.append("<" + item.listTag + ">");
-          html.append(item.html);
+          html.append(listItem.html);
         }
       } else {
         if (lastItem == null)
-          html.append(openOrCloseList(item.listTag, item.level));
-        html.append(item.html);
+          html.append(openOrCloseList(listItem.listTag, listItem.level));
+        html.append(listItem.html);
       }
 
-      lastItem = item;
+      lastItem = listItem;
     }
 
     if (lastItem != null)
@@ -218,45 +217,44 @@ public class IndentAction extends HTMLTextEditAction {
     else
       tag = "<" + ltag + ">\n";
     int c = Math.abs(level);
-    StringBuffer sb = new StringBuffer();
+    StringBuilder sb = new StringBuilder();
     for (int i = 0; i < c; i++)
       sb.append(tag);
     return sb.toString();
   }
 
-  private class ListItem {
+  private static class ListItem {
     String html;
     int level;
     HTML.Tag listTag;
   }
 
-  private List getLeadingTralingListElems(List elems) {
-    Set listElems = new HashSet();
-    for (int i = 0; i < elems.size(); i++) {
-      Element el = (Element) elems.get(i);
-      if (HTMLUtils.getListParent(el) != null)
-        listElems.add(el);
+  private List<Element> getLeadingTralingListElems(List<Element> elems) {
+    Set<Element> listElems = new HashSet<>();
+    for (Element elem : elems) {
+      if (HTMLUtils.getListParent(elem) != null)
+        listElems.add(elem);
       else
         break;
     }
 
     for (int i = elems.size() - 1; i >= 0; i--) {
-      Element el = (Element) elems.get(i);
+      Element el = elems.get(i);
       if (HTMLUtils.getListParent(el) != null)
         listElems.add(el);
       else
         break;
     }
 
-    return new ArrayList(listElems);
+    return new ArrayList<>(listElems);
   }
 
   private void indent1(ActionEvent e, JEditorPane editor) {
-    List elems = getParagraphElements(editor);
+    List<Element> elems = getParagraphElements(editor);
     if (elems.size() == 0)
       return;
 
-    List listElems = this.getLeadingTralingListElems(elems);
+    List<Element> listElems = this.getLeadingTralingListElems(elems);
     elems.removeAll(listElems);
     HTMLDocument doc = (HTMLDocument) editor.getDocument();
     blockquoteElements(elems, doc);
@@ -264,13 +262,13 @@ public class IndentAction extends HTMLTextEditAction {
   }
 
   private void indent(ActionEvent e, JEditorPane editor) {
-    List elems = getParagraphElements(editor);
+    List<Element> elems = getParagraphElements(editor);
     if (elems.size() == 0)
       return;
 
     HTMLDocument doc = (HTMLDocument) editor.getDocument();
-    List nonListElems = new LinkedList();
-    for (Iterator it = elems.iterator(); it.hasNext(); ) {
+    List<Element> nonListElems = new LinkedList<>();
+    for (Iterator<?> it = elems.iterator(); it.hasNext(); ) {
       Element el = (Element) it.next();
       if (HTMLUtils.getListParent(el) == null) {
         nonListElems.add(el);
@@ -279,22 +277,19 @@ public class IndentAction extends HTMLTextEditAction {
     }
     blockquoteElements(nonListElems, doc);
 
-    //now list elements are left over
-    Map listEls = getListElems(elems);
-    for (Iterator it = listEls.keySet().iterator(); it.hasNext(); ) {
-      Element listParent = (Element) it.next();
-      List liElems = (List) listEls.get(listParent);
+    Map<Element,List<Element>> listEls = getListElems(elems);
+    for (Element listParent : listEls.keySet()) {
+      List<Element> liElems = listEls.get(listParent);
       StringBuffer sb = new StringBuffer();
-      sb.append("<" + listParent.getName() + ">\n");
-      for (int i = 0; i < liElems.size(); i++) {
-        Element liElem = (Element) liElems.get(i);
-        sb.append(HTMLUtils.getElementHTML(liElem, true));
+      sb.append("<").append(listParent.getName()).append(">\n");
+      for (Element elem : liElems) {
+        sb.append(HTMLUtils.getElementHTML(elem, true));
       }
-      sb.append("</" + listParent.getName() + ">\n");
+      sb.append("</").append(listParent.getName()).append(">\n");
       System.err.println(sb);
 
       for (int i = liElems.size() - 1; i >= 0; i--) {
-        Element liElem = (Element) liElems.get(i);
+        Element liElem = liElems.get(i);
         try {
           if (i == 0) {
             doc.setOuterHTML(liElem, sb.toString());
@@ -308,9 +303,8 @@ public class IndentAction extends HTMLTextEditAction {
     }
   }
 
-  private void unblockquoteElements(List elems, HTMLDocument doc) {
-    for (Iterator it = elems.iterator(); it.hasNext(); ) {
-      Element curE = (Element) it.next();
+  private void unblockquoteElements(List<Element> elems, HTMLDocument doc) {
+    for (Element curE : elems) {
       if (!curE.getName().equals("blockquote"))
         continue;
 
@@ -327,11 +321,10 @@ public class IndentAction extends HTMLTextEditAction {
     }
   }
 
-  private void blockquoteElements(List elems, HTMLDocument doc) {
-    for (Iterator it = elems.iterator(); it.hasNext(); ) {
-      Element curE = (Element) it.next();
+  private void blockquoteElements(List<Element> elems, HTMLDocument doc) {
+    for (Element curE : elems) {
       String eleHtml = HTMLUtils.getElementHTML(curE, true);
-      StringBuffer sb = new StringBuffer();
+      StringBuilder sb = new StringBuilder();
       sb.append("<blockquote>\n");
       sb.append(eleHtml);
       sb.append("</blockquote>\n");
@@ -344,8 +337,8 @@ public class IndentAction extends HTMLTextEditAction {
   }
 
 
-  public List getParagraphElements(JEditorPane editor) {
-    List elems = new ArrayList();
+  public List<Element> getParagraphElements(JEditorPane editor) {
+    List<Element> elems = new ArrayList<>();
     try {
       HTMLDocument doc = (HTMLDocument) editor.getDocument();
       Element curE = getParaElement(doc, editor.getSelectionStart());
@@ -357,31 +350,17 @@ public class IndentAction extends HTMLTextEditAction {
         if (curE.getEndOffset() >= doc.getLength())
           break;
       }
-    } catch (ClassCastException cce) {
+    }
+    catch (ClassCastException ignored) {
     }
 
     return elems;
   }
 
   private Element getParaElement(HTMLDocument doc, int pos) {
-    Element curE = doc.getParagraphElement(pos);
-        /*while(HTMLUtils.isImplied(curE))
-        {
-            curE = curE.getParentElement();
-        }*/
-        
-        /*Element lp = HTMLUtils.getListParent(curE);
-        if(lp != null)
-            curE = lp;*/
-
-
-    return curE;
+    return doc.getParagraphElement(pos);
   }
 
-
-  /* (non-Javadoc)
-   * @see net.atlanticbb.tantlinger.ui.text.actions.HTMLTextEditAction#wysiwygEditPerformed(java.awt.event.ActionEvent, javax.swing.JEditorPane)
-   */
   protected void wysiwygEditPerformed(ActionEvent e, JEditorPane editor) {
     int cp = editor.getCaretPosition();
     CompoundUndoManager.beginCompoundEdit(editor.getDocument());

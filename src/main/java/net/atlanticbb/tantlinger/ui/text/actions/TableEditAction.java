@@ -1,13 +1,8 @@
-/*
- * Created on Jun 16, 2005
- *
- */
 package net.atlanticbb.tantlinger.ui.text.actions;
 
 import net.atlanticbb.tantlinger.ui.text.CompoundUndoManager;
 import net.atlanticbb.tantlinger.ui.text.ElementWriter;
 import net.atlanticbb.tantlinger.ui.text.HTMLUtils;
-import org.bushe.swing.action.ShouldBeEnabledDelegate;
 
 import javax.swing.*;
 import javax.swing.text.AttributeSet;
@@ -19,17 +14,7 @@ import javax.swing.text.html.HTMLDocument;
 import java.awt.event.ActionEvent;
 import java.io.StringWriter;
 
-
-/**
- * Action for adding and removing table elements
- *
- * @author Bob Tantlinger
- */
 public class TableEditAction extends HTMLTextEditAction {
-  /**
-   *
-   */
-  private static final long serialVersionUID = 1L;
   public static final int INSERT_CELL = 0;
   public static final int DELETE_CELL = 1;
   public static final int INSERT_ROW = 2;
@@ -37,9 +22,7 @@ public class TableEditAction extends HTMLTextEditAction {
   public static final int INSERT_COL = 4;
   public static final int DELETE_COL = 5;
 
-
-  private static final String NAMES[] =
-    {
+  private static final String[] NAMES = {
       i18n.str("insert_cell"),
       i18n.str("delete_cell"),
       i18n.str("insert_row"),
@@ -57,11 +40,7 @@ public class TableEditAction extends HTMLTextEditAction {
       throw new IllegalArgumentException("Invalid type");
     this.type = type;
     putValue(NAME, NAMES[type]);
-    addShouldBeEnabledDelegate(new ShouldBeEnabledDelegate() {
-      public boolean shouldBeEnabled(Action a) {
-        return (getEditMode() != SOURCE) && isInTD(getCurrentEditor());
-      }
-    });
+    addShouldBeEnabledDelegate(a -> (getEditMode() != SOURCE) && isInTD(getCurrentEditor()));
   }
 
 
@@ -71,7 +50,7 @@ public class TableEditAction extends HTMLTextEditAction {
     Element curElem = document.getParagraphElement(ed.getCaretPosition());
     Element td = HTMLUtils.getParent(curElem, HTML.Tag.TD);
     Element tr = HTMLUtils.getParent(curElem, HTML.Tag.TR);
-    //HTMLDocument document = getDocument();
+
     if (td == null || tr == null || document == null)
       return;
 
@@ -266,7 +245,8 @@ public class TableEditAction extends HTMLTextEditAction {
       try {
         Element curElem = doc.getParagraphElement(tc.getCaretPosition());
         td = HTMLUtils.getParent(curElem, HTML.Tag.TD);
-      } catch (Exception ex) {
+      }
+      catch (Exception ignored) {
       }
     }
 
@@ -279,11 +259,6 @@ public class TableEditAction extends HTMLTextEditAction {
       updateEnabled();
   }
 
-
-  /* (non-Javadoc)
-   * @see net.atlanticbb.tantlinger.ui.text.actions.HTMLTextEditAction#sourceEditPerformed(java.awt.event.ActionEvent, javax.swing.JEditorPane)
-   */
   protected void sourceEditPerformed(ActionEvent e, JEditorPane editor) {
-
   }
 }

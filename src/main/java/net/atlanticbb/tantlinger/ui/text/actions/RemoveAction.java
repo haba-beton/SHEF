@@ -1,7 +1,3 @@
-/*
- * Created on Jun 12, 2005
- *
- */
 package net.atlanticbb.tantlinger.ui.text.actions;
 
 import net.atlanticbb.tantlinger.ui.text.CompoundUndoManager;
@@ -13,31 +9,17 @@ import javax.swing.text.html.HTML;
 import javax.swing.text.html.HTMLDocument;
 import java.awt.event.ActionEvent;
 
-/**
- * Remove Action for Wysiwyg HTML editing
- *
- * @author Bob Tantlinger
- */
 public class RemoveAction extends DecoratedTextAction {
-  /**
-   *
-   */
-  private static final long serialVersionUID = 1L;
   public static final int BACKSPACE = 0;
   public static final int DELETE = 1;
 
-  private int type = BACKSPACE;
-  //private Action delegate = null;
+  private int type;
 
   public RemoveAction(int type, Action defaultAction) {
     super("RemoveAction", defaultAction);
-    //delegate = defaultAction;
     this.type = type;
   }
 
-  /* (non-Javadoc)
-   * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-   */
   public void actionPerformed(ActionEvent e) {
     JEditorPane editor;
     HTMLDocument document;
