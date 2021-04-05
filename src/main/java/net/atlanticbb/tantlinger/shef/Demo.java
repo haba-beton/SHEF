@@ -8,24 +8,21 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 
-/**
- * @author Bob Tantlinger
- */
 public class Demo {
 
   private final JFrame frame;
   private final HTMLEditorPane editor;
 
   public Demo() {
-
-
     editor = new HTMLEditorPane(true);
     InputStream in = Demo.class.getResourceAsStream("/net/atlanticbb/tantlinger/shef/htmlsnip.txt");
     try {
       editor.setText(IOUtils.read(in));
-    } catch (IOException ex) {
+    }
+    catch (IOException ex) {
       ex.printStackTrace();
-    } finally {
+    }
+    finally {
       IOUtils.close(in);
     }
 
@@ -65,6 +62,5 @@ public class Demo {
     } while (demo.frame.isVisible());
 
     demo.printHtml();
-
   }
 }

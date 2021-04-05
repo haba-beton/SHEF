@@ -37,7 +37,7 @@ public class HTMLEditorPane extends JPanel {
   private SourceCodeEditor      srcEditor;
   private JEditorPane           focusedEditor;
   private JComboBox<Font>       fontFamilyCombo;
-  private JComboBox             paragraphCombo;
+  private JComboBox<Action>     paragraphCombo;
   private JTabbedPane           tabs;
   private JToolBar              formatToolBar;
 
@@ -60,6 +60,16 @@ public class HTMLEditorPane extends JPanel {
 
   public HTMLEditorPane(boolean showHTMLEditor) {
     initUI(showHTMLEditor);
+  }
+
+  public int getCaretPosition() {
+    if (tabs.getSelectedIndex() == 0) {
+      return wysEditor.getCaretPosition();
+    }
+    else if (tabs.getSelectedIndex() == 1) {
+      return srcEditor.getCaretPosition();
+    }
+    return -1;
   }
 
   public void setCaretPosition(int pos) {
@@ -117,13 +127,11 @@ public class HTMLEditorPane extends JPanel {
     ActionList editActions = HTMLEditorActionFactory.createEditActionList();
     Action objectPropertiesAction = new HTMLElementPropertiesAction();
 
-    //create editor popupmenus
     wysPopupMenu = ActionUIFactory.getInstance().createPopupMenu(editActions);
     wysPopupMenu.addSeparator();
     wysPopupMenu.add(objectPropertiesAction);
     srcPopupMenu = ActionUIFactory.getInstance().createPopupMenu(editActions);
 
-    // create edit menu
     Action act;
     ActionList lst = new ActionList("edits");
     if (enableHTML) {
@@ -131,7 +139,7 @@ public class HTMLEditorPane extends JPanel {
       lst.add(act);
       act = new ChangeTabAction(1);
       lst.add(act);
-      lst.add(null);//separator
+      lst.add(null);
     }
     lst.addAll(editActions);
     lst.add(null);
@@ -140,10 +148,8 @@ public class HTMLEditorPane extends JPanel {
     editMenu = ActionUIFactory.getInstance().createMenu(lst);
     editMenu.setText(i18n.str("edit"));
 
-
-    //create format menu
     formatMenu = new JMenu(i18n.str("format"));
-    lst = HTMLEditorActionFactory.createFontSizeActionList();//HTMLEditorActionFactory.createInlineActionList();
+    lst = HTMLEditorActionFactory.createFontSizeActionList();
     actionList.addAll(lst);
     formatMenu.add(createMenu(lst, i18n.str("size")));
     fontSizeActions.addAll(lst);
@@ -194,8 +200,6 @@ public class HTMLEditorPane extends JPanel {
     actionList.add(objectPropertiesAction);
     formatMenu.add(objectPropertiesAction);
 
-
-    //create insert menu
     insertMenu = new JMenu(i18n.str("insert"));
     act = new HTMLLinkAction();
     actionList.add(act);
@@ -293,11 +297,7 @@ public class HTMLEditorPane extends JPanel {
 
     final JButton fontSizeButton = new JButton(UIUtils.getIcon(UIUtils.X16, "fontsize.png"));
     final JPopupMenu sizePopup = ActionUIFactory.getInstance().createPopupMenu(fontSizeActs);
-    ActionListener al = new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        sizePopup.show(fontSizeButton, 0, fontSizeButton.getHeight());
-      }
-    };
+    ActionListener al = e -> sizePopup.show(fontSizeButton, 0, fontSizeButton.getHeight());
     fontSizeButton.addActionListener(al);
     configToolbarButton(fontSizeButton);
     formatToolBar.add(fontSizeButton);
@@ -323,7 +323,7 @@ public class HTMLEditorPane extends JPanel {
     addToToolBar(formatToolBar, act);
     formatToolBar.addSeparator();
 
-    List alst = HTMLEditorActionFactory.createListElementActionList();
+    ActionList alst = HTMLEditorActionFactory.createListElementActionList();
     for (Object value : alst) {
       act = (Action) value;
       act.putValue(ActionManager.BUTTON_TYPE, ActionManager.BUTTON_TYPE_VALUE_TOGGLE);
@@ -362,12 +362,12 @@ public class HTMLEditorPane extends JPanel {
   }
 
   private Action[] toArray(ActionList lst) {
-    List acts = new ArrayList();
+    List<Action> acts = new ArrayList<>();
     for (Object v : lst) {
-      if (v != null && v instanceof Action)
-        acts.add(v);
+      if (v instanceof Action)
+        acts.add((Action)v);
     }
-    return (Action[]) acts.toArray(new Action[acts.size()]);
+    return acts.toArray(new Action[0]);
   }
 
   private void configToolbarButton(AbstractButton button) {
@@ -394,7 +394,7 @@ public class HTMLEditorPane extends JPanel {
   private void createEditorTabs(boolean show) {
     tabs = new JTabbedPane(SwingConstants.BOTTOM);
 
-    if (!show) {  //set the tab height to zero to hide them from the panel
+    if (!show) {
       tabs.setUI(new BasicTabbedPaneUI() {
         @Override
         protected int calculateTabAreaHeight(int tab_placement, int run_count, int max_tab_height) {
@@ -415,11 +415,7 @@ public class HTMLEditorPane extends JPanel {
     scrollPane.setCorner(ScrollPaneConstants.LOWER_LEFT_CORNER, gutterBase);
 
     tabs.addTab("HTML", scrollPane);
-    tabs.addChangeListener(new ChangeListener() {
-      public void stateChanged(ChangeEvent e) {
-        updateEditView();
-      }
-    });
+    tabs.addChangeListener(e -> updateEditView());
   }
 
   private SourceCodeEditor createSourceEditor() {
@@ -614,7 +610,6 @@ public class HTMLEditorPane extends JPanel {
         focusedEditor = ed;
 
         updateState();
-        // updateEnabledStates();
       }
     }
 
@@ -646,10 +641,6 @@ public class HTMLEditorPane extends JPanel {
   }
 
   private class ChangeTabAction extends DefaultAction {
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
     int tab;
 
     public ChangeTabAction(int tab) {
@@ -679,17 +670,10 @@ public class HTMLEditorPane extends JPanel {
   }
 
   private static class ParagraphComboRenderer extends DefaultListCellRenderer {
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
-
-    public Component getListCellRendererComponent(JList list, Object value, int index,
-                                                  boolean isSelected, boolean cellHasFocus) {
+    public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
       if (value instanceof Action) {
         value = ((Action) value).getValue(Action.NAME);
       }
-
       return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
     }
   }
@@ -697,7 +681,6 @@ public class HTMLEditorPane extends JPanel {
   private class FontChangeHandler implements ActionListener {
     public void actionPerformed(ActionEvent e) {
       if (e.getSource() == fontFamilyCombo && focusedEditor == wysEditor) {
-        //MutableAttributeSet tagAttrs = new SimpleAttributeSet();
         HTMLDocument document = (HTMLDocument) focusedEditor.getDocument();
         CompoundUndoManager.beginCompoundEdit(document);
 
@@ -709,12 +692,6 @@ public class HTMLEditorPane extends JPanel {
         }
         CompoundUndoManager.endCompoundEdit(document);
       }
-    }
-
-    /* (non-Javadoc)
-     * @see java.awt.event.ItemListener#itemStateChanged(java.awt.event.ItemEvent)
-     */
-    public void itemStateChanged(ItemEvent e) {
     }
   }
 }

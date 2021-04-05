@@ -19,8 +19,6 @@ import java.util.*;
 
 public class WysiwygHTMLEditorKit extends HTMLEditorKit {
 
-  private static final long serialVersionUID = 1L;
-
   private ViewFactory                         wysFactory = new WysiwygHTMLFactory();
   private ArrayList<ResizableView>            monitoredViews = new ArrayList<>();
   private MouseInputAdapter                   resizeHandler = new ResizeHandler();
@@ -34,18 +32,14 @@ public class WysiwygHTMLEditorKit extends HTMLEditorKit {
 
   public Document createDefaultDocument() {
     HTMLDocument doc = (HTMLDocument) super.createDefaultDocument();
-
-    //Unless the following property is set, the HTML parser will throw a
-    //ChangedCharSetException every time a char set tag is encountered.
-    doc.putProperty("IgnoreCharsetDirective", Boolean.TRUE);
-
+    doc.putProperty("IgnoreCharsetDirective",Boolean.TRUE);
     return doc;
   }
 
   public void install(JEditorPane ed) {
     super.install(ed);
     if (editorToActionsMap.containsKey(ed))
-      return; //already installed
+      return;
 
     ed.addMouseListener(resizeHandler);
     ed.addMouseMotionListener(resizeHandler);
@@ -245,40 +239,49 @@ public class WysiwygHTMLEditorKit extends HTMLEditorKit {
 
     public void mouseDragged(MouseEvent e) {
       dragStarted = dragDir != -1;
+
       ResizableView v = getSelectedView();
-      if (v == null || !dragStarted)
+
+      if (v == null || !dragStarted) {
         return;
+      }
 
       Rectangle r = v.getSelectionBounds();
 
       if (dragDir == ResizableView.SE) {
         r.width = e.getX() - r.x;
         r.height = e.getY() - r.y;
-      } else if (dragDir == ResizableView.NE) {
+      }
+      else if (dragDir == ResizableView.NE) {
         r.width = e.getX() - r.x;
         r.height = (r.y + r.height) - e.getY();
         r.y = e.getY();
-      } else if (dragDir == ResizableView.SW) {
+      }
+      else if (dragDir == ResizableView.SW) {
         r.width = (r.x + r.width) - e.getX();
         r.height = e.getY() - r.y;
         r.x = e.getX();
-      } else if (dragDir == ResizableView.NW) {
+      }
+      else if (dragDir == ResizableView.NW) {
         r.width = (r.x + r.width) - e.getX();
         r.height = (r.y + r.height) - e.getY();
         r.x = e.getX();
         r.y = e.getY();
-      } else if (dragDir == ResizableView.N) {
+      }
+      else if (dragDir == ResizableView.N) {
         r.height = (r.y + r.height) - e.getY();
         r.y = e.getY();
-      } else if (dragDir == ResizableView.S) {
+      }
+      else if (dragDir == ResizableView.S) {
         r.height = e.getY() - r.y;
-      } else if (dragDir == ResizableView.E) {
+      }
+      else if (dragDir == ResizableView.E) {
         r.width = e.getX() - r.x;
-      } else if (dragDir == ResizableView.W) {
+      }
+      else if (dragDir == ResizableView.W) {
         r.width = (r.x + r.width) - e.getX();
         r.x = e.getX();
       }
-
 
       e.getComponent().repaint();
     }
@@ -292,17 +295,16 @@ public class WysiwygHTMLEditorKit extends HTMLEditorKit {
         Integer w = v.getSelectionBounds().width;
         Integer h = v.getSelectionBounds().height;
 
-        if (elem.getName().equals("table"))//resize the table
-        {
-          //currently jeditorpane only supports the width attrib for tables
+        if (elem.getName().equals("table")) { //resize the table
           sas.addAttribute(HTML.Attribute.WIDTH, w);
           String html = HTMLUtils.getElementHTML(elem, false);
           html = HTMLUtils.createTag(HTML.Tag.TABLE, sas, html);
           replace(elem, html);
-        } else if (elem.getName().equals("img"))//resize the img
-        {
+        }
+        else if (elem.getName().equals("img")) { //resize the img
           sas.addAttribute(HTML.Attribute.WIDTH, w);
           sas.addAttribute(HTML.Attribute.HEIGHT, h);
+
           String html = "<img";
           for (Enumeration<?> ee = sas.getAttributeNames(); ee.hasMoreElements(); ) {
             Object name = ee.nextElement();
@@ -313,13 +315,15 @@ public class WysiwygHTMLEditorKit extends HTMLEditorKit {
           }
           html += ">";
 
-          if (sas.isDefined(HTML.Tag.A))
+          if (sas.isDefined(HTML.Tag.A)) {
             html = "<a " + sas.getAttribute(HTML.Tag.A) + ">" + html + "</a>";
+          }
+
           replace(elem, html);
         }
 
         //remove views not appearing in the doc
-        updateMonitoredViews((HTMLDocument) v.getDocument());
+        updateMonitoredViews((HTMLDocument)v.getDocument());
       }
 
       dragStarted = false;
@@ -379,7 +383,6 @@ public class WysiwygHTMLEditorKit extends HTMLEditorKit {
         if (v.isSelectionEnabled())
           return v;
       }
-
       return null;
     }
 

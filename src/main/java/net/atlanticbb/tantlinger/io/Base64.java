@@ -373,10 +373,10 @@ public class Base64 {
 
     // Return value according to relevant encoding.
     try {
-      return new String(baos.toByteArray(), PREFERRED_ENCODING);
+      return baos.toString(PREFERRED_ENCODING);
     }   // end try
     catch (java.io.UnsupportedEncodingException uue) {
-      return new String(baos.toByteArray());
+      return baos.toString();
     }   // end catch
 
   }   // end encode
