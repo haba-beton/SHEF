@@ -152,13 +152,16 @@ public class WysiwygHTMLEditorKit extends HTMLEditorKit {
             new BorderlessTableView(super.create(elem)));
           monitoredViews.add(v);
           return v;
-        } else if (kind == HTML.Tag.IMG) {
+        }
+        else if (kind == HTML.Tag.IMG) {
           ResizableView v = new ResizableView(super.create(elem));
           monitoredViews.add(v);
           return v;
-        } else if (kind == HTML.Tag.COMMENT) {
+        }
+        else if (kind == HTML.Tag.COMMENT) {
           return new UnknownElementView((elem));
-        } else if (kind == HTML.Tag.OBJECT) {
+        }
+        else if (kind == HTML.Tag.OBJECT) {
           return new ObjectView(elem) {
             //make a nicer looking representation for <object>.
             //The default is a crappy red JLabel with "??" as the text
@@ -179,7 +182,8 @@ public class WysiwygHTMLEditorKit extends HTMLEditorKit {
               return comp;
             }
           };
-        } else if ((kind instanceof HTML.UnknownTag) ||
+        }
+        else if ((kind instanceof HTML.UnknownTag) ||
           (kind == HTML.Tag.TITLE) ||
           (kind == HTML.Tag.META) ||
           (kind == HTML.Tag.LINK) ||
