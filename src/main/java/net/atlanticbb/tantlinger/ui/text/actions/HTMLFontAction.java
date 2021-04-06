@@ -16,7 +16,7 @@ public class HTMLFontAction extends HTMLTextEditAction {
     super(i18n.str("font_"));
   }
 
-  protected void sourceEditPerformed(ActionEvent e, JEditorPane editor) {
+  protected void sourceEditPerformed(ActionEvent e,JEditorPane editor) {
     HTMLFontDialog d = createDialog(editor);
     d.setLocationRelativeTo(d.getParent());
     d.setVisible(true);
@@ -26,37 +26,43 @@ public class HTMLFontAction extends HTMLTextEditAction {
     }
   }
 
-  protected void wysiwygEditPerformed(ActionEvent e, JEditorPane editor) {
-    HTMLDocument doc = (HTMLDocument) editor.getDocument();
-    Element chElem = doc.getCharacterElement(editor.getCaretPosition());
-    AttributeSet sas = chElem.getAttributes();
+  protected void wysiwygEditPerformed(ActionEvent e,JEditorPane editor) {
+    HTMLDocument doc                        = (HTMLDocument)editor.getDocument();
+    Element      characterElement           = doc.getCharacterElement(editor.getCaretPosition());
+    AttributeSet characterElementAttributes = characterElement.getAttributes();
 
-    HTMLFontDialog d = createDialog(editor);
-    d.setBold(sas.containsAttribute(StyleConstants.Bold, Boolean.TRUE));
-    d.setItalic(sas.containsAttribute(StyleConstants.Italic, Boolean.TRUE));
-    d.setUnderline(sas.containsAttribute(StyleConstants.Underline, Boolean.TRUE));
+    HTMLFontDialog htmlFontDialog = createDialog(editor);
+    htmlFontDialog.setBold(     characterElementAttributes.containsAttribute(StyleConstants.Bold,     Boolean.TRUE));
+    htmlFontDialog.setItalic(   characterElementAttributes.containsAttribute(StyleConstants.Italic,   Boolean.TRUE));
+    htmlFontDialog.setUnderline(characterElementAttributes.containsAttribute(StyleConstants.Underline,Boolean.TRUE));
 
-    Object o = sas.getAttribute(StyleConstants.FontFamily);
-    if (o != null)
-      d.setFontName(o.toString());
-    o = sas.getAttribute(StyleConstants.FontSize);
-    if (o != null) {
+    Object attribute = characterElementAttributes.getAttribute(StyleConstants.FontFamily);
+
+    if (attribute != null) {
+      htmlFontDialog.setFontName(attribute.toString());
+    }
+
+    attribute = characterElementAttributes.getAttribute(StyleConstants.FontSize);
+
+    if (attribute != null) {
       try {
-        d.setFontSize(Integer.parseInt(o.toString()));
-      } catch (Exception ex) {
+        htmlFontDialog.setFontSize(Integer.parseInt(attribute.toString()));
+      }
+      catch (Exception ex) {
         ex.printStackTrace();
       }
     }
 
-    d.setLocationRelativeTo(d.getParent());
-    d.setVisible(true);
-    if (!d.hasUserCancelled()) {
+    htmlFontDialog.setLocationRelativeTo(htmlFontDialog.getParent());
+    htmlFontDialog.setVisible(true);
+
+    if (!htmlFontDialog.hasUserCancelled()) {
       MutableAttributeSet tagAttrs = new SimpleAttributeSet();
-      tagAttrs.addAttribute(StyleConstants.FontFamily, d.getFontName());
-      tagAttrs.addAttribute(StyleConstants.FontSize, d.getFontSize());
-      tagAttrs.addAttribute(StyleConstants.Bold, d.isBold());
-      tagAttrs.addAttribute(StyleConstants.Italic, d.isItalic());
-      tagAttrs.addAttribute(StyleConstants.Underline, d.isUnderline());
+      tagAttrs.addAttribute(StyleConstants.FontFamily, htmlFontDialog.getFontName());
+      tagAttrs.addAttribute(StyleConstants.FontSize, htmlFontDialog.getFontSize());
+      tagAttrs.addAttribute(StyleConstants.Bold, htmlFontDialog.isBold());
+      tagAttrs.addAttribute(StyleConstants.Italic, htmlFontDialog.isItalic());
+      tagAttrs.addAttribute(StyleConstants.Underline, htmlFontDialog.isUnderline());
 
       CompoundUndoManager.beginCompoundEdit(editor.getDocument());
       HTMLUtils.setCharacterAttributes(editor, tagAttrs);
@@ -64,17 +70,24 @@ public class HTMLFontAction extends HTMLTextEditAction {
     }
   }
 
-  private HTMLFontDialog createDialog(JTextComponent ed) {
-    Window w = SwingUtilities.getWindowAncestor(ed);
-    String t = "";
-    if (ed.getSelectedText() != null)
-      t = ed.getSelectedText();
-    HTMLFontDialog d = null;
-    if (w instanceof Frame)
-      d = new HTMLFontDialog((Frame) w, t);
-    else if (w instanceof Dialog)
-      d = new HTMLFontDialog((Dialog) w, t);
+  private HTMLFontDialog createDialog(JTextComponent textComponent) {
+    Window window = SwingUtilities.getWindowAncestor(textComponent);
 
-    return d;
+    String text = "";
+
+    if (textComponent.getSelectedText() != null) {
+      text = textComponent.getSelectedText();
+    }
+
+    HTMLFontDialog htmlFontDialog = null;
+
+    if (window instanceof Frame) {
+      htmlFontDialog = new HTMLFontDialog((Frame) window, text);
+    }
+    else if (window instanceof Dialog) {
+      htmlFontDialog = new HTMLFontDialog((Dialog) window, text);
+    }
+
+    return htmlFontDialog;
   }
 }
