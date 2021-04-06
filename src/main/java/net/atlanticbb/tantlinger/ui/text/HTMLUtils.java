@@ -319,19 +319,19 @@ public class HTMLUtils {
   }
 
   public static AttributeSet getCharacterAttributes(JEditorPane editor) {
-    int p;
+    int pos;
+
     if (editor.getSelectedText() != null) {
-      p = editor.getSelectionEnd() - 1;
+      pos = editor.getSelectionEnd() - 1;
     }
     else {
-      p = (editor.getCaretPosition() > 0) ? (editor.getCaretPosition() - 1) : 0;
+      pos = (editor.getCaretPosition() > 0) ? (editor.getCaretPosition() - 1) : 0;
     }
 
     try {
-      StyledDocument doc = (StyledDocument) editor.getDocument();
-      return (doc.getCharacterElement(p).getAttributes());
+      return ((StyledDocument)editor.getDocument()).getCharacterElement(pos).getAttributes();
     }
-    catch (ClassCastException ignored) {
+    catch (Exception ignored) {
     }
 
     return null;
@@ -360,26 +360,19 @@ public class HTMLUtils {
 
   public static void setFontFamily(JEditorPane editor, String fontName) {
     AttributeSet attr = getCharacterAttributes(editor);
-    if (attr == null)
+
+    if (attr == null) {
       return;
-        /*try
-        {
-            HTMLDocument doc = (HTMLDocument)editor.getDocument();             
-            attr = doc.getCharacterElement(editor.getCaretPosition()).getAttributes();
-        }
-        catch(ClassCastException cce)
-        {
-            return;
-        }*/
+    }
 
     printAttribs(attr);
+
     if (fontName == null) {
-      //the font might be defined as a font tag
-      Object val = attr.getAttribute(HTML.Tag.FONT);
-      if (val instanceof AttributeSet) {
-        MutableAttributeSet set = new SimpleAttributeSet((AttributeSet) val);
-        val = set.getAttribute(HTML.Attribute.FACE); //does it have a FACE attrib?
-        if (val != null) {
+      Object attribute = attr.getAttribute(HTML.Tag.FONT);
+      if (attribute instanceof AttributeSet) {
+        MutableAttributeSet set = new SimpleAttributeSet((AttributeSet) attribute);
+        attribute = set.getAttribute(HTML.Attribute.FACE); //does it have a FACE attrib?
+        if (attribute != null) {
           set.removeAttribute(HTML.Attribute.FACE);
           removeCharacterAttribute(editor, HTML.Tag.FONT); //remove the current font tag
           if (set.getAttributeCount() > 0) {
@@ -399,6 +392,7 @@ public class HTMLUtils {
       tagAttrs.addAttribute(StyleConstants.FontFamily, fontName);
       setCharacterAttributes(editor, tagAttrs);
     }
+
     printAttribs(attr);
   }
 

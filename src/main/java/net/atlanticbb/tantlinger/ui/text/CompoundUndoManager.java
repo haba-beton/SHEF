@@ -1,7 +1,3 @@
-/*
- * Created on Jun 7, 2005
- *
- */
 package net.atlanticbb.tantlinger.ui.text;
 
 import net.atlanticbb.tantlinger.i18n.I18n;

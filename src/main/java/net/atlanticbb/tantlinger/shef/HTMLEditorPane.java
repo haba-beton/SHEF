@@ -9,7 +9,6 @@ import novaworx.syntax.SyntaxFactory;
 import novaworx.textpane.SyntaxDocument;
 import novaworx.textpane.SyntaxGutter;
 import novaworx.textpane.SyntaxGutterBase;
-import org.apache.commons.text.translate.EntityArrays;
 import org.bushe.swing.action.ActionList;
 import org.bushe.swing.action.ActionManager;
 import org.bushe.swing.action.ActionUIFactory;
@@ -50,12 +49,12 @@ public class HTMLEditorPane extends JPanel {
 
   private ActionList actionList;
 
-  private FocusListener focusHandler = new FocusHandler();
-  private DocumentListener textChangedHandler = new TextChangedHandler();
-  private ActionListener fontChangeHandler = new FontChangeHandler();
-  private ActionListener paragraphComboHandler = new ParagraphComboHandler();
-  private CaretListener caretHandler = new CaretHandler();
-  private MouseListener popupHandler = new PopupHandler();
+  private FocusListener     focusHandler = new FocusHandler();
+  private DocumentListener  textChangedHandler = new TextChangedHandler();
+  private ActionListener    fontChangeHandler = new FontChangeHandler();
+  private ActionListener    paragraphComboHandler = new ParagraphComboHandler();
+  private CaretListener     caretHandler = new CaretHandler();
+  private MouseListener     popupHandler = new PopupHandler();
 
   private boolean isWysTextChanged;
 
@@ -664,7 +663,7 @@ public class HTMLEditorPane extends JPanel {
   private class ParagraphComboHandler implements ActionListener {
     public void actionPerformed(ActionEvent e) {
       if (e.getSource() == paragraphCombo) {
-        Action a = (Action) (paragraphCombo.getSelectedItem());
+        Action a = (Action)(paragraphCombo.getSelectedItem());
         a.actionPerformed(e);
       }
     }
@@ -682,15 +681,18 @@ public class HTMLEditorPane extends JPanel {
   private class FontChangeHandler implements ActionListener {
     public void actionPerformed(ActionEvent e) {
       if (e.getSource() == fontFamilyCombo && focusedEditor == wysEditor) {
-        HTMLDocument document = (HTMLDocument) focusedEditor.getDocument();
+
+        HTMLDocument document = (HTMLDocument)focusedEditor.getDocument();
+
         CompoundUndoManager.beginCompoundEdit(document);
 
         if (fontFamilyCombo.getSelectedIndex() != 0) {
-          HTMLUtils.setFontFamily(wysEditor, ((Font) fontFamilyCombo.getSelectedItem()).getFamily());
-
-        } else {
+          HTMLUtils.setFontFamily(wysEditor,((Font)fontFamilyCombo.getSelectedItem()).getFamily());
+        }
+        else {
           HTMLUtils.setFontFamily(wysEditor, null);
         }
+
         CompoundUndoManager.endCompoundEdit(document);
       }
     }

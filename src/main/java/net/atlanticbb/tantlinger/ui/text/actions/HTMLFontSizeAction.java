@@ -55,18 +55,21 @@ public class HTMLFontSizeAction extends HTMLTextEditAction {
   }
 
   protected void sourceEditPerformed(ActionEvent e, JEditorPane editor) {
-    String prefix = "<font size=" + (size + 1) + ">";
-    String postfix = "</font>";
-    String sel = editor.getSelectedText();
-    if (sel == null) {
+    String prefix       = "<font size=" + (size + 1) + ">";
+    String postfix      = "</font>";
+    String selectedText = editor.getSelectedText();
+    if (selectedText == null) {
       editor.replaceSelection(prefix + postfix);
 
       int pos = editor.getCaretPosition() - postfix.length();
-      if (pos >= 0)
+
+      if (pos >= 0) {
         editor.setCaretPosition(pos);
-    } else {
-      sel = prefix + sel + postfix;
-      editor.replaceSelection(sel);
+      }
+    }
+    else {
+      selectedText = prefix + selectedText + postfix;
+      editor.replaceSelection(selectedText);
     }
   }
 
