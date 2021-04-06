@@ -17,12 +17,12 @@ public class HTMLFontAction extends HTMLTextEditAction {
   }
 
   protected void sourceEditPerformed(ActionEvent e,JEditorPane editor) {
-    HTMLFontDialog d = createDialog(editor);
-    d.setLocationRelativeTo(d.getParent());
-    d.setVisible(true);
-    if (!d.hasUserCancelled()) {
+    HTMLFontDialog htmlFontDialog = createDialog(editor);
+    htmlFontDialog.setLocationRelativeTo(htmlFontDialog.getParent());
+    htmlFontDialog.setVisible(true);
+    if (!htmlFontDialog.hasUserCancelled()) {
       editor.requestFocusInWindow();
-      editor.replaceSelection(d.getHTML());
+      editor.replaceSelection(htmlFontDialog.getHTML());
     }
   }
 
