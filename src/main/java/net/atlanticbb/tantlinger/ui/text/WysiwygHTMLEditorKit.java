@@ -19,9 +19,9 @@ import java.util.*;
 
 public class WysiwygHTMLEditorKit extends HTMLEditorKit {
 
-  private ViewFactory                         wysFactory = new WysiwygHTMLFactory();
-  private ArrayList<ResizableView>            monitoredViews = new ArrayList<>();
-  private MouseInputAdapter                   resizeHandler = new ResizeHandler();
+  private ViewFactory                         wysFactory         = new WysiwygHTMLFactory();
+  private ArrayList<ResizableView>            monitoredViews     = new ArrayList<>();
+  private MouseInputAdapter                   resizeHandler      = new ResizeHandler();
 
   private Map<JEditorPane,Map<String,Action>> editorToActionsMap = new HashMap<>();
   private KeyStroke                           tabBackwardKS      = KeyStroke.getKeyStroke(KeyEvent.VK_TAB, InputEvent.SHIFT_DOWN_MASK);

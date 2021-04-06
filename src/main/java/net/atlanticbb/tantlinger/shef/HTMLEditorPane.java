@@ -9,6 +9,7 @@ import novaworx.syntax.SyntaxFactory;
 import novaworx.textpane.SyntaxDocument;
 import novaworx.textpane.SyntaxGutter;
 import novaworx.textpane.SyntaxGutterBase;
+import org.apache.commons.text.translate.EntityArrays;
 import org.bushe.swing.action.ActionList;
 import org.bushe.swing.action.ActionManager;
 import org.bushe.swing.action.ActionUIFactory;

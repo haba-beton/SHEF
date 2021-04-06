@@ -157,8 +157,7 @@ public class Entities {
       {"yuml", "255"}, // - lowercase y, umlaut
     };
 
-  static final String[][] HTML40_GREEK_ARRAY =
-    {
+  static final String[][] HTML40_GREEK_ARRAY = {
       // <!-- Greek -->
       {"Alpha", "913"}, // greek capital letter alpha, U+0391 -->
       {"Beta", "914"}, // greek capital letter beta, U+0392 -->
